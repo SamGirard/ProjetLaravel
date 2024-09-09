@@ -81,7 +81,7 @@
                                                                 <nav class="flex justify-between">
                                                                     <ol id="breadcrumbs" class="inline-flex items-center mb-3 space-x-1 text-xs text-neutral-500 [&_.active-breadcrumb]:text-neutral-600 [&_.active-breadcrumb]:font-medium sm:mb-0">
                                                                         <li class="flex items-center h-full">
-                                                                            <a href="#" class="inline-flex items-center px-2 py-1.5 space-x-1.5 rounded-md hover:text-neutral-900 hover:bg-neutral-100">
+                                                                            <a class="inline-flex items-center px-2 py-1.5 space-x-1.5 rounded-md hover:text-neutral-900 hover:bg-neutral-100">
                                                                                 <span class="hidden md:inline">Liste des produits et services</span>
                                                                                 <span class="inline md:hidden">Liste</span>
                                                                             </a>
@@ -252,7 +252,7 @@ $(document).ready(function() {
             .addClass('flex items-center h-full')
             .attr('data-url', url)
             .attr('data-next', nextUrlPart)
-            .html(`<a href="#" class="inline-flex items-center px-2 py-1.5 space-x-1.5 rounded-md hover:text-neutral-900 hover:bg-neutral-100">${name}</a>`)
+            .html(`<a class="inline-flex items-center px-2 py-1.5 space-x-1.5 rounded-md hover:text-neutral-900 hover:bg-neutral-100">${name}</a>`)
             .click(function(event) {
                 event.preventDefault();
                 let clickedUrl = $(this).attr('data-url');
