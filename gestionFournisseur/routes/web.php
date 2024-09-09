@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FournisseurController;
+use App\Http\Controllers\EmployeController;
 
 
 Route::get('/', 
@@ -9,3 +10,6 @@ Route::get('/',
 
 Route::get('/fournisseurs/{fournisseur}/',
 [FournisseurController::class, 'show'])->name('fournisseurs.show');
+
+Route::get('/role', 
+[EmployeController::class, 'index'])->name('role');

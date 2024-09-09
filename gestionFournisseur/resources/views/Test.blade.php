@@ -17,5 +17,7 @@
         @else
             <p>aucun fournisseur</p>
         @endif
+
+        <a href="{{ route('role') }}">Gérer les droits</a>
     </body>
 </html>
