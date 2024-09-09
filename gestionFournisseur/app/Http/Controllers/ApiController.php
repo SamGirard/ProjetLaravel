@@ -35,6 +35,21 @@ class ApiController extends Controller
        return $data;
   }
 
+  public function fetchAllVille()
+  {   
+      $client = new Client([
+          'verify' => false,
+      ]);
+    
+      $sql = 'https://donneesquebec.ca/recherche/api/action/datastore_search_sql?sql=SELECT DISTINCT "munnom" FROM "19385b4e-5503-4330-9e59-f998f5918363"';
+
+      $response = $client->request('GET', $sql);
+      $data = json_decode($response->getBody()->getContents());
+
+      return $data;
+ }
+
+
    public function fetchFromNeq(string $neq) 
    {
         $client = new Client([
