@@ -81,7 +81,7 @@
                                                                 <nav class="flex justify-between">
                                                                     <ol id="breadcrumbs" class="inline-flex items-center mb-3 space-x-1 text-xs text-neutral-500 [&_.active-breadcrumb]:text-neutral-600 [&_.active-breadcrumb]:font-medium sm:mb-0">
                                                                         <li class="flex items-center h-full">
-                                                                            <a class="inline-flex items-center px-2 py-1.5 space-x-1.5 rounded-md hover:text-neutral-900 hover:bg-neutral-100">
+                                                                            <a href="#" class="inline-flex items-center px-2 py-1.5 space-x-1.5 rounded-md hover:text-neutral-900 hover:bg-neutral-100">
                                                                                 <span class="hidden md:inline">Liste des produits et services</span>
                                                                                 <span class="inline md:hidden">Liste</span>
                                                                             </a>
