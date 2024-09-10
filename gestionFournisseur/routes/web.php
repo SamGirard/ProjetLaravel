@@ -8,8 +8,6 @@ use App\Http\Controllers\EmployeController;
 
 //Route de Sam pour menu test
 Route::get('/MenuTest', 
-//Route de Sam (route de test)
-Route::get('/MenuTest', 
 [FournisseurController::class, 'index'])->name('index');
 
 
