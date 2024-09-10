@@ -20,5 +20,7 @@
         @endif
 
         <a href="{{ route('role') }}">Gérer les droits</a>
+
+        @vite('resources/js/app.js')
     </body>
 </html>

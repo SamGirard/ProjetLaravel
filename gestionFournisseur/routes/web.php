@@ -8,15 +8,19 @@ use App\Http\Controllers\EmployeController;
 
 //Route de Sam pour menu test
 Route::get('/MenuTest', 
+//Route de Sam (route de test)
+Route::get('/MenuTest', 
 [FournisseurController::class, 'index'])->name('index');
 
 
 //Route de Sam pour liste fournisseur
+//Route Zoom fournisseur
 Route::get('/fournisseurs/{fournisseur}/',
 [FournisseurController::class, 'show'])->name('fournisseurs.show');
 
 
 //Route de Sam pour les role
+//route pour la page des role
 Route::get('/Gestion_des_roles', 
 [EmployeController::class, 'index'])->name('role');
 
@@ -27,6 +31,22 @@ Route::post('/employes',
 [EmployeController::class, 'store'])->name('employes.store');
 
 
+Route::get('/employes/creation',
+[EmployeController::class, 'create'])->name('employes.create');
+
+Route::post('/employes',
+[EmployeController::class, 'store'])->name('employes.store');
+
+
+//Route pour créer les employé
+Route::get('/employes/creation',
+[EmployeController::class, 'create']) -> name('employes.create');
+
+Route::post('/employes',
+[EmployeController::class, 'store'])->name('employes.store');
+
+
+//route welcome
 Route::get('/', function () {
     return view('welcome');
 });
