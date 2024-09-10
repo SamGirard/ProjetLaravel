@@ -128,4 +128,20 @@ class ApiController extends Controller
        });
    }
 
+   public function fetchUNSPSCComodityFromName(string $commodity, int $start, int $number)
+   {
+       $jsonResponse = $this->readUNSPSCFile(function ($row) use ($commodity) {
+           return (isset($row[9], $row[11]) && strpos(strtolower($row[9]) . " - " . strtolower($row[11]), strtolower($commodity)) !== false)
+               ? $row[9] . " - " . $row[11]
+               : null;
+       });
+   
+       $results = json_decode($jsonResponse->getContent(), true);
+   
+       $filteredResults = array_filter($results, fn($value) => $value !== null);
+   
+       return array_slice($filteredResults, $start, $number);
+   }
+   
+
 }

@@ -88,6 +88,12 @@
                                                                         </li>  
                                                                     </ol>
                                                                 </nav>
+                                                                <input 
+                                                                    type="text" 
+                                                                    placeholder="Rechercher un service..." 
+                                                                    id="searchSegment"
+                                                                    class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                                >
                                                                 <div id="segment-list" class="h-64 overflow-y-scroll bg-white rounded shadow p-4"></div>
                                                                 <div id="commodity-list" class="hidden h-64 overflow-y-scroll bg-white rounded shadow p-4 mt-4">
                                                                     <div id="commodity-items" class="space-y-2"></div>
@@ -150,8 +156,13 @@
                                                     </button>
                                                     <div x-show="activeAccordion === id" x-collapse x-cloak>
                                                         <div class="p-4 pt-0 opacity-70">
+                                                            <input 
+                                                                type="text" 
+                                                                placeholder="Rechercher une région..." 
+                                                                id="searchRegion"
+                                                                class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                            >
                                                             <div id="region-list" class="h-64 overflow-y-scroll bg-white rounded shadow p-4">
-                                                                    <!-- Regions will be dynamically inserted here -->
                                                             </div>
                                                         </div>
                                                     </div>
@@ -178,8 +189,13 @@
                                                     </button>
                                                     <div x-show="activeAccordion === id" x-collapse x-cloak>
                                                         <div class="p-4 pt-0 opacity-70">
+                                                            <input 
+                                                                type="text" 
+                                                                placeholder="Rechercher une ville..." 
+                                                                id="searchCity"
+                                                                class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                            >
                                                             <div id="city-list" class="h-64 overflow-y-scroll bg-white rounded shadow p-4 mt-4">
-                                                                <!-- Cities will be dynamically inserted here -->
                                                             </div>
                                                         </div>
                                                     </div>
@@ -202,8 +218,65 @@ $(document).ready(function() {
     let addedCommodities = new Set();
     let selectedRegions = new Set();
     let currentCities = new Set();
+    let startingComodities = 0;
+    let firstLoad = false;
+
+    function searchCommodities() {
+        let searchQuery = $('#searchSegment').val().toLowerCase();
+
+        if(searchQuery === "") {
+            loadSegments('/segment', 'family');
+        }
+        else{
+            $.ajax({
+            url: '/comoditySearch/' + searchQuery + '/' + startingComodities + '/50',
+            method: 'GET',
+            success: function(data) {
+                let segmentList = $('#segment-list');
+                if(!firstLoad) {
+                    segmentList.empty();
+                    firstLoad = true;
+                }
+
+                data.forEach(item => {
+                    let itemName = item.split(' ')[0];
+                    let itemElement = $('<div></div>')
+                        .addClass('p-2 cursor-pointer hover:bg-gray-200')
+                        .text(item)
+                        .click(function() {
+                            addCommodity(item);
+                        });
+                    
+                    segmentList.append(itemElement);
+                });
+            },
+            error: function() {
+                alert('Failed to fetch data.');
+            }
+        });
+        }
+    }
+
+    function handleScroll() {
+        let searchQuery = $('#searchSegment').val().toLowerCase();
+
+        if(searchQuery != "") {
+            const element = document.getElementById('segment-list');
+            const scrollTop = element.scrollTop;
+            const scrollHeight = element.scrollHeight;
+            const clientHeight = element.clientHeight;
+            const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+
+            if(scrollPercentage > 50) {
+                startingComodities+=50;
+                searchCommodities();
+            }
+
+        }
+    }
 
     function loadSegments(url, nextUrlPart = null, breadcrumbName = null) {
+        $('#searchSegment').val('');
         $.ajax({
             url: url,
             method: 'GET',
@@ -312,6 +385,9 @@ $(document).ready(function() {
     }
 
     function loadRegions() {
+        let searchQuery = $('#searchRegion').val().trim().toLowerCase();
+        let regex = new RegExp(searchQuery, 'i');
+
         $.ajax({
             url: '/regions',
             method: 'GET',
@@ -321,20 +397,22 @@ $(document).ready(function() {
                 
                 $.each(data.result.records, function(index, item) {
                     let regionName = item.regadm;
-                    let checkboxId = 'region-' + regionName.replace(/\s+/g, '-').toLowerCase();
+                    if(searchQuery === "" || regex.test(regionName)) {
+                        let checkboxId = 'region-' + regionName.replace(/\s+/g, '-').toLowerCase();
                     
-                    let regionItem = $(`
-                        <div class="flex items-center mb-4">
-                            <input id="${checkboxId}" type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" value="${regionName}">
-                            <label for="${checkboxId}" class="ml-2 text-sm font-medium text-gray-900">${regionName}</label>
-                        </div>
-                    `);
-                    
-                    regionItem.find('input').change(function() {
-                        filterCities();
-                    });
-                    
-                    regionList.append(regionItem);
+                        let regionItem = $(`
+                            <div class="flex items-center mb-4">
+                                <input id="${checkboxId}" type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" value="${regionName}">
+                                <label for="${checkboxId}" class="ml-2 text-sm font-medium text-gray-900">${regionName}</label>
+                            </div>
+                        `);
+                        
+                        regionItem.find('input').change(function() {
+                            filterCities();
+                        });
+                        
+                        regionList.append(regionItem);
+                    }
                 });
 
                 filterCities();
@@ -358,11 +436,22 @@ $(document).ready(function() {
         });
     }
 
+    function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+    }
+
+
     function filterCities() {
         let selectedRegions = $('#region-list input:checked').map(function() {
             return $(this).val();
         }).get();
         
+        let searchQuery = $('#searchCity').val().trim().toLowerCase();
+        let regex = new RegExp(searchQuery, 'i');
         let cityList = $('#city-list');
         cityList.empty();
 
@@ -373,19 +462,20 @@ $(document).ready(function() {
             selectedRegions.forEach(region => {
                 loadCities(region, function(data) {
                     $.each(data.result.records, function(index, item) {
-                        let cityName = item.munnom;
+                        let cityName = item.munnom.toLowerCase();
                         if (!loadedCities.has(cityName)) {
-                            loadedCities.add(cityName);
-                            let checkboxId = 'city-' + cityName.replace(/\s+/g, '-').toLowerCase();
-                            
-                            let cityItem = $(`
-                                <div class="flex items-center mb-4">
-                                    <input id="${checkboxId}" type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" value="${cityName}">
-                                    <label for="${checkboxId}" class="ml-2 text-sm font-medium text-gray-900">${cityName}</label>
-                                </div>
-                            `);
-                            
-                            cityList.append(cityItem);
+                            if (searchQuery === "" || regex.test(cityName)) {
+                                loadedCities.add(cityName);
+                                let checkboxId = 'city-' + cityName.replace(/\s+/g, '-').toLowerCase();
+                                let cityItem = $(`
+                                    <div class="flex items-center mb-4">
+                                        <input id="${checkboxId}" type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" value="${item.munnom}">
+                                        <label for="${checkboxId}" class="ml-2 text-sm font-medium text-gray-900">${item.munnom}</label>
+                                    </div>
+                                `);
+                                
+                                cityList.append(cityItem);
+                            }
                         }
                     });
 
@@ -401,17 +491,18 @@ $(document).ready(function() {
                 method: 'GET',
                 success: function(data) {
                     $.each(data.result.records, function(index, item) {
-                        let cityName = item.munnom;
-                        let checkboxId = 'city-' + cityName.replace(/\s+/g, '-').toLowerCase();
-                        
-                        let cityItem = $(`
-                            <div class="flex items-center mb-4">
-                                <input id="${checkboxId}" type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" value="${cityName}">
-                                <label for="${checkboxId}" class="ml-2 text-sm font-medium text-gray-900">${cityName}</label>
-                            </div>
-                        `);
-                        
-                        cityList.append(cityItem);
+                        let cityName = item.munnom.toLowerCase();
+                        if (searchQuery === "" || regex.test(cityName)) {
+                            let checkboxId = 'city-' + cityName.replace(/\s+/g, '-').toLowerCase();
+                            let cityItem = $(`
+                                <div class="flex items-center mb-4">
+                                    <input id="${checkboxId}" type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" value="${item.munnom}">
+                                    <label for="${checkboxId}" class="ml-2 text-sm font-medium text-gray-900">${item.munnom}</label>
+                                </div>
+                            `);
+                            
+                            cityList.append(cityItem);
+                        }
                     });
 
                     if (data.result.records.length > 0) {
@@ -427,6 +518,11 @@ $(document).ready(function() {
         }
     }
 
+    const debouncedFilterCities = debounce(filterCities, 300);
+    const debouncedLoadRegions = debounce(loadRegions, 300);
+    const debouncedSearchCommodities = debounce(searchCommodities, 300);
+    const debouncedScrollComodities = debounce(handleScroll, 300);
+
     loadSegments('/segment', 'family');
     loadRegions();
 
@@ -435,6 +531,10 @@ $(document).ready(function() {
     $('#check-all').change(function() {
         checkAllCommodities(this.checked);
     });
-});
 
+    $('#searchCity').on('input', debouncedFilterCities);
+    $('#searchRegion').on('input', debouncedLoadRegions);
+    $('#searchSegment').on('input', debouncedSearchCommodities);
+    $('#segment-list').on('scroll', debouncedScrollComodities);
+});
 </script>
