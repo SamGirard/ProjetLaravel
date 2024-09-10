@@ -6,15 +6,26 @@ use App\Http\Controllers\GestionController;
 use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\EmployeController;
 
-
-Route::get('/', 
+//Route de Sam pour menu test
+Route::get('/MenuTest', 
 [FournisseurController::class, 'index'])->name('index');
 
+
+//Route de Sam pour liste fournisseur
 Route::get('/fournisseurs/{fournisseur}/',
 [FournisseurController::class, 'show'])->name('fournisseurs.show');
 
+
+//Route de Sam pour les role
 Route::get('/Gestion_des_roles', 
 [EmployeController::class, 'index'])->name('role');
+
+Route::get('/employes/creation',
+[EmployeController::class, 'create'])->name('employes.create');
+
+Route::post('/employes',
+[EmployeController::class, 'store'])->name('employes.store');
+
 
 Route::get('/', function () {
     return view('welcome');

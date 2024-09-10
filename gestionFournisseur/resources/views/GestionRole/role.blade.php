@@ -24,6 +24,8 @@
                 <p>aucun fournisseur</p>
             @endif
             
+            <a href="{{ route('employes.create')}}">Ajouter</a>
+
             <br>
             <a href="{{ route('index') }}">Retour</a>
         </div>
