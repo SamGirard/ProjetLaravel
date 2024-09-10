@@ -11,5 +11,5 @@ Route::get('/',
 Route::get('/fournisseurs/{fournisseur}/',
 [FournisseurController::class, 'show'])->name('fournisseurs.show');
 
-Route::get('/role', 
+Route::get('/Gestion_des_roles', 
 [EmployeController::class, 'index'])->name('role');

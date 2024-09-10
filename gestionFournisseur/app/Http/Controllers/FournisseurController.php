@@ -13,11 +13,11 @@ class FournisseurController extends Controller
         $fournisseurs = Fournisseur::all();
 
         // Passer les données à la vue
-        return view('test', compact('fournisseurs'));
+        return view('pageTest.test', compact('fournisseurs'));
     }
 
     public function show(Fournisseur $fournisseur){
         $infosRbq = $fournisseur->infosRbq;
-        return view('show', compact('fournisseur', 'infosRbq'));
+        return view('pageTest.show', compact('fournisseur', 'infosRbq'));
     }
 }

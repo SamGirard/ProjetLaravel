@@ -11,6 +11,6 @@ class EmployeController extends Controller
     public function index(){
         $employes = Employe::all();
 
-        return view('role', compact('employes'));
+        return view('GestionRole.role', compact('employes'));
     }
 }
