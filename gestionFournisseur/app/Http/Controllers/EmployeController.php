@@ -13,4 +13,12 @@ class EmployeController extends Controller
 
         return view('GestionRole.role', compact('employes'));
     }
+
+    public function create(){
+        return View('GestionRole.create');
+    }
+
+    public function store(){
+        //
+    }
 }
