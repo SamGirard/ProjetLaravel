@@ -7,12 +7,18 @@ use Illuminate\Http\Request;
 
 class FournisseurController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index(){
+        // Récupérer tous les fournisseurs
+        $fournisseurs = Fournisseur::all();
+
+        // Passer les données à la vue
+        return view('pageTest.test', compact('fournisseurs'));
+    }
+
+    public function show(Fournisseur $fournisseur){
+        $infosRbq = $fournisseur->infosRbq;
+        return view('pageTest.show', compact('fournisseur', 'infosRbq'));
+
     }
 
     /**
@@ -50,13 +56,7 @@ class FournisseurController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -79,6 +79,5 @@ class FournisseurController extends Controller
      */
     public function destroy(string $id)
     {
-        //
     }
 }
