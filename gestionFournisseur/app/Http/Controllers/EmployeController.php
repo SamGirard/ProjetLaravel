@@ -27,6 +27,6 @@ class EmployeController extends Controller
         catch(\Throwable $e){
             Log::debug($e);
         }
-        return redirect()->route('role');
+        return redirect()->route('role')->with('success', 'Employé ajouté avec succès!');
     }
 }

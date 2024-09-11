@@ -7,6 +7,12 @@
 </head>
     <body>
         <div>
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <h1>Gestion role</h1>
             
             @if(count($employes))

@@ -22,14 +22,15 @@ class EmployeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //'courriel' => 'require|',
-            // 'role'=> 'require|'
+            'courriel' => 'required|string|email|min:1|max:64',
+            'role'=> 'required|string|in:Administrateur,Responsable,Commis',
         ];
     }
 
     public function messages(){
         return [
-            'courriel.min' => 'Le courriel ... erreur'
+            'courriel.required' => 'Le courriel est requis',
+            'role.required' => 'L\'employé doit avoir un rôle',
         ];
     }
 }
