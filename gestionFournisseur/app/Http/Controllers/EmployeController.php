@@ -30,7 +30,7 @@ class EmployeController extends Controller
         return redirect()->route('role')->with('success', 'Employé ajouté avec succès!');
     }
 
-    
+
 
     public function update(Request $request){
         $employe = new Employe($request->all());
@@ -40,7 +40,7 @@ class EmployeController extends Controller
                 'role' => $employe['role'],
             ]);
         }
-        return redirect()->back()->with('success', 'Les employés sonts modifiés.');
+        return redirect()->back()->with('success', 'Les employés sont modifiés.');
     }
 
 

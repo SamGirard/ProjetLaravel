@@ -42,3 +42,10 @@ const checkboxes = document.querySelectorAll(".checkbox-emp")
 checkboxes.forEach(checkbox => {
     checkbox.addEventListener('change', verifCheckSupprimer);
 });
+
+function verifNbrRole(){
+    const nbrAdmin = 0;
+    const nbrResponsable = 0;
+
+    const listeRole = document.getElementById('roleSelect');
+}
