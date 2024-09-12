@@ -12,13 +12,11 @@ Route::get('/MenuTest',
 
 
 //Route de Sam pour liste fournisseur
-//Route Zoom fournisseur
 Route::get('/fournisseurs/{fournisseur}/',
 [FournisseurController::class, 'show'])->name('fournisseurs.show');
 
 
 //Route de Sam pour les role
-//route pour la page des role
 Route::get('/Gestion_des_roles', 
 [EmployeController::class, 'index'])->name('role');
 
@@ -43,6 +41,13 @@ Route::get('/employes/creation',
 Route::post('/employes',
 [EmployeController::class, 'store'])->name('employes.store');
 
+//Route pour le delete d'employé
+Route::delete('/supprimerEmploye',
+[EmployeController::class, 'destroy'])->name('supprimerEmploye');
+
+//Route pour modifier le role des employé
+Route::patch('/modifierEmploye',
+[EmployeController::class, 'update'])->name('modifierEmploye');
 
 //route welcome
 Route::get('/', function () {
