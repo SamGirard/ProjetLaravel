@@ -221,6 +221,13 @@ $(document).ready(function() {
     let startingComodities = 0;
     let firstLoad = false;
 
+    function onInputCommodities() {
+        startingComodities = 0;
+        firstLoad = false;
+        searchCommodities();
+        document.getElementById('segment-list').scrollTop = 0;
+    }
+
     function searchCommodities() {
         let searchQuery = $('#searchSegment').val().toLowerCase();
 
@@ -520,7 +527,7 @@ $(document).ready(function() {
 
     const debouncedFilterCities = debounce(filterCities, 300);
     const debouncedLoadRegions = debounce(loadRegions, 300);
-    const debouncedSearchCommodities = debounce(searchCommodities, 300);
+    const debouncedSearchCommodities = debounce(onInputCommodities, 300);
     const debouncedScrollComodities = debounce(handleScroll, 300);
 
     loadSegments('/segment', 'family');
