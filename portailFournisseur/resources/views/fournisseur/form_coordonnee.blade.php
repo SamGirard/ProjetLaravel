@@ -73,8 +73,8 @@
             <fieldset class="border border-solid border-gray-300 p-3 mt-2">
                 <legend class="ml-4 text-sm font-medium text-gray-900">Téléphones</legend>
                 <div class="mb-4">
-                    <label for="motDePasse" class="block text-gray-700 text-sm font-bold mb-2">Mot de passe</label>
-                    <input  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="motDePasse" name="password" type="password">
+                    <label for="telephone" class="block text-gray-700 text-sm font-bold mb-2"> telephone</label>
+                    <input  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="motDePasse" name="telephone" type="tel">
 
                 </div>
             </fieldset>
@@ -89,5 +89,14 @@
             </div>
         </form>
     </div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
 @endsection

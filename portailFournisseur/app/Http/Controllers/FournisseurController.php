@@ -33,7 +33,7 @@ class FournisseurController extends Controller
     public function store_identification(Request $request){
         $validated = $request->validate([
             'neq' => ['required','size:10','regex:/^(11|22|33|88)[4-9]\d{7}$/','unique:'.User::class],
-            'nom'=>'required|max:64',
+            'nom'=>['required,max:64'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:64', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -66,17 +66,17 @@ class FournisseurController extends Controller
     }
     public function store_coordonnee(Request $request)
     {
-        $validated = $request->validate([
-            'numero_civique' => ['required','max:8','alpha_num'],
-            'rue'=>'required|max:64',
-            'bureau' => ['string', 'lowercase', 'email', 'max:8'],
+       /* $validated = $request->validate([
+            'numero_civique' => ['required','max:8'],
+            'rue'=>['required','max:64'],
+            'bureau' => ['string', 'max:8'],
             'ville' => ['required','max:64'],
-            'province'=>'required',
+            'province'=>['required'],
             'code_postal'=>['required','size:6','regex:/^[A-Za-z]\d[A-Za-z] \d[A-Za-z]\d$/'],
             'site_web'=>['max:64'],
-            'type_telephone'=>'required',
+            'type_telephone'=>['required'],
             'numero'=>['required','regex:/^(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/']
-        ]);
+        ]);*/
 
        dd($request->all());
        // return redirect()->route('create_coordonnee');
