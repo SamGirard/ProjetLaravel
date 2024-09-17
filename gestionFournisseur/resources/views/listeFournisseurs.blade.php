@@ -6,6 +6,7 @@
     <script src="https://unpkg.com/alpinejs" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <div x-data="{ slideOverOpen: false }" class="relative z-50 w-auto h-auto">
     <button 
         @click="slideOverOpen = true" 
@@ -39,7 +40,7 @@
                             x-transition:leave-end="translate-x-full" 
                             class="w-screen max-w-md"
                         >
-                            <div class="flex flex-col h-full py-5 overflow-y-scroll bg-white border-l shadow-lg border-neutral-100/70">
+                            <div class="flex flex-col h-full py-5 overflow-y-scroll bg-gray-50 dark:bg-gray-800 border-l shadow-lg border-neutral-100/70">
                                 <div class="px-4 sm:px-5">
                                     <div class="flex items-start justify-between pb-1">
                                         <h2 class="text-base font-semibold leading-6 text-gray-900">Filtres</h2>
@@ -281,34 +282,7 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
-        @if(count($fournisseurs))
-            @foreach($fournisseurs as $fournisseur)
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {{$fournisseur->nomEntreprise}}
-                </th>
-                <td class="px-6 py-4">
-                    {{$fournisseur->ville}}
-                </td>
-                <td class="px-6 py-4">
-                    2/2
-                </td>
-                <td class="px-6 py-4">
-                    2/2
-                </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Ouvrir</a>
-                </td>
-                <td class="w-4 p-4">
-                    <div class="flex items-center">
-                        <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                    </div>
-                </td>
-            </tr>
-            @endforeach
-        @endif
+        <tbody id="fournisseurs-list">
         </tbody>
     </table>
 </div>
@@ -321,6 +295,12 @@ $(document).ready(function() {
     let currentCities = new Set();
     let startingComodities = 0;
     let firstLoad = false;
+    let checkedRegions = {};
+    let checkedCities = {};
+    let checkedLicences = {};
+    var categoriesLicences = @json($categoriesLicences);
+    var licences = @json($licences);
+    var fournisseurs = @json($fournisseurs);
 
     function onInputCommodities() {
         startingComodities = 0;
@@ -336,6 +316,7 @@ $(document).ready(function() {
             loadSegments('/segment', 'family');
         }
         else{
+            $('#breadcrumbs').children('li:not(:first)').remove();
             $.ajax({
             url: '/comoditySearch/' + searchQuery + '/' + startingComodities + '/50',
             method: 'GET',
@@ -502,23 +483,28 @@ $(document).ready(function() {
             success: function(data) {
                 let regionList = $('#region-list');
                 regionList.empty();
-                
+
                 $.each(data.result.records, function(index, item) {
                     let regionName = item.regadm;
-                    if(searchQuery === "" || regex.test(regionName)) {
+                    if (searchQuery === "" || regex.test(regionName)) {
                         let checkboxId = 'region-' + regionName.replace(/\s+/g, '-').toLowerCase();
-                    
+
                         let regionItem = $(`
                             <div class="flex items-center mb-4">
                                 <input id="${checkboxId}" type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" value="${regionName}">
                                 <label for="${checkboxId}" class="ml-2 text-sm font-medium text-gray-900">${regionName}</label>
                             </div>
                         `);
-                        
+
+                        if (checkedRegions[checkboxId]) {
+                            regionItem.find('input').prop('checked', true);
+                        }
+
                         regionItem.find('input').change(function() {
+                            checkedRegions[this.id] = $(this).is(':checked');
                             filterCities();
                         });
-                        
+
                         regionList.append(regionItem);
                     }
                 });
@@ -530,6 +516,7 @@ $(document).ready(function() {
             }
         });
     }
+
 
     function loadCities(region, callback) {
         $.ajax({
@@ -551,7 +538,6 @@ $(document).ready(function() {
             timeout = setTimeout(() => func.apply(this, args), wait);
         };
     }
-
 
     function filterCities() {
         let selectedRegions = $('#region-list input:checked').map(function() {
@@ -581,6 +567,14 @@ $(document).ready(function() {
                                         <label for="${checkboxId}" class="ml-2 text-sm font-medium text-gray-900">${item.munnom}</label>
                                     </div>
                                 `);
+
+                                if (checkedCities[checkboxId]) {
+                                    cityItem.find('input').prop('checked', true);
+                                }
+
+                                cityItem.find('input').change(function() {
+                                    checkedCities[this.id] = $(this).is(':checked');
+                                });
                                 
                                 cityList.append(cityItem);
                             }
@@ -608,6 +602,14 @@ $(document).ready(function() {
                                     <label for="${checkboxId}" class="ml-2 text-sm font-medium text-gray-900">${item.munnom}</label>
                                 </div>
                             `);
+
+                            if (checkedCities[checkboxId]) {
+                                cityItem.find('input').prop('checked', true);
+                            }
+
+                            cityItem.find('input').change(function() {
+                                checkedCities[this.id] = $(this).is(':checked');
+                            });
                             
                             cityList.append(cityItem);
                         }
@@ -626,6 +628,111 @@ $(document).ready(function() {
         }
     }
 
+    function filterLicences() {
+        let searchValue = $('#searchCategorie').val().toLowerCase();
+        let regex = new RegExp(searchValue, 'i');
+        $("#categorie-list").empty();
+
+        if (searchValue === "") {
+            categoriesLicences.forEach(category => {
+                $("#categorie-list").append(`<h1>${category.titre}</h1>`);
+
+                let filteredLicences = licences.filter(licence => licence.Categorie === category.id);
+                
+                if (licences.length > 0) {
+                    filteredLicences.forEach(licence => {
+                        licenceItem = $(`
+                            <div class="flex items-center mb-4">
+                                <input id="${licence.id}" 
+                                    type="checkbox" 
+                                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" 
+                                    value="${licence.titre}">
+                                <label for="${licence.id}" 
+                                    class="ml-2 text-sm font-medium text-gray-900">
+                                    ${licence.titre}
+                                </label>
+                            </div>
+                        `);
+
+                        if (checkedLicences[licence.id]) {
+                            licenceItem.find('input').prop('checked', true);
+                        }
+
+                        licenceItem.find('input').change(function() {
+                            checkedLicences[this.id] = $(this).is(':checked');
+                        });
+                                
+                        $("#categorie-list").append(licenceItem);
+                    });
+                }
+            });
+        } else {
+            categoriesLicences.forEach(category => {
+                    let filteredLicences = licences.filter(licence => licence.Categorie === category.id && regex.test(licence.titre));
+                    if (filteredLicences.length > 0) {
+                        $("#categorie-list").append(`<h1>${category.titre}</h1>`);
+                        filteredLicences.forEach(licence => {
+                            licenceItem = $(`
+                            <div class="flex items-center mb-4">
+                                <input id="${licence.id}" 
+                                    type="checkbox" 
+                                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" 
+                                    value="${licence.titre}">
+                                <label for="${licence.id}" 
+                                    class="ml-2 text-sm font-medium text-gray-900">
+                                    ${licence.titre}
+                                </label>
+                            </div>
+                            `);
+
+                            if (checkedLicences[licence.id]) {
+                                licenceItem.find('input').prop('checked', true);
+                            }
+
+                            licenceItem.find('input').change(function() {
+                                checkedLicences[this.id] = $(this).is(':checked');
+                            });
+
+                            $("#categorie-list").append(licenceItem);
+                        });
+                    }
+            });
+        }
+    }
+
+    function filterFournisseurs() {
+        //filteredFournisseurs = fournisseurs.filter(f => )
+        fournisseurs.forEach(fournisseur => {
+            fournisseurItem = $(`
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    ${fournisseur.nomEntreprise}
+                </th>
+                <td class="px-6 py-4">
+                    ${fournisseur.ville}
+                </td>
+                <td class="px-6 py-4">
+                    0/0
+                </td>
+                <td class="px-6 py-4">
+                    0/${Object.keys(checkedLicences).length}
+                </td>
+                <td class="px-6 py-4">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Ouvrir</a>
+                </td>
+                <td class="w-4 p-4">
+                    <div class="flex items-center">
+                        <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                    </div>
+                </td>
+            </tr>
+            `);
+
+            $('#fournisseurs-list').append(fournisseurItem);
+        })
+    }
+
     const debouncedFilterCities = debounce(filterCities, 300);
     const debouncedLoadRegions = debounce(loadRegions, 300);
     const debouncedSearchCommodities = debounce(onInputCommodities, 300);
@@ -633,6 +740,8 @@ $(document).ready(function() {
 
     loadSegments('/segment', 'family');
     loadRegions();
+    filterLicences();
+    filterFournisseurs();
 
     $('#breadcrumbs').children('li:first').click(returnToSegments);
     $('#delete-checked').click(deleteCheckedCommodities);
@@ -644,5 +753,6 @@ $(document).ready(function() {
     $('#searchRegion').on('input', debouncedLoadRegions);
     $('#searchSegment').on('input', debouncedSearchCommodities);
     $('#segment-list').on('scroll', debouncedScrollComodities);
+    $('#searchCategorie').on('input', filterLicences);
 });
 </script>
