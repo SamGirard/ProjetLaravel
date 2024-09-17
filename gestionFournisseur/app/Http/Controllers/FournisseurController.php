@@ -24,28 +24,7 @@ class FournisseurController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create_identification()
-    {
-        return view('fournisseur/form_identification');
-    }
 
-    public function store_identification(Request $request){
-        $validated = $request->validate([
-            'neq' => ['required','size:10','regex:/^(11|22|33|88)[4-9]\d{7}$/'],
-            'nom'=>'required|max:64',
-            'email' => 'required|email|max:64',
-        ]);
-        session(['validation_identification' => 'ok']);
-        return redirect()->route('create_service');
-    }
-
-    public function create_service(Request $request)
-    {
-        if($request->session()->get('validation_identification')=="ok")
-            return view('fournisseur/form_produit_service');
-        else
-            return view('fournisseur/form_identification');
-    }
 
 
     /**

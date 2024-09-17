@@ -1,7 +1,38 @@
 <?php
 
+use App\Http\Controllers\FournisseurController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('ajouter_identification',[FournisseurController::class,'create_identification'])->name('create_indentification');
+Route::post('ajouter_identification',[FournisseurController::class,'store_identification'])->name('store_indentification');
+Route::get('ajouter_service',[FournisseurController::class,'create_service'])->name('create_service');
+Route::post('ajouter_service',[FournisseurController::class,'store_service'])->name('store_service');
+Route::get('ajouter_coordonnee',[FournisseurController::class,'create_coordonnee'])->name('create_coordonnee');
+Route::post('ajouter_coordonnee',[FournisseurController::class,'store_coordonnee'])->name('store_coordonnee');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
+Route::get('/neq/{neq}', [ApiController::class, 'fetchFromNeq']);
+Route::get('/regions', [ApiController::class, 'fetchRegions']);
+Route::get('/segment', [ApiController::class, 'fetchUNSPSCSegment']);
+Route::get('/family/{segment}', [ApiController::class, 'fetchUNSPSCFamily']);
+Route::get('/class/{family}', [ApiController::class, 'fetchUNSPSCClass']);
+Route::get('/comodity/{class}', [ApiController::class, 'fetchUNSPSCComodity']);
+Route::get('/liste', [GestionController::class, 'listeFournisseur']);
+
+
+require __DIR__.'/auth.php';

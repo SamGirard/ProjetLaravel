@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('infos_rbq', function (Blueprint $table) {
-            $table->string('numLicense', 10)->primary(); // Clé primaire personnalisée
+            $table->id();
+            $table->string('numLicense', 10)->unique(); // Clé primaire personnalisée
             $table->integer('neqFournisseur');
             $table->string('courrielFournisseur', 64);
             $table->enum('statut', ['Valide', 'Valide avec restriction', 'Non valide']);
