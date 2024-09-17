@@ -29,7 +29,9 @@ class EmployeRequest extends FormRequest
 
     public function messages(){
         return [
-            'courriel.required' => 'Le courriel est requis',
+            'courriel.required' => 'Le courriel est requis.',
+            'courriel.email' => 'Le courriel fourni est invalide.',
+            'role.in' => 'L\'employé doit avoir un rôle',
             'role.required' => 'L\'employé doit avoir un rôle',
         ];
     }
