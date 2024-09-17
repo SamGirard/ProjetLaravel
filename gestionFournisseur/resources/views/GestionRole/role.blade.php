@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    @vite(['resources/css/app.css','resources/js/app.js','resources/js/gestionEmploye.js'])
-</head>
-    <body>
+    @extends('layouts.app')
+    @section('title', "Gestion des employés")
+
         {{--@auth décommenter quand le login va etre fait avec ligne 133 --}}
+        @section('contenu')
         <div class="bg-white py-24 sm:py-32">
             <div class="flex justify-center">
                 @if (session('success'))
@@ -128,13 +123,12 @@
             </div>
         </div>
 
-
         <div>
-        {{--
-        @else
-            <h1>Veuillez vous connecter en administrateur</h1>
-            <a href="">Se connecter</a>
-        @endauth
-        --}}
-    </body>
-</html>
+            {{--
+            @else
+                <h1>Veuillez vous connecter en administrateur</h1>
+                <a href="">Se connecter</a>
+            @endauth
+            --}}
+        </div>
+        @endsection
