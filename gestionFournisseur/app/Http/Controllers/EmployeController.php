@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+
 use App\Models\Employe;
 use App\Http\Requests\EmployeRequest;
 
@@ -17,6 +20,26 @@ class EmployeController extends Controller
 
     public function create(){
         return view('GestionRole.create');
+    }
+
+    public function login(Request $request){
+        $courriel = $request->input('courriel');
+
+        // Rechercher l'utilisateur par courriel
+        $employe = Employe::where('courriel', $courriel)->first();
+
+        if ($employe) {
+            // Authentifier l'utilisateur sans utiliser le mot de passe
+            Auth::login($employe);
+            return redirect()->route("liste");
+        } else {
+            return redirect()->route('loginEmploye')->withErrors(['courriel' => 'Le courriel fourni est invalide.']);
+        }
+    }
+
+    public function showLoginForm()
+    {
+        return View('GestionRole.login');
     }
 
     public function store(EmployeRequest $request){

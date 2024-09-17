@@ -49,6 +49,23 @@ Route::delete('/supprimerEmploye',
 Route::patch('/modifierEmploye',
 [EmployeController::class, 'update'])->name('modifierEmploye');
 
+
+//Route pour le login d'employe
+Route::get('/loginEmploye', 
+[EmployeController::class, 'showLoginForm'])->name('loginEmploye');
+
+Route::post('/loginEmploye', 
+[EmployeController::class, 'login'])->name('loginPost');
+
+Route::post('/logout', 
+[EmployeController::class, 'logout'])->name('logout');
+
+Route::get('/liste', 
+[EmployeController::class, 'index'])->name('menuListe')->middleware('CheckRole:admin,responsable,commis');
+
+
+
+
 //route welcome
 Route::get('/', function () {
     return view('welcome');
@@ -60,4 +77,4 @@ Route::get('/segment', [ApiController::class, 'fetchUNSPSCSegment']);
 Route::get('/family/{segment}', [ApiController::class, 'fetchUNSPSCFamily']);
 Route::get('/class/{family}', [ApiController::class, 'fetchUNSPSCClass']);
 Route::get('/comodity/{class}', [ApiController::class, 'fetchUNSPSCComodity']);
-Route::get('/liste', [GestionController::class, 'listeFournisseur']);
+Route::get('/liste', [GestionController::class, 'listeFournisseur'])->name('liste');
