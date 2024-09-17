@@ -6,9 +6,9 @@
     <!-- service offerts -->
 
     <div class="container mx-auto mt-6">
-        <form action="" method="post" class="bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4">
+        <form action="{{ route('store_service') }}" method="post" class="bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4">
+            @csrf
             <div class="flex flex-row justify-between">
-
 
                 <fieldset class="border border-solid border-gray-300 p-3 w-full mr-2">
                     <legend class="ml-4 text-sm font-medium text-gray-900">Produits et services offerts</legend>

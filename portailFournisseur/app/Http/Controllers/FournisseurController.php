@@ -54,6 +54,10 @@ class FournisseurController extends Controller
             return redirect()->route('create_indentification');
     }
 
+    public function store_service(Request $request)
+    {
+        return view('fournisseur/form_coordonnee');
+    }
     public function create_coordonnee(Request $request)
     {
 
@@ -62,7 +66,20 @@ class FournisseurController extends Controller
     }
     public function store_coordonnee(Request $request)
     {
+        $validated = $request->validate([
+            'numero_civique' => ['required','max:8','alpha_num'],
+            'rue'=>'required|max:64',
+            'bureau' => ['string', 'lowercase', 'email', 'max:8'],
+            'ville' => ['required','max:64'],
+            'province'=>'required',
+            'code_postal'=>['required','size:6','regex:/^[A-Za-z]\d[A-Za-z] \d[A-Za-z]\d$/'],
+            'site_web'=>['max:64'],
+            'type_telephone'=>'required',
+            'numero'=>['required','regex:/^(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/']
+        ]);
 
+       dd($request->all());
+       // return redirect()->route('create_coordonnee');
     }
 
     /**

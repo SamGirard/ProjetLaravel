@@ -3,7 +3,7 @@
 
     @include('partials/barre_ajout')
     <div class="container mx-auto mt-6">
-        <form action="{{ route('store_indentification') }}" method="post" class="bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4">
+        <form action="{{ route('store_coordonnee') }}" method="post" class="bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4">
             @csrf
 
             <!--  ************* section adresse ******************** -->
@@ -13,17 +13,32 @@
                 <div class="flex justify-start">
                     <div class="mb-4">
                         <label for="numero_civique" class="block text-gray-700 text-sm font-bold mb-2">Numero civique</label>
-                        <input  class="@error('numero_civique')  border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="numero_civique" name="numero_civique" type="number">
+                        <div class="flex">
+                            <input  class="@error('numero_civique')  border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="numero_civique" name="numero_civique" type="number">
+                            @error('numero_civique')
+                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                            @else
+                                <i class="fa-solid fa-check text-lg ml-2 text-green-500 icon-validate"></i>
+                            @enderror
+                        </div>
                         @error('numero_civique')
-                        <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                        <span class="text-red-500">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="mb-4 mx-2">
                         <label for="rue" class="block text-gray-700 text-sm font-bold mb-2">Rue</label>
-                        <input  class="@error('numero_civique')  border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="rue" name="rue" type="text">
-                        @error('rue')
-                        <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
-                        @enderror
+                        <div class="flex">
+                            <input  class="@error('rue')  border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="rue" name="rue" type="text">
+                            @error('rue')
+                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                            @else
+                                <i class="fa-solid fa-check text-lg ml-2 text-green-500 icon-validate"></i>
+                                @enderror
+                        </div>
+
+                            @error('rue')
+                            <span class="text-red-500">{{ $message }}</span>
+                            @enderror
                     </div>
                     <div class="mb-4 mx-2">
                         <label for="rue" class="block text-gray-700 text-sm font-bold mb-2">Bureau</label>
@@ -64,7 +79,10 @@
                 </div>
             </fieldset>
 
-            <div class="flex justify-end mt-3">
+            <div class="flex justify-between mt-3">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="window.history.back();">
+                    Précédent
+                </button>
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                     Suivant
                 </button>
