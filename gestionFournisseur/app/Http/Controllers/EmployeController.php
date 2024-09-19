@@ -42,6 +42,11 @@ class EmployeController extends Controller
         return View('GestionRole.login');
     }
 
+    public function logout()
+    {
+        return View('GestionRole.login');
+    }
+
     public function store(EmployeRequest $request){
         try{
             $employe = new Employe($request->all());

@@ -5,6 +5,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\GestionController;
 use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\EmployeController;
+use App\Http\Middleware\CheckRole;
 
 //Route de Sam pour menu test
 Route::get('/MenuTest', 
@@ -52,7 +53,8 @@ Route::patch('/modifierEmploye',
 
 //Route pour le login d'employe
 Route::get('/loginEmploye', 
-[EmployeController::class, 'showLoginForm'])->name('loginEmploye');
+[EmployeController::class, 'showLoginForm'])->name('loginEmploye')
+->middleware('CheckRole:admin,responsable,commis');
 
 Route::post('/loginEmploye', 
 [EmployeController::class, 'login'])->name('loginPost');
@@ -61,7 +63,8 @@ Route::post('/logout',
 [EmployeController::class, 'logout'])->name('logout');
 
 Route::get('/liste', 
-[EmployeController::class, 'index'])->name('menuListe')->middleware('CheckRole:admin,responsable,commis');
+[EmployeController::class, 'index'])->name('menuListe')
+->middleware('CheckRole:admin,responsable,commis');
 
 
 

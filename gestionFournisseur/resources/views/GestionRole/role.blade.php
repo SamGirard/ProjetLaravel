@@ -1,8 +1,8 @@
     @extends('layouts.app')
     @section('title', "Gestion des employés")
-
-        {{--@auth décommenter quand le login va etre fait avec ligne 133 --}}
-        @section('contenu')
+    
+    @section('contenu')
+    @auth
         <div class="bg-white py-24 sm:py-32">
             <div class="flex justify-center">
                 @if (session('success'))
@@ -124,11 +124,9 @@
         </div>
 
         <div>
-            {{--
             @else
                 <h1>Veuillez vous connecter en administrateur</h1>
-                <a href="">Se connecter</a>
+                <a href="{{route('loginEmploye')}}">Se connecter</a>
             @endauth
-            --}}
         </div>
-        @endsection
+    @endsection
