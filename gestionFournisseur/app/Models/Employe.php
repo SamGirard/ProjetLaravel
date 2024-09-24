@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
 
 class Employe extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
     protected $table = 'employes';
     protected $primaryKey = 'courriel';
@@ -25,9 +24,8 @@ class Employe extends Authenticatable
         return 'courriel';
     }
 
-    // Si vous n'utilisez pas de mot de passe, vous pouvez ignorer cette méthode ou la laisser vide
     public function getAuthPassword()
     {
-        return null; // ou une valeur vide
+        return null;
     }
 }

@@ -1,8 +1,10 @@
-@extends('layouts.app')
-    @section('title', "Liste fournisseurs")
+    @extends('layouts.app')
+    @section('title', "Liste des fournisseurs")
     
     @section('contenu')
-
+    @php
+        logger('Utilisateur authentifié : ' . Auth::user()->courriel);
+    @endphp
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/alpinejs" defer></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

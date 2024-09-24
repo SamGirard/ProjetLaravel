@@ -10,30 +10,51 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Employe;
 use App\Http\Requests\EmployeRequest;
 
+use App\Models\CategoriesLicence;
+use App\Models\Licence;
+
+use App\Models\Fournisseur;
+
+
 class EmployeController extends Controller
 {
     public function index(){
         $employes = Employe::all();
 
-        return view('GestionRole.role', compact('employes'));
+        if($employe->role == "Administrateur"){
+            return view('GestionRole.role', compact('employes'));
+            
+        } else if ($employe->role == "Responsable" || $employe->role == "Commis"){
+            return view('liste', compact('employes'));
+        }
     }
 
     public function create(){
         return view('GestionRole.create');
     }
 
-    public function login(Request $request){
-        $courriel = $request->input('courriel');
+    public function login(Request $request)
+    {
+        $employes = Employe::all();
+        $user = Employe::where('courriel', $request->courriel)->first();
+        $categoriesLicences = CategoriesLicence::all();
+        $licences = Licence::all();
+        $fournisseurs = Fournisseur::all();
 
-        // Rechercher l'utilisateur par courriel
-        $employe = Employe::where('courriel', $courriel)->first();
 
-        if ($employe) {
-            // Authentifier l'utilisateur sans utiliser le mot de passe
-            Auth::login($employe);
-            return redirect()->route("liste");
+        if ($user) {
+            Auth::login($user);
+            logger('Utilisateur connecté : ' . $user->role);
+            
+            if($user->role == "Administrateur"){
+                return view('GestionRole.role', compact('employes'));
+
+            } else if ($user->role == "Responsable" || $employe->role == "Commis"){
+                return view('listeFournisseurs', compact('employes', 'categoriesLicences', 'licences', 'fournisseurs'));
+            }
+
         } else {
-            return redirect()->route('loginEmploye')->withErrors(['courriel' => 'Le courriel fourni est invalide.']);
+            return redirect()->route('loginEmploye')->withErrors(["Information invalide"]);
         }
     }
 
@@ -42,9 +63,10 @@ class EmployeController extends Controller
         return View('GestionRole.login');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        return View('GestionRole.login');
+        Auth::logout();
+        return redirect()->route('loginEmploye');
     }
 
     public function store(EmployeRequest $request){

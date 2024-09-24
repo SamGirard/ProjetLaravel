@@ -19,7 +19,8 @@ Route::get('/fournisseurs/{fournisseur}/',
 
 //Route de Sam pour les role
 Route::get('/Gestion_des_roles', 
-[EmployeController::class, 'index'])->name('role');
+[EmployeController::class, 'index'])->name('role')
+->middleware('auth');
 
 Route::get('/employes/creation',
 [EmployeController::class, 'create'])->name('employes.create');
@@ -53,8 +54,7 @@ Route::patch('/modifierEmploye',
 
 //Route pour le login d'employe
 Route::get('/loginEmploye', 
-[EmployeController::class, 'showLoginForm'])->name('loginEmploye')
-->middleware('CheckRole:admin,responsable,commis');
+[EmployeController::class, 'showLoginForm'])->name('loginEmploye');
 
 Route::post('/loginEmploye', 
 [EmployeController::class, 'login'])->name('loginPost');
@@ -64,7 +64,7 @@ Route::post('/logout',
 
 Route::get('/liste', 
 [EmployeController::class, 'index'])->name('menuListe')
-->middleware('CheckRole:admin,responsable,commis');
+->middleware('auth');
 
 
 
