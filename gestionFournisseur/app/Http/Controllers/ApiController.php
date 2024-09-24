@@ -128,9 +128,15 @@ class ApiController extends Controller
        });
    }
 
-   public function fetchUNSPSCComodityFromName(string $commodity, int $start, int $number)
+   public function fetchUNSPSCComodityFromName(int $start, int $number, Request $request)
    {
+       $commodity = $request->query('comodity', '');
+   
        $jsonResponse = $this->readUNSPSCFile(function ($row) use ($commodity) {
+           if (is_null($commodity) || $commodity === '') {
+               return isset($row[9], $row[11]) ? $row[9] . " - " . $row[11] : null;
+           }
+   
            return (isset($row[9], $row[11]) && strpos(strtolower($row[9]) . " - " . strtolower($row[11]), strtolower($commodity)) !== false)
                ? $row[9] . " - " . $row[11]
                : null;
@@ -143,5 +149,5 @@ class ApiController extends Controller
        return array_slice($filteredResults, $start, $number);
    }
    
-
+   
 }
