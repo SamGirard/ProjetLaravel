@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    @vite(['resources/css/app.css','resources/js/app.js'])
-</head>
-    <body>
+    @extends('layouts.app')
+    @section('title', "Gestion des employés")
+    
+    @section('contenu')
+    @auth
         <div class="bg-white py-24 sm:py-32">
+            <div class="flex justify-center">
                 @if (session('success'))
-                    <div id="toast-success" class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+                    <div id="toast-success" class="flex items-center w-full max-w-xs p-4 mb-6 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
                         <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
                             <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
@@ -25,6 +22,7 @@
                         </button>
                     </div>
                 @endif
+            </div>
                 <form action="{{ route('modifierEmploye') }}" method="POST">
                     @csrf
                     @method("PATCH")
@@ -41,7 +39,7 @@
                                 <div>
                                     <h3 class="text-base font-semibold leading-7 text-lg tracking-tight text-gray-900">{{$employe->courriel}}</h3>
                                     <input type="hidden" name="employes[{{ $employe->courriel }}][courriel]" value="{{ $employe->courriel }}">
-                                    <select selected="{{$employe->role}}" name="employes[{{ $employe->courriel }}][role]" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                                    <select selected="{{$employe->role}}" id="roleSelect" name="employes[{{ $employe->courriel }}][role]" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
                                         <option value="Administrateur" {{ $employe->role == 'Administrateur' ? 'selected' : '' }}>Administrateur</option>
                                         <option value="Responsable" {{ $employe->role == 'Responsable' ? 'selected' : '' }}>Responsable</option>
                                         <option value="Commis" {{ $employe->role == 'Commis' ? 'selected' : '' }}>Commis</option>
@@ -125,7 +123,10 @@
             </div>
         </div>
 
-
         <div>
-    </body>
-</html>
+            @else
+                <h1>Veuillez vous connecter en administrateur</h1>
+                <a href="{{route('loginEmploye')}}">Se connecter</a>
+            @endauth
+        </div>
+    @endsection

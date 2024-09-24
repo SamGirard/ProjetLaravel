@@ -1,4 +1,3 @@
-import './bootstrap';
 import 'flowbite';
 
 //recherche dans la suppression d'employe
@@ -47,28 +46,57 @@ checkboxes.forEach(checkbox => {
 document.addEventListener("DOMContentLoaded", function(){
     
     let roleSelect = document.querySelectorAll('select[id="roleSelect"]');
+    let roleCheck = document.querySelectorAll('.checkEmploye');
 
     let nbrAdmin = 0;
     let nbrResponsable = 0;
 
-    roleSelect.forEach(select => {
-        let roleChoisi = select.value;
-
-        if(roleChoisi == "Administrateur"){
-            nbrAdmin ++;
-        }
-        else if (roleChoisi == "Responsable"){
-            nbrResponsable ++;
-        }
+    // Fonction pour compter les rôles
+    function countRoles() {
+        nbrAdmin = 0;
+        nbrResponsable = 0;
 
         roleSelect.forEach(select => {
-            if (nbrAdmin <= 2 && select.value == "Administrateur") {
-                select.disabled = true; // Désactive les rôles qui ne sont pas Administrateur si le nombre d'admins est <= 2
-            } else if (nbrResponsable <= 1 && select.value == "Responsable") {
-                select.disabled = true; // Désactive les rôles qui ne sont pas Responsable si le nombre de responsables est <= 1
-            } else {
-                select.disabled = false; // Réactive uniquement si aucune des conditions ne s'applique
+            let roleChoisi = select.value;
+
+            if (roleChoisi == "Administrateur") {
+                nbrAdmin++;
+            } else if (roleChoisi == "Responsable") {
+                nbrResponsable++;
             }
         });
-    });
+    }
+
+    updateFields();
+    // Fonction pour désactiver/activer les selects et checkboxes
+    function updateFields() {
+        // Désactivation des selects en fonction du nombre d'administrateurs/responsables
+        roleSelect.forEach(select => {
+            if (nbrAdmin >= 2 && select.value == "Administrateur") {
+                select.disabled = true; 
+            } else if (nbrResponsable >= 1 && select.value == "Responsable") {
+                select.disabled = true;
+            } else {
+                select.disabled = false; 
+            }
+        });
+
+        // Désactivation des checkboxes en fonction du nombre d'administrateurs/responsables
+        roleCheck.forEach(checkbox => {
+            if (nbrAdmin >= 2 && checkbox.value == "Administrateur") {
+                checkbox.disabled = true;
+            } else if (nbrResponsable >= 1 && checkbox.value == "Responsable") {
+                checkbox.disabled = true;
+            } else {
+                checkbox.disabled = false;
+            }
+        });
+    }
+
+    // Compter les rôles et mettre à jour les selects et checkboxes au chargement de la page
+    countRoles();
+    updateFields();
 });
+
+
+///Desactiver les checkboxs pour les admin et les responsable
