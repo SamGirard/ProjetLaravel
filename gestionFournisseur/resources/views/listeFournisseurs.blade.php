@@ -7,99 +7,45 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
-<div x-data="{ slideOverOpen: false }" class="relative z-50 w-auto h-auto">
-    <button 
-        @click="slideOverOpen = true" 
-        class="inline-flex items-center justify-center h-10 px-4 py-2 text-sm font-medium transition-colors bg-white border rounded-md hover:bg-neutral-100 active:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-200/60 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none"
-    >
-        Filtrer
-    </button>
+<div class="flex min-h-screen">
+    <aside id="sidebar" class="top-0 left-0 z-40 w-64 h-screen" aria-label="Sidebar">
+        <div class="h-full px-2 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+            <ul class="space-y-2 font-medium">
 
-        <div 
-            x-show="slideOverOpen"
-            @keydown.window.escape="slideOverOpen = false"
-            class="relative z-[99]"
-        >
-            <div 
-                x-show="slideOverOpen"
-                x-transition.opacity.duration.600ms 
-                @click="slideOverOpen = false" 
-                class="fixed inset-0 bg-black bg-opacity-10"
-            ></div>
-            <div class="fixed inset-0 overflow-hidden">
-                <div class="absolute inset-0 overflow-hidden">
-                    <div class="fixed inset-y-0 right-0 flex max-w-full pl-10">
-                        <div 
-                            x-show="slideOverOpen" 
-                            @click.away="slideOverOpen = false"
-                            x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700" 
-                            x-transition:enter-start="translate-x-full" 
-                            x-transition:enter-end="translate-x-0" 
-                            x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700" 
-                            x-transition:leave-start="translate-x-0" 
-                            x-transition:leave-end="translate-x-full" 
-                            class="w-screen max-w-md"
-                        >
-                            <div class="flex flex-col h-full py-5 overflow-y-scroll bg-gray-50 dark:bg-gray-800 border-l shadow-lg border-neutral-100/70">
-                                <div class="px-4 sm:px-5">
-                                    <div class="flex items-start justify-between pb-1">
-                                        <h2 class="text-base font-semibold leading-6 text-gray-900">Filtres</h2>
-                                        <button 
-                                            @click="slideOverOpen = false"
-                                            class="absolute top-0 right-0 z-30 flex items-center justify-center px-3 py-2 mt-4 mr-5 space-x-1 text-xs font-medium uppercase border rounded-md border-neutral-200 text-neutral-600 hover:bg-neutral-100"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-                                            </svg>
-                                            <span>Fermer</span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="relative flex-1 px-4 mt-5 sm:px-5">
-                                    <div class="absolute inset-0 px-4 sm:px-5">
-                                        <div class="relative h-full overflow-hidden border border-dashed rounded-md border-neutral-300">
-                                            <div x-data="{ activeAccordion: '', setActiveAccordion(id) { this.activeAccordion = this.activeAccordion === id ? '' : id } }" class="relative w-full mx-auto overflow-hidden text-sm font-normal bg-white border border-gray-200 divide-y divide-gray-200 rounded-md">
-                                                <div x-data="{ id: $id('accordion') }">
-                                                    <button 
-                                                        @click="setActiveAccordion(id)" 
-                                                        class="flex items-center justify-between w-full p-4 text-left select-none group-hover:underline"
-                                                    >
-                                                        <span>Produits et Services</span>
-                                                        <svg 
-                                                            class="w-4 h-4 duration-200 ease-out" 
-                                                            :class="{ 'rotate-180': activeAccordion === id }" 
-                                                            viewBox="0 0 24 24" 
-                                                            xmlns="http://www.w3.org/2000/svg" 
-                                                            fill="none" 
-                                                            stroke="currentColor" 
-                                                            stroke-width="2" 
-                                                            stroke-linecap="round" 
-                                                            stroke-linejoin="round"
-                                                        >
-                                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                                        </svg>
-                                                    </button>
-                                                    <div x-show="activeAccordion === id" x-collapse x-cloak>
-                                                        <div class="p-4 pt-0 opacity-70">
-                                                            <div class="container mx-auto">
-                                                                <nav class="flex justify-between">
-                                                                    <ol id="breadcrumbs" class="inline-flex items-center mb-3 space-x-1 text-xs text-neutral-500 [&_.active-breadcrumb]:text-neutral-600 [&_.active-breadcrumb]:font-medium sm:mb-0">
-                                                                        <li class="flex items-center h-full">
-                                                                            <a class="inline-flex items-center px-2 py-1.5 space-x-1.5 rounded-md hover:text-neutral-900 hover:bg-neutral-100">
-                                                                                <span class="hidden md:inline">Liste des produits et services</span>
-                                                                                <span class="inline md:hidden">Liste</span>
-                                                                            </a>
-                                                                        </li>  
-                                                                    </ol>
-                                                                </nav>
-                                                                <input 
-                                                                    type="text" 
-                                                                    placeholder="Rechercher un service..." 
-                                                                    id="searchSegment"
-                                                                    class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                                >
-                                                                <div id="segment-list" class="h-64 overflow-y-scroll bg-white rounded shadow p-4"></div>
-                                                                <div id="commodity-list" class="hidden h-64 overflow-y-scroll bg-white rounded shadow p-4 mt-4">
+                <button type="button" class="flex items-center w-full p-1 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-segment" data-collapse-toggle="dropdown-segment">
+                <svg class="w-[24px] h-[24px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"/>
+</svg>
+
+                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Produits et Services </span>
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                        
+                <ul id="dropdown-segment" class="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
+                    <div class="p-3">
+                            <nav class="flex justify-between">
+                                <ol id="breadcrumbs" class="inline-flex items-center mb-3 space-x-1 text-xs text-neutral-500 [&_.active-breadcrumb]:text-neutral-600 [&_.active-breadcrumb]:font-medium sm:mb-0">
+                                    <li class="flex items-center h-full">
+                                        <a class="inline-flex items-center px-2 py-1.5 space-x-1.5 rounded-md hover:text-neutral-900 hover:bg-neutral-100">
+                                            <span>Liste</span>
+                                        </a>
+                                    </li>  
+                                </ol>
+                            </nav>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </svg>
+                            </div>
+                            <input type="text" id="searchSegment" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher un service...">
+                        </div>
+                    </div>
+                    <ul id="segment-list" class="h-64 px-3 pb-3 overflow-y-scroll text-sm text-gray-700 dark:text-gray-200">
+                    </ul>
+                    <div id="commodity-list" class="hidden h-64 overflow-y-scroll bg-white rounded shadow p-4 mt-4">
                                                                     <div id="commodity-items" class="space-y-2"></div>
                                                                     <button 
                                                                         id="delete-checked" 
@@ -108,144 +54,112 @@
                                                                         Enlever du filtre
                                                                     </button>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div x-data="{ id: $id('accordion') }">
-                                                    <button 
-                                                        @click="setActiveAccordion(id)" 
-                                                        class="flex items-center justify-between w-full p-4 text-left select-none group-hover:underline"
-                                                    >
-                                                        <span>Catégorie de travaux</span>
-                                                        <svg 
-                                                            class="w-4 h-4 duration-200 ease-out" 
-                                                            :class="{ 'rotate-180': activeAccordion === id }" 
-                                                            viewBox="0 0 24 24" 
-                                                            xmlns="http://www.w3.org/2000/svg" 
-                                                            fill="none" 
-                                                            stroke="currentColor" 
-                                                            stroke-width="2" 
-                                                            stroke-linecap="round" 
-                                                            stroke-linejoin="round"
-                                                        >
-                                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                                        </svg>
-                                                    </button>
-                                                    <div x-show="activeAccordion === id" x-collapse x-cloak>
-                                                    <div class="p-4 pt-0 opacity-70">
-                                                            <input 
-                                                                type="text" 
-                                                                placeholder="Rechercher une catégorie..." 
-                                                                id="searchCategorie"
-                                                                class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                            >
-                                                            <div id="categorie-list" class="h-64 overflow-y-scroll bg-white rounded shadow p-4">
-                                                            @if(count($categoriesLicences))
-                                                                @foreach($categoriesLicences as $categoriesLicence)
-                                                                    <h1>{{ $categoriesLicence->titre }}</h1>
-                                                                    
-                                                                    @php
-                                                                        $filteredLicences = $licences->where('Categorie', $categoriesLicence->id);
-                                                                    @endphp
-                                                                    
-                                                                    @if(count($filteredLicences))
-                                                                        @foreach($filteredLicences as $licence)
-                                                                            <div class="flex items-center mb-4">
-                                                                                <input id="{{ $licence->id }}" 
-                                                                                    type="checkbox" 
-                                                                                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" 
-                                                                                    value="{{ $licence->titre }}">
-                                                                                <label for="{{ $licence->id }}" 
-                                                                                    class="ml-2 text-sm font-medium text-gray-900">
-                                                                                    {{ $licence->titre }}
-                                                                                </label>
-                                                                            </div>
-                                                                        @endforeach
-                                                                    @endif
-                                                                @endforeach
-                                                            @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div x-data="{ id: $id('accordion') }">
-                                                    <button 
-                                                        @click="setActiveAccordion(id)" 
-                                                        class="flex items-center justify-between w-full p-4 text-left select-none group-hover:underline"
-                                                    >
-                                                        <span>Régions administratives</span>
-                                                        <svg 
-                                                            class="w-4 h-4 duration-200 ease-out" 
-                                                            :class="{ 'rotate-180': activeAccordion === id }" 
-                                                            viewBox="0 0 24 24" 
-                                                            xmlns="http://www.w3.org/2000/svg" 
-                                                            fill="none" 
-                                                            stroke="currentColor" 
-                                                            stroke-width="2" 
-                                                            stroke-linecap="round" 
-                                                            stroke-linejoin="round"
-                                                        >
-                                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                                        </svg>
-                                                    </button>
-                                                    <div x-show="activeAccordion === id" x-collapse x-cloak>
-                                                        <div class="p-4 pt-0 opacity-70">
-                                                            <input 
-                                                                type="text" 
-                                                                placeholder="Rechercher une région..." 
-                                                                id="searchRegion"
-                                                                class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                            >
-                                                            <div id="region-list" class="h-64 overflow-y-scroll bg-white rounded shadow p-4">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div x-data="{ id: $id('accordion') }">
-                                                    <button 
-                                                        @click="setActiveAccordion(id)" 
-                                                        class="flex items-center justify-between w-full p-4 text-left select-none group-hover:underline"
-                                                    >
-                                                        <span>Villes</span>
-                                                        <svg 
-                                                            class="w-4 h-4 duration-200 ease-out" 
-                                                            :class="{ 'rotate-180': activeAccordion === id }" 
-                                                            viewBox="0 0 24 24" 
-                                                            xmlns="http://www.w3.org/2000/svg" 
-                                                            fill="none" 
-                                                            stroke="currentColor" 
-                                                            stroke-width="2" 
-                                                            stroke-linecap="round" 
-                                                            stroke-linejoin="round"
-                                                        >
-                                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                                        </svg>
-                                                    </button>
-                                                    <div x-show="activeAccordion === id" x-collapse x-cloak>
-                                                        <div class="p-4 pt-0 opacity-70">
-                                                            <input 
-                                                                type="text" 
-                                                                placeholder="Rechercher une ville..." 
-                                                                id="searchCity"
-                                                                class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                            >
-                                                            <div id="city-list" class="h-64 overflow-y-scroll bg-white rounded shadow p-4 mt-4">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                </ul>
+
+                <button type="button" class="flex items-center w-full p-1 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-categorie" data-collapse-toggle="dropdown-categorie">
+                <svg class="w-[24px] h-[24px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 9h6m-6 3h6m-6 3h6M6.996 9h.01m-.01 3h.01m-.01 3h.01M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
+</svg>
+
+                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Catégorie de travaux </span>
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                    
+                <ul id="dropdown-categorie" class="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
+                    <div class="p-3">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-[24px] h-[24px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+  <path fill-rule="evenodd" d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11.5c.07 0 .14-.007.207-.021.095.014.193.021.293.021h2a2 2 0 0 0 2-2V7a1 1 0 0 0-1-1h-1a1 1 0 1 0 0 2v11h-2V5a2 2 0 0 0-2-2H5Zm7 4a1 1 0 0 1 1-1h.5a1 1 0 1 1 0 2H13a1 1 0 0 1-1-1Zm0 3a1 1 0 0 1 1-1h.5a1 1 0 1 1 0 2H13a1 1 0 0 1-1-1Zm-6 4a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1Zm0 3a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1ZM7 6a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H7Zm1 3V8h1v1H8Z" clip-rule="evenodd"/>
+</svg>
+
                             </div>
+                            <input type="text" id="searchCategorie" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher une ville...">
                         </div>
                     </div>
-                </div>
-            </div>
+                    <ul id="categorie-list" class="h-64 px-3 pb-3 overflow-y-scroll text-sm text-gray-700 dark:text-gray-200">
+                    @if(count($categoriesLicences))
+                        @foreach($categoriesLicences as $categoriesLicence)
+                            <h2 class="mb-2 text-base">{{ $categoriesLicence->titre }}</h2>
+                                                                    
+                            @php
+                                $filteredLicences = $licences->where('Categorie', $categoriesLicence->id);
+                            @endphp
+                                                                    
+                            @if(count($filteredLicences))
+                                @foreach($filteredLicences as $licence)
+                                    <li>
+                                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                            <input id="{{ $licence->id }}" type="checkbox" value="{{ $licence->titre }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                            <label for="{{ $licence->id }}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $licence->titre }}</label>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            @endif
+                        @endforeach
+                    @endif
+                    </ul>
+                </ul>
+
+                <button type="button" class="flex items-center w-full p-1 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-regions" data-collapse-toggle="dropdown-regions">
+                <svg class="w-[24px] h-[24px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+  <path fill-rule="evenodd" d="M8.64 4.737A7.97 7.97 0 0 1 12 4a7.997 7.997 0 0 1 6.933 4.006h-.738c-.65 0-1.177.25-1.177.9 0 .33 0 2.04-2.026 2.008-1.972 0-1.972-1.732-1.972-2.008 0-1.429-.787-1.65-1.752-1.923-.374-.105-.774-.218-1.166-.411-1.004-.497-1.347-1.183-1.461-1.835ZM6 4a10.06 10.06 0 0 0-2.812 3.27A9.956 9.956 0 0 0 2 12c0 5.289 4.106 9.619 9.304 9.976l.054.004a10.12 10.12 0 0 0 1.155.007h.002a10.024 10.024 0 0 0 1.5-.19 9.925 9.925 0 0 0 2.259-.754 10.041 10.041 0 0 0 4.987-5.263A9.917 9.917 0 0 0 22 12a10.025 10.025 0 0 0-.315-2.5A10.001 10.001 0 0 0 12 2a9.964 9.964 0 0 0-6 2Zm13.372 11.113a2.575 2.575 0 0 0-.75-.112h-.217A3.405 3.405 0 0 0 15 18.405v1.014a8.027 8.027 0 0 0 4.372-4.307ZM12.114 20H12A8 8 0 0 1 5.1 7.95c.95.541 1.421 1.537 1.835 2.415.209.441.403.853.637 1.162.54.712 1.063 1.019 1.591 1.328.52.305 1.047.613 1.6 1.316 1.44 1.825 1.419 4.366 1.35 5.828Z" clip-rule="evenodd"/>
+</svg>
+
+                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Régions administratives </span>
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                    
+                <ul id="dropdown-regions" class="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
+                    <div class="p-3">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                            </div>
+                            <input type="text" id="searchRegion" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher une régions...">
+                        </div>
+                    </div>
+                    <ul id="region-list" class="h-64 px-3 pb-3 overflow-y-scroll text-sm text-gray-700 dark:text-gray-200">
+                    </ul>
+                </ul>
+
+                <button type="button" class="flex items-center w-full p-1 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-city" data-collapse-toggle="dropdown-city">
+                <svg class="w-[24px] h-[24px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+  <path fill-rule="evenodd" d="M10.915 2.345a2 2 0 0 1 2.17 0l7 4.52A2 2 0 0 1 21 8.544V9.5a1.5 1.5 0 0 1-1.5 1.5H19v6h1a1 1 0 1 1 0 2H4a1 1 0 1 1 0-2h1v-6h-.5A1.5 1.5 0 0 1 3 9.5v-.955a2 2 0 0 1 .915-1.68l7-4.52ZM17 17v-6h-2v6h2Zm-6-6h2v6h-2v-6Zm-2 6v-6H7v6h2Z" clip-rule="evenodd"/>
+  <path d="M2 21a1 1 0 0 1 1-1h18a1 1 0 1 1 0 2H3a1 1 0 0 1-1-1Z"/>
+</svg>
+
+
+                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Villes </span>
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                    
+                <ul id="dropdown-city" class="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
+                    <div class="p-3">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                            </div>
+                            <input type="text" id="searchCity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher une ville...">
+                        </div>
+                    </div>
+                    <ul id="city-list" class="h-64 px-3 pb-3 overflow-y-scroll text-sm text-gray-700 dark:text-gray-200">
+                    </ul>
+                </ul>
+            </ul>
+            </ul>
         </div>
-</div>
+    </aside>
 
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <div class="pb-4 bg-white dark:bg-gray-900">
@@ -286,7 +200,7 @@
         </tbody>
     </table>
 </div>
-
+</div>
 
 <script>
 $(document).ready(function() {
@@ -445,10 +359,12 @@ $(document).ready(function() {
             let checkboxId = `checkbox-${name.replace(/\s+/g, '-').toLowerCase()}`;
 
             let commodityItem = $(`
-                <div class="flex items-center mb-4">
-                    <input id="${checkboxId}" type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" value="${name}">
-                    <label for="${checkboxId}" class="ml-2 text-sm font-medium text-gray-900">${name}</label>
-                </div>
+                                        <li>
+                                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                <input id="${checkboxId}" type="checkbox" value="${name}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                                <label for="${checkboxId}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${name}</label>
+                                            </div>
+                                        </li>
             `);
 
             commodityItems.append(commodityItem);
@@ -490,10 +406,12 @@ $(document).ready(function() {
                         let checkboxId = 'region-' + regionName.replace(/\s+/g, '-').toLowerCase();
 
                         let regionItem = $(`
-                            <div class="flex items-center mb-4">
-                                <input id="${checkboxId}" type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" value="${regionName}">
-                                <label for="${checkboxId}" class="ml-2 text-sm font-medium text-gray-900">${regionName}</label>
-                            </div>
+                                        <li>
+                                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                <input id="${checkboxId}" type="checkbox" value="${regionName}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                                <label for="${checkboxId}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${regionName}</label>
+                                            </div>
+                                        </li>
                         `);
 
                         if (checkedRegions[checkboxId]) {
@@ -562,10 +480,12 @@ $(document).ready(function() {
                                 loadedCities.add(cityName);
                                 let checkboxId = 'city-' + cityName.replace(/\s+/g, '-').toLowerCase();
                                 let cityItem = $(`
-                                    <div class="flex items-center mb-4">
-                                        <input id="${checkboxId}" type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" value="${item.munnom}">
-                                        <label for="${checkboxId}" class="ml-2 text-sm font-medium text-gray-900">${item.munnom}</label>
-                                    </div>
+                                        <li>
+                                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                <input id="${checkboxId}" type="checkbox" value="${item.munnom}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                                <label for="${checkboxId}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${item.munnom}</label>
+                                            </div>
+                                        </li>
                                 `);
 
                                 if (checkedCities[checkboxId]) {
@@ -597,11 +517,13 @@ $(document).ready(function() {
                         if (searchQuery === "" || regex.test(cityName)) {
                             let checkboxId = 'city-' + cityName.replace(/\s+/g, '-').toLowerCase();
                             let cityItem = $(`
-                                <div class="flex items-center mb-4">
-                                    <input id="${checkboxId}" type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" value="${item.munnom}">
-                                    <label for="${checkboxId}" class="ml-2 text-sm font-medium text-gray-900">${item.munnom}</label>
-                                </div>
-                            `);
+                                        <li>
+                                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                <input id="${checkboxId}" type="checkbox" value="${item.munnom}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                                <label for="${checkboxId}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${item.munnom}</label>
+                                            </div>
+                                        </li>
+                                `);
 
                             if (checkedCities[checkboxId]) {
                                 cityItem.find('input').prop('checked', true);
@@ -635,23 +557,19 @@ $(document).ready(function() {
 
         if (searchValue === "") {
             categoriesLicences.forEach(category => {
-                $("#categorie-list").append(`<h1>${category.titre}</h1>`);
+                $("#categorie-list").append(`<h2 class="mb-2 text-base">${category.titre}</h2>`);
 
                 let filteredLicences = licences.filter(licence => licence.Categorie === category.id);
                 
                 if (licences.length > 0) {
                     filteredLicences.forEach(licence => {
                         licenceItem = $(`
-                            <div class="flex items-center mb-4">
-                                <input id="${licence.id}" 
-                                    type="checkbox" 
-                                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" 
-                                    value="${licence.titre}">
-                                <label for="${licence.id}" 
-                                    class="ml-2 text-sm font-medium text-gray-900">
-                                    ${licence.titre}
-                                </label>
-                            </div>
+                                    <li>
+                                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                            <input id="${ licence.id }" type="checkbox" value="${ licence.titre }" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                            <label for="${ licence.id }" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${ licence.titre }</label>
+                                        </div>
+                                    </li>
                         `);
 
                         if (checkedLicences[licence.id]) {
@@ -670,19 +588,15 @@ $(document).ready(function() {
             categoriesLicences.forEach(category => {
                     let filteredLicences = licences.filter(licence => licence.Categorie === category.id && regex.test(licence.titre));
                     if (filteredLicences.length > 0) {
-                        $("#categorie-list").append(`<h1>${category.titre}</h1>`);
+                        $("#categorie-list").append(`<h2 class="mb-2 text-base">${category.titre}</h2>`);
                         filteredLicences.forEach(licence => {
                             licenceItem = $(`
-                            <div class="flex items-center mb-4">
-                                <input id="${licence.id}" 
-                                    type="checkbox" 
-                                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-neutral-900 focus:ring-neutral-900" 
-                                    value="${licence.titre}">
-                                <label for="${licence.id}" 
-                                    class="ml-2 text-sm font-medium text-gray-900">
-                                    ${licence.titre}
-                                </label>
-                            </div>
+                                    <li>
+                                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                            <input id="${licence.id}" type="checkbox" value="${licence.titre}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                            <label for="${licence.id}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${licence.titre}</label>
+                                        </div>
+                                    </li>
                             `);
 
                             if (checkedLicences[licence.id]) {
