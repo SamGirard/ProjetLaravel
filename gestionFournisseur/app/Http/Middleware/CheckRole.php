@@ -15,18 +15,18 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        $employe = $request->employe();
+        $employe = $request->user(); 
 
-        if($employe){
-            if(!$request->is('login')){
-                return redirect()->route('login');
+        if (!$employe) {
+            if (!$request->is('loginEmploye')) {
+                return redirect()->route('loginEmploye');
             }
-            else {
-                if(!in_array($employe->$role, $roles)){
-                    return redirect()->route('login');
-                }
+        } else {
+            if (!in_array($employe->role, $roles)) {
+                return redirect()->route('loginEmploye');
             }
-            return $next($request);
         }
+
+        return $next($request);
     }
 }

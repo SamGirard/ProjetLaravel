@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Employe extends Authenticatable
 {
     use HasFactory;
+
     protected $table = 'employes';
     protected $primaryKey = 'courriel';
     public $incrementing = false;
@@ -23,9 +24,8 @@ class Employe extends Authenticatable
         return 'courriel';
     }
 
-    // Si vous n'utilisez pas de mot de passe, vous pouvez ignorer cette méthode ou la laisser vide
     public function getAuthPassword()
     {
-        return null; // ou une valeur vide
+        return null;
     }
 }

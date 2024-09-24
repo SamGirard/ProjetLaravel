@@ -5,6 +5,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\GestionController;
 use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\EmployeController;
+use App\Http\Middleware\CheckRole;
 
 //Route de Sam pour menu test
 Route::get('/MenuTest', 
@@ -18,7 +19,8 @@ Route::get('/fournisseurs/{fournisseur}/',
 
 //Route de Sam pour les role
 Route::get('/Gestion_des_roles', 
-[EmployeController::class, 'index'])->name('role');
+[EmployeController::class, 'index'])->name('role')
+->middleware('auth');
 
 Route::get('/employes/creation',
 [EmployeController::class, 'create'])->name('employes.create');
@@ -61,7 +63,8 @@ Route::post('/logout',
 [EmployeController::class, 'logout'])->name('logout');
 
 Route::get('/liste', 
-[EmployeController::class, 'index'])->name('menuListe')->middleware('CheckRole:admin,responsable,commis');
+[EmployeController::class, 'index'])->name('menuListe')
+->middleware('auth');
 
 
 
@@ -80,5 +83,5 @@ Route::get('/family/{segment}', [ApiController::class, 'fetchUNSPSCFamily']);
 Route::get('/class/{family}', [ApiController::class, 'fetchUNSPSCClass']);
 Route::get('/comodity/{class}', [ApiController::class, 'fetchUNSPSCComodity']);
 Route::get('/comoditySearch/{comodity}/{start}/{number}', [ApiController::class, 'fetchUNSPSCComodityFromName']);
-Route::get('/liste', [GestionController::class, 'listeFournisseur']);
+Route::get('/liste', [GestionController::class, 'listeFournisseur'])->name('liste');
 
