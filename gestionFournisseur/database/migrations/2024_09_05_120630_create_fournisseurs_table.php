@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('siteInternet', 64)->nullable();
             $table->string('régionAdministrative', 64)->nullable();
             $table->enum('TypeNumTelephone', ['Bureau', 'Télécopieur', 'Cellulaire']);
-            $table->integer('numéroTelephone');
+            $table->string('numéroTelephone', 64);
             $table->string('poste', 64)->nullable();
             $table->string('courrielContact', 64);
             $table->integer('numTPS')->nullable();

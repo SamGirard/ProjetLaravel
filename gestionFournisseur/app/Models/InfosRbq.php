@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Fournisseur;
 
 class InfosRbq extends Model
 {
@@ -29,6 +30,6 @@ class InfosRbq extends Model
 
     //relation avec fournisseurs
     public function fournisseurs(){
-        return $this->hasMany(Fournisseurs::class, 'num_rbq', 'numLicense');
+        return $this->hasMany(Fournisseur::class, 'num_rbq', 'numLicense');
     }
 }

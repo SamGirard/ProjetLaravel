@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('title', "Liste des fournisseurs")
-
 @section('contenu')
-
+@php
+  #logger('Utilisateur authentifié : ' . Auth::user()->courriel);
+@endphp
 @vite(['resources/css/app.css','resources/js/app.js'])
-
 <script src="https://unpkg.com/alpinejs" defer></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -46,11 +46,6 @@
                     </div>
                     <ul id="segment-list" class="h-64 px-3 pb-3 overflow-y-scroll text-sm text-gray-700 dark:text-gray-200">
                     </ul>
-                    <div id="commodity-list" class="hidden h-64 overflow-y-scroll bg-white rounded shadow p-4 mt-4">
-                    <h2 class="mb-2 text-base">Produits et Services sélectionnés</h2>
-                        <div id="commodity-items" class="space-y-2"></div>
-                        <button id="delete-checked" type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Retirer du filtre</button>
-                    </div>
                 </ul>
 
                 <button type="button" class="flex items-center w-full p-1 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-categorie" data-collapse-toggle="dropdown-categorie">
@@ -68,12 +63,12 @@
                     <div class="p-3">
                         <div class="relative">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                <svg class="w-[24px] h-[24px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11.5c.07 0 .14-.007.207-.021.095.014.193.021.293.021h2a2 2 0 0 0 2-2V7a1 1 0 0 0-1-1h-1a1 1 0 1 0 0 2v11h-2V5a2 2 0 0 0-2-2H5Zm7 4a1 1 0 0 1 1-1h.5a1 1 0 1 1 0 2H13a1 1 0 0 1-1-1Zm0 3a1 1 0 0 1 1-1h.5a1 1 0 1 1 0 2H13a1 1 0 0 1-1-1Zm-6 4a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1Zm0 3a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1ZM7 6a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H7Zm1 3V8h1v1H8Z" clip-rule="evenodd"/>
-                                </svg>
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
 
                             </div>
-                            <input type="text" id="searchCategorie" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher une ville...">
+                            <input type="text" id="searchCategorie" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher une catégorie...">
                         </div>
                     </div>
                     <ul id="categorie-list" class="h-64 px-3 pb-3 overflow-y-scroll text-sm text-gray-700 dark:text-gray-200">
@@ -89,8 +84,8 @@
                                 @foreach($filteredLicences as $licence)
                                     <li>
                                         <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input id="{{ $licence->id }}" type="checkbox" value="{{ $licence->titre }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="{{ $licence->id }}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $licence->titre }}</label>
+                                            <input id="{{ $licence->Numéro }}" type="checkbox" value="{{ $licence->titre }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                            <label for="{{ $licence->Numéro }}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $licence->titre }}</label>
                                         </div>
                                     </li>
                                 @endforeach
@@ -178,20 +173,20 @@
             <div class="border-t border-gray-200 dark:border-gray-700 pb-4"></div>
             <div class="flex pb-4">
                 <div class="flex items-center me-4">
-                    <input id="waiting" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="waiting" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">En attente</label>
+                    <input id="En attente" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="En attente" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">En attente</label>
                 </div>
                 <div class="flex items-center me-4">
-                    <input checked id="accepted" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="accepted" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Acceptées</label>
+                    <input checked id="Accepter" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="Accepter" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Acceptées</label>
                 </div>
                 <div class="flex items-center me-4">
-                    <input id="refused" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="refused" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Refusées</label>
+                    <input id="Refusé" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="Refusé" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Refusées</label>
                 </div>
                 <div class="flex items-center me-4">
-                    <input id="revision" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="revision" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">À réviser</label>
+                    <input id="Réviser" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="Réviser" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">À réviser</label>
                 </div>
             </div>
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -261,371 +256,244 @@
             }
         });
 
-    function filterFournisseursOnUpdate(obj) {
-        return new Proxy(obj, {
-            set(target, property, value) {
-                target[property] = value;
-                filterFournisseurs();
-                return true;
-            }
-        });
-    }
-
-    function onInputCommodities() {
-        startingComodities = 0;
-        firstLoad = false;
-        searchCommodities();
-        document.getElementById('segment-list').scrollTop = 0;
-    }
-
-    function searchCommodities() {
-        let searchQuery = $('#searchSegment').val().toLowerCase();
-
-        if(searchQuery === "") {
-            loadSegments('/segment', 'family');
-        }
-        else{
-            $('#breadcrumbs').children('li:not(:first)').remove();
-            $.ajax({
-            url: '/comoditySearch/' + searchQuery + '/' + startingComodities + '/50',
-            method: 'GET',
-            success: function(data) {
-                let segmentList = $('#segment-list');
-                if(!firstLoad) {
-                    segmentList.empty();
-                    firstLoad = true;
+        function filterFournisseursOnUpdate(obj) {
+            return new Proxy(obj, {
+                set(target, property, value) {
+                    target[property] = value;
+                    filterFournisseurs();
+                    return true;
                 }
-
-                data.forEach(item => {
-                    let itemName = item.split(' ')[0];
-                    let itemElement = $('<div></div>')
-                        .addClass('p-2 cursor-pointer hover:bg-gray-200')
-                        .text(item)
-                        .click(function() {
-                            addCommodity(item);
-                        });
-                    
-                    segmentList.append(itemElement);
-                });
-            },
-            error: function() {
-                alert('Failed to fetch data.');
-            }
-        });
+            });
         }
-    }
 
-    function handleScroll() {
-        let searchQuery = $('#searchSegment').val().toLowerCase();
+        let isSearching = false;
+        let debounceTimer;
+        const itemsPerPage = 100;
 
-        if(searchQuery != "") {
+        function onInputCommodities() {
+            firstLoad = false;
+            clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    startingComodities = 0;
+                    searchCommodities();
+                }, 300);
+            document.getElementById('segment-list').scrollTop = 0;
+        }
+
+        function searchCommodities() {
+            if (isSearching) return;
+
+            isSearching = true;
+            let searchQuery = $('#searchSegment').val().toLowerCase();
+
+            let url = '/comoditySearch/' + startingComodities + '/' + itemsPerPage;
+            if (searchQuery !== '') {
+                url += '?comodity=' + encodeURIComponent(searchQuery);
+            }
+
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(data) {
+                    let segmentList = $('#segment-list');
+                    if (!firstLoad) {
+                        segmentList.empty();
+                        firstLoad = true;
+                    }
+
+                    let items = [];
+
+                    $.each(data, function(index, item) {
+                            let isChecked = checkedCommodities[item] ? 'checked' : '';
+                            items.push(`
+                                <li>
+                                    <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                        <input id="${item}" type="checkbox" value="${item}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
+                                        <label for="${item}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${item}</label>
+                                    </div>
+                                </li>
+                            `);
+                    });
+
+                    segmentList.append(items.join(''));
+                },
+                error: function() {
+                    alert('Failed to fetch data.');
+                },
+                complete: function() {
+                    isSearching = false;
+                }
+            });
+        }
+
+        $('#segment-list').on('change', 'input[type="checkbox"]', function() {
+            checkedCommodities[this.id] = $(this).is(':checked');
+        });
+
+        function handleScroll() {
             const element = document.getElementById('segment-list');
             const scrollTop = element.scrollTop;
             const scrollHeight = element.scrollHeight;
             const clientHeight = element.clientHeight;
             const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
-            if(scrollPercentage > 50) {
-                startingComodities+=50;
-                searchCommodities();
+            if (scrollPercentage > 80) {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    startingComodities += itemsPerPage;
+                    searchCommodities();
+                }, 100);
             }
-
         }
-    }
 
-    function loadSegments(url, nextUrlPart = null, breadcrumbName = null) {
-        $('#searchSegment').val('');
-        $.ajax({
-            url: url,
-            method: 'GET',
-            success: function(data) {
-                let segmentList = $('#segment-list');
-                segmentList.empty();
+        function loadRegions() {
+            let searchQuery = $('#searchRegion').val().trim().toLowerCase();
+            let regex = new RegExp(searchQuery, 'i');
 
-                data.forEach(item => {
-                    let itemName = item.split(' ')[0];
-                    let itemElement = $('<div></div>')
-                        .addClass('p-2 cursor-pointer hover:bg-gray-200')
-                        .text(item)
-                        .click(function() {
-                            if (nextUrlPart) {
-                                let nextUrl = `/${nextUrlPart}/${itemName}`;
-                                loadSegments(nextUrl, nextNextUrlPart(nextUrlPart), itemName);
-                            } else {
-                                addCommodity(item);
-                            }
-                        });
-                    
-                    segmentList.append(itemElement);
-                });
-
-                if (breadcrumbName) {
-                    addBreadcrumb(breadcrumbName, url, nextUrlPart);
-                }
-            },
-            error: function() {
-                alert('Failed to fetch data.');
-            }
-        });
-    }
-
-    function nextNextUrlPart(currentPart) {
-        switch (currentPart) {
-            case 'family': return 'class';
-            case 'class': return 'comodity';
-            default: return '';
-        }
-    }
-
-    function addBreadcrumb(name, url, nextUrlPart) {
-        let breadcrumbs = $('#breadcrumbs');
-        let breadcrumbItem = $('<li></li>')
-            .addClass('flex items-center h-full')
-            .attr('data-url', url)
-            .attr('data-next', nextUrlPart)
-            .html(`<a class="inline-flex items-center px-2 py-1.5 space-x-1.5 rounded-md hover:text-neutral-900 hover:bg-neutral-100">${name}</a>`)
-            .click(function(event) {
-                event.preventDefault();
-                let clickedUrl = $(this).attr('data-url');
-                let clickedNextPart = $(this).attr('data-next');
-                loadSegments(clickedUrl, clickedNextPart);
-                $(this).nextAll().remove();
-            });
-
-        breadcrumbs.append('<li class="text-neutral-500">/</li>');
-        breadcrumbs.append(breadcrumbItem);
-    }
-
-    function returnToSegments() {
-        loadSegments('/segment', 'family');
-        $('#breadcrumbs').children('li:not(:first)').remove();
-    }
-
-    function addCommodity(name) {
-        if (!addedCommodities.has(name)) {
-            addedCommodities.add(name);
-            let commodityList = $('#commodity-list');
-            let commodityItems = $('#commodity-items');
-
-            if (commodityList.hasClass('hidden')) {
-                commodityList.removeClass('hidden');
-            }
-
-            let commodityItem = $(`
-                                        <li>
-                                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                <input id="${name}" type="checkbox" value="${name}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                                <label for="${name}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${name}</label>
-                                            </div>
-                                        </li>
-            `);
-
-            commodityItems.append(commodityItem);
-            filterFournisseurs();
-        }
-    }
-
-    function deleteCheckedCommodities() {
-        $('#commodity-items input:checked').each(function() {
-            let value = $(this).val();
-            addedCommodities.delete(value);
-            $(this).closest('div').remove();
-        });
-
-        if (addedCommodities.size === 0) {
-            $('#commodity-list').addClass('hidden');
-        }
-    }
-
-    function checkAllCommodities(checked) {
-        $('#commodity-items input[type="checkbox"]').each(function() {
-            $(this).prop('checked', checked);
-        });
-    }
-
-    function loadRegions() {
-        let searchQuery = $('#searchRegion').val().trim().toLowerCase();
-        let regex = new RegExp(searchQuery, 'i');
-
-        $.ajax({
-            url: '/regions',
-            method: 'GET',
-            success: function(data) {
-                let regionList = $('#region-list');
-                regionList.empty();
-                let items = [];
-
-                $.each(data.result.records, function(index, item) {
-                    let regionName = item.regadm;
-                    if (searchQuery === "" || regex.test(regionName)) {
-                        let isChecked = checkedRegions[regionName] ? 'checked' : '';
-                        items.push(`
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="${regionName}" type="checkbox" value="${regionName}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
-                                    <label for="${regionName}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${regionName}</label>
-                                </div>
-                            </li>
-                        `);
-                    }
-                });
-
-                regionList.append(items.join(''));
-
-            },
-            error: function() {
-                alert('Failed to fetch regions.');
-            }
-        });
-    }
-
-    $('#region-list').on('change', 'input[type="checkbox"]', function() {
-        checkedRegions[this.id] = $(this).is(':checked');
-        filterCities();
-    });
-
-    function loadCities(region, callback) {
-        $.ajax({
-            url: '/ville/' + encodeURIComponent(region),
-            method: 'GET',
-            success: callback,
-            error: function() {
-                alert('Failed to fetch cities for region: ' + region);
-            }
-        });
-    }
-
-    function debounce(func, wait) {
-        let timeout;
-        return function(...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
-        };
-    }
-
-    function filterCities() {
-        let selectedRegions = $('#region-list input:checked').map(function() {
-            return $(this).val();
-        }).get();
-        
-        let searchQuery = $('#searchCity').val().trim().toLowerCase();
-        let regex = new RegExp(searchQuery, 'i');
-        let cityList = $('#city-list');
-        cityList.empty();
-
-        if (selectedRegions.length > 0) {
-            let loadedCities = new Set();
-            let remainingRegions = selectedRegions.length;
-            let cityItems = [];
-
-            selectedRegions.forEach(region => {
-                loadCities(region, function(data) {
-                    $.each(data.result.records, function(index, item) {
-                        let cityName = item.munnom.toLowerCase();
-                        if (!loadedCities.has(cityName) && (searchQuery === "" || regex.test(cityName))) {
-                            loadedCities.add(cityName);
-                            let isChecked = checkedCities[cityName] ? 'checked' : '';
-                            cityItems.push(`
-                                <li>
-                                    <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                        <input id="${cityName}" type="checkbox" value="${item.munnom}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
-                                        <label for="${cityName}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${item.munnom}</label>
-                                    </div>
-                                </li>
-                            `);
-                        }
-                    });
-
-                    remainingRegions--;
-                    if (remainingRegions === 0) {
-                        cityList.append(cityItems.join(''));
-                        cityList.removeClass('hidden');
-                    }
-                });
-            });
-        } else {
             $.ajax({
-                url: '/ville',
+                url: '/regions',
                 method: 'GET',
                 success: function(data) {
-                    let cityItems = [];
+                    let regionList = $('#region-list');
+                    regionList.empty();
+                    let items = [];
+
                     $.each(data.result.records, function(index, item) {
-                        let cityName = item.munnom.toLowerCase();
-                        if (searchQuery === "" || regex.test(cityName)) {
-                            let isChecked = checkedCities[cityName] ? 'checked' : '';
-                            cityItems.push(`
+                        let regionName = item.regadm;
+                        if (searchQuery === "" || regex.test(regionName)) {
+                            let isChecked = checkedRegions[regionName] ? 'checked' : '';
+                            items.push(`
                                 <li>
                                     <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                        <input id="${cityName}" type="checkbox" value="${item.munnom}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
-                                        <label for="${cityName}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${item.munnom}</label>
+                                        <input id="${regionName}" type="checkbox" value="${regionName}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
+                                        <label for="${regionName}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${regionName}</label>
                                     </div>
                                 </li>
                             `);
                         }
                     });
 
-                    cityList.append(cityItems.join(''));
-                    cityList.toggleClass('hidden', cityItems.length === 0);
+                    regionList.append(items.join(''));
+
                 },
                 error: function() {
-                    alert('Failed to fetch all cities.');
+                    alert('Failed to fetch regions.');
                 }
             });
         }
-    }
 
-    $('#city-list').on('change', 'input[type="checkbox"]', function() {
-        checkedCities[this.id] = $(this).is(':checked');
-    });
+        $('#region-list').on('change', 'input[type="checkbox"]', function() {
+            checkedRegions[this.id] = $(this).is(':checked');
+            filterCities();
+        });
 
-
-    function filterLicences() {
-        let searchValue = $('#searchCategorie').val().toLowerCase();
-        let regex = new RegExp(searchValue, 'i');
-        $("#categorie-list").empty();
-
-        if (searchValue === "") {
-            categoriesLicences.forEach(category => {
-                $("#categorie-list").append(`<h2 class="mb-2 text-base">${category.titre}</h2>`);
-
-                let filteredLicences = licences.filter(licence => licence.Categorie === category.id);
-                
-                if (licences.length > 0) {
-                    filteredLicences.forEach(licence => {
-                        licenceItem = $(`
-                                    <li>
-                                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input id="${ licence.id }" type="checkbox" value="${ licence.titre }" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="${ licence.id }" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${ licence.titre }</label>
-                                        </div>
-                                    </li>
-                        `);
-
-                        if (checkedLicences[licence.id]) {
-                            licenceItem.find('input').prop('checked', true);
-                        }
-
-                        licenceItem.find('input').change(function() {
-                            checkedLicences[this.id] = $(this).is(':checked');
-                        });
-                                
-                        $("#categorie-list").append(licenceItem);
-                    });
+        function loadCities(region, callback) {
+            $.ajax({
+                url: '/ville/' + encodeURIComponent(region),
+                method: 'GET',
+                success: callback,
+                error: function() {
+                    alert('Failed to fetch cities for region: ' + region);
                 }
             });
-        } else {
-            categoriesLicences.forEach(category => {
-                    let filteredLicences = licences.filter(licence => licence.Categorie === category.id && regex.test(licence.titre));
-                    if (filteredLicences.length > 0) {
-                        $("#categorie-list").append(`<h2 class="mb-2 text-base">${category.titre}</h2>`);
-                        filteredLicences.forEach(licence => {
-                            licenceItem = $(`
+        }
+
+        function filterCities() {
+            let selectedRegions = $('#region-list input:checked').map(function() {
+                return $(this).val();
+            }).get();
+            
+            let searchQuery = $('#searchCity').val().trim().toLowerCase();
+            let regex = new RegExp(searchQuery, 'i');
+            let cityList = $('#city-list');
+            cityList.empty();
+
+            if (selectedRegions.length > 0) {
+                let loadedCities = new Set();
+                let remainingRegions = selectedRegions.length;
+                let cityItems = [];
+
+                selectedRegions.forEach(region => {
+                    loadCities(region, function(data) {
+                        $.each(data.result.records, function(index, item) {
+                            let cityName = item.munnom.toLowerCase();
+                            if (!loadedCities.has(cityName) && (searchQuery === "" || regex.test(cityName))) {
+                                loadedCities.add(cityName);
+                                let isChecked = checkedCities[cityName] ? 'checked' : '';
+                                cityItems.push(`
                                     <li>
                                         <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input id="${licence.id}" type="checkbox" value="${licence.titre}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="${licence.id}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${licence.titre}</label>
+                                            <input id="${cityName}" type="checkbox" value="${item.munnom}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
+                                            <label for="${cityName}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${item.munnom}</label>
                                         </div>
                                     </li>
+                                `);
+                            }
+                        });
+
+                        remainingRegions--;
+                        if (remainingRegions === 0) {
+                            cityList.append(cityItems.join(''));
+                            cityList.removeClass('hidden');
+                        }
+                    });
+                });
+            } else {
+                $.ajax({
+                    url: '/ville',
+                    method: 'GET',
+                    success: function(data) {
+                        let cityItems = [];
+                        $.each(data.result.records, function(index, item) {
+                            let cityName = item.munnom.toLowerCase();
+                            if (searchQuery === "" || regex.test(cityName)) {
+                                let isChecked = checkedCities[cityName] ? 'checked' : '';
+                                cityItems.push(`
+                                    <li>
+                                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                            <input id="${cityName}" type="checkbox" value="${item.munnom}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
+                                            <label for="${cityName}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${item.munnom}</label>
+                                        </div>
+                                    </li>
+                                `);
+                            }
+                        });
+
+                        cityList.append(cityItems.join(''));
+                        cityList.toggleClass('hidden', cityItems.length === 0);
+                    },
+                    error: function() {
+                        alert('Failed to fetch all cities.');
+                    }
+                });
+            }
+        }
+
+        $('#city-list').on('change', 'input[type="checkbox"]', function() {
+            checkedCities[this.id] = $(this).is(':checked');
+        });
+
+
+        function filterLicences() {
+            let searchValue = $('#searchCategorie').val().toLowerCase();
+            let regex = new RegExp(searchValue, 'i');
+            $("#categorie-list").empty();
+
+            if (searchValue === "") {
+                categoriesLicences.forEach(category => {
+                    $("#categorie-list").append(`<h2 class="mb-2 text-base">${category.titre}</h2>`);
+
+                    let filteredLicences = licences.filter(licence => licence.Categorie === category.id);
+                    
+                    if (licences.length > 0) {
+                        filteredLicences.forEach(licence => {
+                            licenceItem = $(`
+                                        <li>
+                                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                <input id="${ licence.Numéro }" type="checkbox" value="${ licence.titre }" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                                <label for="${ licence.Numéro }" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${ licence.titre }</label>
+                                            </div>
+                                        </li>
                             `);
 
                             if (checkedLicences[licence.id]) {
@@ -635,32 +503,58 @@
                             licenceItem.find('input').change(function() {
                                 checkedLicences[this.id] = $(this).is(':checked');
                             });
-
+                                    
                             $("#categorie-list").append(licenceItem);
                         });
                     }
-            });
-        }
-    }
-
-
-    document.querySelectorAll('.statusCheckbox').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const value = this.id;
-
-            if (this.checked) {
-                checkedStatus[value] = true;
+                });
             } else {
-                delete checkedStatus[value];
+                categoriesLicences.forEach(category => {
+                        let filteredLicences = licences.filter(licence => licence.Categorie === category.id && regex.test(licence.titre));
+                        if (filteredLicences.length > 0) {
+                            $("#categorie-list").append(`<h2 class="mb-2 text-base">${category.titre}</h2>`);
+                            filteredLicences.forEach(licence => {
+                                licenceItem = $(`
+                                        <li>
+                                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                <input id="${licence.Numéro}" type="checkbox" value="${licence.titre}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                                <label for="${licence.Numéro}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${licence.titre}</label>
+                                            </div>
+                                        </li>
+                                `);
+
+                                if (checkedLicences[licence.id]) {
+                                    licenceItem.find('input').prop('checked', true);
+                                }
+
+                                licenceItem.find('input').change(function() {
+                                    checkedLicences[this.id] = $(this).is(':checked');
+                                });
+
+                                $("#categorie-list").append(licenceItem);
+                            });
+                        }
+                });
             }
+        }
 
-            console.log(checkedStatus);
+        document.querySelectorAll('.statusCheckbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const value = this.id;
+
+                if (this.checked) {
+                    checkedStatus[value] = true;
+                } else {
+                    delete checkedStatus[value];
+                }
+
+                filterFournisseurs();
+            });
         });
-    });
 
 
-    function filterFournisseurs() {
-        $('#fournisseurs-list').empty();
+        function filterFournisseurs() {
+            $('#fournisseurs-list').empty();
 
             let searchValue = $('#table-search').val();
             let regex = new RegExp(searchValue, 'i');
@@ -717,79 +611,82 @@
                 regionsVerification(f.ville)
             );
 
-        filteredFournisseurs.forEach(fournisseur => {
-            var etat;
+            filteredFournisseurs.forEach(fournisseur => {
+                var etat = demandes.filter(d => d.neqFournisseur === fournisseur.neq)[0].etatDemande;
 
-            switch ('Acceptée') {
-                case "Acceptée":
-                    etat = '<span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Acceptée</span>';
-                    break;
-                case "Refusé":
-                    etat = '<span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Refusé</span>';
-                    break;
-                case "Reviser":
-                    etat = '<span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">À réviser</span>'
-                    break;
-                case "En attente":
-                    etat = '<span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">En attente</span>'
-                    break;
-            }
+                switch (etat) {
+                    case "Accepter":
+                        etat = '<span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Acceptée</span>';
+                        break;
+                    case "Refusé":
+                        etat = '<span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Refusé</span>';
+                        break;
+                    case "Réviser":
+                        etat = '<span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">À réviser</span>'
+                        break;
+                    case "En attente":
+                        etat = '<span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">En attente</span>'
+                        break;
+                }
 
-            fournisseurItem = $(`
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td class="px-6 py-4">
-                    ${etat}
-                </td>
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    ${fournisseur.nomEntreprise}
-                </th>
-                <td class="px-6 py-4">
-                    ${fournisseur.ville}
-                </td>
-                <td class="px-6 py-4">
-                    0/${addedCommodities.size}
-                </td>
-                <td class="px-6 py-4">
-                    0/${Object.keys(checkedLicences).length}
-                </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Ouvrir</a>
-                </td>
-                <td class="w-4 p-4">
-                    <div class="flex items-center">
-                        <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                    </div>
-                </td>
-            </tr>
-            `);
+                fournisseurItem = $(`
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td class="px-6 py-4">
+                        ${etat}
+                    </td>
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        ${fournisseur.nomEntreprise}
+                    </th>
+                    <td class="px-6 py-4">
+                        ${fournisseur.ville}
+                    </td>
+                    <td class="px-6 py-4">
+                        ${compteurCommodities}/${Object.values(checkedCommodities).filter(value => value === true).length}
+                    </td>
+                    <td class="px-6 py-4">
+                        ${compteurLicences}/${Object.values(checkedLicences).filter(value => value === true).length}
+                    </td>
+                    <td class="px-6 py-4">
+                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Ouvrir</a>
+                    </td>
+                    <td class="w-4 p-4">
+                        <div class="flex items-center">
+                            <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                        </div>
+                    </td>
+                </tr>
+                `);
 
-            $('#fournisseurs-list').append(fournisseurItem);
-        })
-    }
+                $('#fournisseurs-list').append(fournisseurItem);
+            })
+        }
 
-    const debouncedFilterCities = debounce(filterCities, 300);
-    const debouncedLoadRegions = debounce(loadRegions, 300);
-    const debouncedSearchCommodities = debounce(onInputCommodities, 300);
-    const debouncedScrollComodities = debounce(handleScroll, 300);
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
 
-    loadSegments('/segment', 'family');
-    loadRegions();
-    filterCities();
-    filterLicences();
-    filterFournisseurs();
+        loadRegions();
+        filterCities();
+        filterLicences();
+        filterFournisseurs();
+        searchCommodities();
 
-    $('#breadcrumbs').children('li:first').click(returnToSegments);
-    $('#delete-checked').click(deleteCheckedCommodities);
-    $('#check-all').change(function() {
-        checkAllCommodities(this.checked);
+        const debouncedFilterCities = debounce(filterCities, 300);
+        const debouncedLoadRegions = debounce(loadRegions, 300);
+
+        $('#searchCity').on('input', debouncedFilterCities);
+        $('#searchRegion').on('input', debouncedLoadRegions);
+        $('#searchSegment').on('input', onInputCommodities);
+        $('#segment-list').on('scroll', handleScroll);
+        $('#searchCategorie').on('input', filterLicences);
+        $('#table-search').on('input', filterFournisseurs);
     });
 
-    $('#searchCity').on('input', filterCities);
-    $('#searchRegion').on('input', loadRegions);
-    $('#searchSegment').on('input', debouncedSearchCommodities);
-    $('#segment-list').on('scroll', handleScroll);
-    $('#searchCategorie').on('input', filterLicences);
-    $('#table-search').on('input', filterFournisseurs);
-});
 </script>
+
+@endsection
