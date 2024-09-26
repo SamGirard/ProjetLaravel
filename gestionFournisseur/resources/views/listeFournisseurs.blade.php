@@ -237,6 +237,24 @@
         var infosRbq = @json($infosRbq);
         var checkedStatus = {};
         checkedStatus['Accepter'] = true;
+        var allCities = [];
+
+        $.ajax({
+            url: '/ville',
+            method: 'GET',
+            success: function(data) {
+                $.each(data.result.records, function(index, item) {
+                    allCities.push({
+                        key: item.munnom,
+                        value: item.regadm
+                    });
+                });
+
+            },
+            error: function() {
+                alert('Failed to fetch data.');
+            }
+        });
 
         function filterFournisseursOnUpdate(obj) {
             return new Proxy(obj, {
@@ -582,10 +600,9 @@
             }
 
             function regionsVerification(city) {
-                var region = city;
-                console.log(region)
+                const region = allCities.find(c => c.key === city)?.value;
 
-                return !Object.values(checkedRegions).includes(true) || checkedRegions[region.toLowerCase().region(' (')[0]] === true;
+                return !Object.values(checkedRegions).includes(true) || checkedRegions[region] === true;
             }
             
             filteredFournisseurs = fournisseurs.filter(f => 
