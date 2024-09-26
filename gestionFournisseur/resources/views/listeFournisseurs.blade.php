@@ -10,7 +10,7 @@
 
 <div class="flex min-h-screen">
     <aside id="sidebar" class="top-0 left-0 z-40 w-64 h-screen mr-5" aria-label="Sidebar">
-        <div class="h-full px-2 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div class="h-full px-2 py-4 overflow-y-auto  bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
             <ul class="space-y-2 font-medium">
 
                 <button type="button" class="flex items-center w-full p-1 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-segment" data-collapse-toggle="dropdown-segment">
@@ -237,6 +237,24 @@
         var infosRbq = @json($infosRbq);
         var checkedStatus = {};
         checkedStatus['Accepter'] = true;
+        var allCities = [];
+
+        $.ajax({
+            url: '/ville',
+            method: 'GET',
+            success: function(data) {
+                $.each(data.result.records, function(index, item) {
+                    allCities.push({
+                        key: item.munnom,
+                        value: item.regadm
+                    });
+                });
+
+            },
+            error: function() {
+                alert('Failed to fetch data.');
+            }
+        });
 
         function filterFournisseursOnUpdate(obj) {
             return new Proxy(obj, {
@@ -267,8 +285,6 @@
 
             isSearching = true;
             let searchQuery = $('#searchSegment').val().toLowerCase();
-
-            $('#breadcrumbs').children('li:not(:first)').remove();
 
             let url = '/comoditySearch/' + startingComodities + '/' + itemsPerPage;
             if (searchQuery !== '') {
@@ -582,10 +598,9 @@
             }
 
             function regionsVerification(city) {
-                var region = city;
-                console.log(region)
+                const region = allCities.find(c => c.key === city)?.value;
 
-                return !Object.values(checkedRegions).includes(true) || checkedRegions[region.toLowerCase().region(' (')[0]] === true;
+                return !Object.values(checkedRegions).includes(true) || checkedRegions[region] === true;
             }
             
             filteredFournisseurs = fournisseurs.filter(f => 

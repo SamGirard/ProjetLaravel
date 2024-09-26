@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('courriel', 64)->unique(); //clef primaire secondaire
             $table->string('password', 64);
             $table->string('nomEntreprise', 64);
-
             $table->string('numCivique', 8);
             $table->string('rue', 64);
             $table->string('bureau', 64)->nullable();
