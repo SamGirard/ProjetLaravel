@@ -119,7 +119,7 @@ class FournisseursTableSeeder extends Seeder
                 'numCivique' => '8585',
                 'rue' => 'Côte-de-Liesse',
                 'bureau' => 'Bureau 100',
-                'ville' => 'Saint-Laurent',
+                'ville' => 'Deschaillons-sur-Saint-Laurent',
                 'province' => 'Québec',
                 'codePostal' => 'H4T1G6',
                 'siteInternet' => 'http://www.cae.com',

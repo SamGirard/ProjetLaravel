@@ -84,8 +84,8 @@
                                 @foreach($filteredLicences as $licence)
                                     <li>
                                         <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input id="{{ $licence->id }}" type="checkbox" value="{{ $licence->titre }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="{{ $licence->id }}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $licence->titre }}</label>
+                                            <input id="{{ $licence->Numéro }}" type="checkbox" value="{{ $licence->titre }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                            <label for="{{ $licence->Numéro }}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $licence->titre }}</label>
                                         </div>
                                     </li>
                                 @endforeach
@@ -474,8 +474,8 @@
                             licenceItem = $(`
                                         <li>
                                             <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                <input id="${ licence.id }" type="checkbox" value="${ licence.titre }" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                                <label for="${ licence.id }" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${ licence.titre }</label>
+                                                <input id="${ licence.Numéro }" type="checkbox" value="${ licence.titre }" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                                <label for="${ licence.Numéro }" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${ licence.titre }</label>
                                             </div>
                                         </li>
                             `);
@@ -501,8 +501,8 @@
                                 licenceItem = $(`
                                         <li>
                                             <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                <input id="${licence.id}" type="checkbox" value="${licence.titre}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                                <label for="${licence.id}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${licence.titre}</label>
+                                                <input id="${licence.Numéro}" type="checkbox" value="${licence.titre}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                                <label for="${licence.Numéro}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${licence.titre}</label>
                                             </div>
                                         </li>
                                 `);
@@ -542,25 +542,62 @@
 
             let searchValue = $('#table-search').val();
             let regex = new RegExp(searchValue, 'i');
+            let compteurCommodities = 0;
+            let compteurLicences = 0;
             
             function nameVerification(name) {
                 return searchValue === "" || regex.test(name);
             }
 
             function statusVerification(status) {
-                console.log(status)
                 return checkedStatus[status[0].etatDemande] === true
             }
 
-            var commoditiesVerification = !Object.values(checkedCommodities).includes(true) || checkedCommodities['10101501 - Chats'] === true;
-            var licencesVerification = !Object.values(checkedLicences).includes(true) || checkedLicences[test] === true;
-            var citiesVerification = !Object.values(checkedCities).includes(true) || checkedCities[test] === true 
-            var regionsVerification = !Object.values(checkedRegions).includes(true) || checkedRegions[test] === true 
+            function commoditiesVerification(commodities) {
+                var isChecked = false;
+
+                commodities.forEach(commodity => {
+                    console.log(commodity);
+                    compteurCommodities++;
+                })
+
+                return !Object.values(checkedCommodities).includes(true) || isChecked;
+            }
+
+            function licencesVerification(infosRbq) {
+                var isChecked = false;
+
+                infosRbq.forEach(infoRbq => {
+                    if(checkedLicences[infoRbq.codeSousCategorie] === true) {
+                        isChecked = true;
+                        compteurLicences++;
+                    }
+                })
+
+                return !Object.values(checkedLicences).includes(true) || isChecked;
+            }
+
+            function citiesVerification(city) {
+                return !Object.values(checkedCities).includes(true) || checkedCities[city.toLowerCase()] === true;
+            }
+
+            function regionsVerification(city) {
+                var region = city;
+                console.log(region)
+
+                return !Object.values(checkedRegions).includes(true) || checkedRegions[region.toLowerCase().region(' (')[0]] === true;
+            }
             
-            filteredFournisseurs = fournisseurs.filter(f => nameVerification(f.name) && statusVerification(demandes.filter(d => d.neqFournisseur === f.neq)));
+            filteredFournisseurs = fournisseurs.filter(f => 
+                nameVerification(f.name) &&
+                statusVerification(demandes.filter(d => d.neqFournisseur === f.neq)) &&
+                licencesVerification(infosRbq.filter(i => i.neqFournisseur === f.neq)) && 
+                citiesVerification(f.ville) &&
+                regionsVerification(f.ville)
+            );
 
             filteredFournisseurs.forEach(fournisseur => {
-                var etat = demandes.filter(d => d.neqFournisseur === fournisseur.neq)[0].etatDemande
+                var etat = demandes.filter(d => d.neqFournisseur === fournisseur.neq)[0].etatDemande;
 
                 switch (etat) {
                     case "Accepter":
@@ -589,10 +626,10 @@
                         ${fournisseur.ville}
                     </td>
                     <td class="px-6 py-4">
-                        0/${Object.keys(checkedCommodities).length}
+                        ${compteurCommodities}/${Object.values(checkedCommodities).filter(value => value === true).length}
                     </td>
                     <td class="px-6 py-4">
-                        0/${Object.keys(checkedLicences).length}
+                        ${compteurLicences}/${Object.values(checkedLicences).filter(value => value === true).length}
                     </td>
                     <td class="px-6 py-4">
                         <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Ouvrir</a>
