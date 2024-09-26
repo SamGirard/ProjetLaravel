@@ -14,6 +14,8 @@ use App\Models\CategoriesLicence;
 use App\Models\Licence;
 
 use App\Models\Fournisseur;
+use App\Models\Demande;
+use App\Models\InfosRbq;
 
 
 class EmployeController extends Controller
@@ -40,6 +42,8 @@ class EmployeController extends Controller
         $categoriesLicences = CategoriesLicence::all();
         $licences = Licence::all();
         $fournisseurs = Fournisseur::all();
+        $demandes = Demande::all();
+        $infosRbq = InfosRbq::all();
 
 
         if ($user) {
@@ -50,7 +54,8 @@ class EmployeController extends Controller
                 return view('GestionRole.role', compact('employes'));
 
             } else if ($user->role == "Responsable" || $employe->role == "Commis"){
-                return view('listeFournisseurs', compact('employes', 'categoriesLicences', 'licences', 'fournisseurs'));
+                //return view('listeFournisseurs', compact('employes', 'categoriesLicences', 'licences', 'fournisseurs', 'demandes', 'infosRbq'));
+                return redirect()->route('liste');
             }
 
         } else {
