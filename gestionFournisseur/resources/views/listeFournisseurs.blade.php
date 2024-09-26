@@ -245,7 +245,7 @@
         checkedStatus['Accepter'] = true;
         var allCities = [];
         let currentPage = 1;
-        const itemsPerPage = 5;
+        const itemsPerPage = 10;
 
         $.ajax({
             url: '/ville',
@@ -624,7 +624,7 @@
 
                 $('#pagination').append(`
                     <li>
-                        <a class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" ${currentPage === 1 ? 'class="disabled"' : ''} data-page="${currentPage - 1}">Previous</a>
+                        <a class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" ${currentPage === 1 ? 'class="disabled"' : ''} data-page="${currentPage - 1}"><</a>
                     </li>
                 `);
 
@@ -645,7 +645,7 @@
 
                 $('#pagination').append(`
                     <li>
-                        <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" ${currentPage === totalPages ? 'class="disabled"' : ''} data-page="${currentPage + 1}">Next</a>
+                        <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" ${currentPage === totalPages ? 'class="disabled"' : ''} data-page="${currentPage + 1}">></a>
                     </li>
                 `);
 
