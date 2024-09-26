@@ -2,10 +2,9 @@
 @section('title', "Liste des fournisseurs")
 
 @section('contenu')
-@php
-  logger('Utilisateur authentifié : ' . Auth::user()->courriel);
-@endphp
+
 @vite(['resources/css/app.css','resources/js/app.js'])
+
 <script src="https://unpkg.com/alpinejs" defer></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -226,34 +225,41 @@
             </table>
     </div>
 
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <div class="pb-4 bg-white dark:bg-gray-900">
-            <label for="table-search" class="sr-only">Search</label>
-            <div class="relative mt-1">
-                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                    </svg>
-                </div>
-                <input type="text" id="table-search" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items">
-            </div>
-  @endsection
+    <script>
+    $(document).ready(function() {
+        let selectedRegions = new Set();
+        let currentCities = new Set();
+        let startingComodities = 0;
+        let firstLoad = false;
+        let checkedRegions = filterFournisseursOnUpdate({});
+        let checkedCities = filterFournisseursOnUpdate({});
+        let checkedLicences = filterFournisseursOnUpdate({});
+        let checkedCommodities = filterFournisseursOnUpdate({});
+        var categoriesLicences = @json($categoriesLicences);
+        var licences = @json($licences);
+        var fournisseurs = @json($fournisseurs);
+        var demandes = @json($demandes);
+        var infosRbq = @json($infosRbq);
+        var checkedStatus = {};
+        checkedStatus['Accepter'] = true;
+        var allCities = [];
 
-<script>
-$(document).ready(function() {
-    let addedCommodities = new Set();
-    let selectedRegions = new Set();
-    let currentCities = new Set();
-    let startingComodities = 0;
-    let firstLoad = false;
-    let checkedRegions = filterFournisseursOnUpdate({});
-    let checkedCities = filterFournisseursOnUpdate({});
-    let checkedLicences = filterFournisseursOnUpdate({});
-    var categoriesLicences = @json($categoriesLicences);
-    var licences = @json($licences);
-    var fournisseurs = @json($fournisseurs);
-    var checkedStatus = filterFournisseursOnUpdate({});
-    checkedStatus['accepted'] = true;
+        $.ajax({
+            url: '/ville',
+            method: 'GET',
+            success: function(data) {
+                $.each(data.result.records, function(index, item) {
+                    allCities.push({
+                        key: item.munnom,
+                        value: item.regadm
+                    });
+                });
+
+            },
+            error: function() {
+                alert('Failed to fetch data.');
+            }
+        });
 
     function filterFournisseursOnUpdate(obj) {
         return new Proxy(obj, {
@@ -656,19 +662,60 @@ $(document).ready(function() {
     function filterFournisseurs() {
         $('#fournisseurs-list').empty();
 
-        let searchValue = $('#table-search').val();
-        let regex = new RegExp(searchValue, 'i');
+            let searchValue = $('#table-search').val();
+            let regex = new RegExp(searchValue, 'i');
+            let compteurCommodities = 0;
+            let compteurLicences = 0;
+            
+            function nameVerification(name) {
+                return searchValue === "" || regex.test(name);
+            }
 
-        var test = "la martre"
+            function statusVerification(status) {
+                return checkedStatus[status[0].etatDemande] === true
+            }
 
-        var nameVerification = searchValue === "" || regex.test('Entreprise Exemple');
-        var statusVerification = checkedStatus['accepted'] === true;
-        var commoditiesVerification = addedCommodities.size === 0 || addedCommodities.has("10101501 - Chats");
-        var licencesVerification = !Object.values(checkedLicences).includes(true) || checkedLicences[test] === true;
-        var citiesVerification = !Object.values(checkedCities).includes(true) || checkedCities[test] === true 
-        var regionsVerification = !Object.values(checkedRegions).includes(true) || checkedRegions[test] === true 
-        
-        filteredFournisseurs = fournisseurs.filter(f => citiesVerification && regionsVerification && licencesVerification && commoditiesVerification && statusVerification && nameVerification);
+            function commoditiesVerification(commodities) {
+                var isChecked = false;
+
+                commodities.forEach(commodity => {
+                    console.log(commodity);
+                    compteurCommodities++;
+                })
+
+                return !Object.values(checkedCommodities).includes(true) || isChecked;
+            }
+
+            function licencesVerification(infosRbq) {
+                var isChecked = false;
+
+                infosRbq.forEach(infoRbq => {
+                    if(checkedLicences[infoRbq.codeSousCategorie] === true) {
+                        isChecked = true;
+                        compteurLicences++;
+                    }
+                })
+
+                return !Object.values(checkedLicences).includes(true) || isChecked;
+            }
+
+            function citiesVerification(city) {
+                return !Object.values(checkedCities).includes(true) || checkedCities[city.toLowerCase()] === true;
+            }
+
+            function regionsVerification(city) {
+                const region = allCities.find(c => c.key === city)?.value;
+
+                return !Object.values(checkedRegions).includes(true) || checkedRegions[region] === true;
+            }
+            
+            filteredFournisseurs = fournisseurs.filter(f => 
+                nameVerification(f.name) &&
+                statusVerification(demandes.filter(d => d.neqFournisseur === f.neq)) &&
+                licencesVerification(infosRbq.filter(i => i.neqFournisseur === f.neq)) && 
+                citiesVerification(f.ville) &&
+                regionsVerification(f.ville)
+            );
 
         filteredFournisseurs.forEach(fournisseur => {
             var etat;
