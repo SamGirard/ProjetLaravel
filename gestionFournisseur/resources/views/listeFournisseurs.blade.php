@@ -173,20 +173,20 @@
             <div class="border-t border-gray-200 dark:border-gray-700 pb-4"></div>
             <div class="flex pb-4">
                 <div class="flex items-center me-4">
-                    <input id="waiting" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="waiting" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">En attente</label>
+                    <input id="En attente" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="En attente" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">En attente</label>
                 </div>
                 <div class="flex items-center me-4">
-                    <input checked id="accepted" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="accepted" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Acceptées</label>
+                    <input checked id="Accepter" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="Accepter" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Acceptées</label>
                 </div>
                 <div class="flex items-center me-4">
-                    <input id="refused" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="refused" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Refusées</label>
+                    <input id="Refusé" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="Refusé" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Refusées</label>
                 </div>
                 <div class="flex items-center me-4">
-                    <input id="revision" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="revision" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">À réviser</label>
+                    <input id="Réviser" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="Réviser" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">À réviser</label>
                 </div>
             </div>
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -233,8 +233,10 @@
         var categoriesLicences = @json($categoriesLicences);
         var licences = @json($licences);
         var fournisseurs = @json($fournisseurs);
+        var demandes = @json($demandes);
+        var infosRbq = @json($infosRbq);
         var checkedStatus = {};
-        checkedStatus['accepted'] = true;
+        checkedStatus['Accepter'] = true;
 
         function filterFournisseursOnUpdate(obj) {
             return new Proxy(obj, {
@@ -540,29 +542,34 @@
 
             let searchValue = $('#table-search').val();
             let regex = new RegExp(searchValue, 'i');
+            
+            function nameVerification(name) {
+                return searchValue === "" || regex.test(name);
+            }
 
-            var test = "la martre"
-            console.log(checkedCommodities);
-            var nameVerification = searchValue === "" || regex.test('Entreprise Exemple');
-            var statusVerification = checkedStatus['accepted'] === true;
+            function statusVerification(status) {
+                console.log(status)
+                return checkedStatus[status[0].etatDemande] === true
+            }
+
             var commoditiesVerification = !Object.values(checkedCommodities).includes(true) || checkedCommodities['10101501 - Chats'] === true;
             var licencesVerification = !Object.values(checkedLicences).includes(true) || checkedLicences[test] === true;
             var citiesVerification = !Object.values(checkedCities).includes(true) || checkedCities[test] === true 
             var regionsVerification = !Object.values(checkedRegions).includes(true) || checkedRegions[test] === true 
             
-            filteredFournisseurs = fournisseurs.filter(f => citiesVerification && regionsVerification && licencesVerification && commoditiesVerification && statusVerification && nameVerification);
+            filteredFournisseurs = fournisseurs.filter(f => nameVerification(f.name) && statusVerification(demandes.filter(d => d.neqFournisseur === f.neq)));
 
             filteredFournisseurs.forEach(fournisseur => {
-                var etat;
+                var etat = demandes.filter(d => d.neqFournisseur === fournisseur.neq)[0].etatDemande
 
-                switch ('Acceptée') {
-                    case "Acceptée":
+                switch (etat) {
+                    case "Accepter":
                         etat = '<span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Acceptée</span>';
                         break;
                     case "Refusé":
                         etat = '<span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Refusé</span>';
                         break;
-                    case "Reviser":
+                    case "Réviser":
                         etat = '<span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">À réviser</span>'
                         break;
                     case "En attente":
@@ -603,14 +610,25 @@
             })
         }
 
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
         loadRegions();
         filterCities();
         filterLicences();
         filterFournisseurs();
         searchCommodities();
 
-        $('#searchCity').on('input', filterCities);
-        $('#searchRegion').on('input', loadRegions);
+        const debouncedFilterCities = debounce(filterCities, 300);
+        const debouncedLoadRegions = debounce(loadRegions, 300);
+
+        $('#searchCity').on('input', debouncedFilterCities);
+        $('#searchRegion').on('input', debouncedLoadRegions);
         $('#searchSegment').on('input', onInputCommodities);
         $('#segment-list').on('scroll', handleScroll);
         $('#searchCategorie').on('input', filterLicences);

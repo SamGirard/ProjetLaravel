@@ -15,8 +15,8 @@ class CategoriesLicencesTableSeeder extends Seeder
     {
         DB::table('categories_licences')->insert([
             ['Id' => 1, 'Titre' => 'Entrepreneur général (Annexe I)'],
-            ['Id' => 2, 'Titre' => 'Entrepreneur spcéialisé (Annexe II)'],
-            ['Id' => 3, 'Titre' => 'Entrepreneur spcéialisé (Annexe III)']
+            ['Id' => 2, 'Titre' => 'Entrepreneur spécialisé (Annexe II)'],
+            ['Id' => 3, 'Titre' => 'Entrepreneur spécialisé (Annexe III)']
     ]);
     }
 }
