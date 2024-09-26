@@ -218,6 +218,12 @@
                 <tbody id="fournisseurs-list">
                 </tbody>
             </table>
+            <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
+                <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Affichage de <span id="nbAffichage" class="font-semibold text-gray-900 dark:text-white">1-10</span> sur <span id="nbAffichageTotal" class="font-semibold text-gray-900 dark:text-white">{{count($fournisseurs)}}</span></span>
+                <ul id="pagination"class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+                    <p>allo</p>
+                </ul>
+            </nav>
     </div>
 
     <script>
@@ -238,6 +244,8 @@
         var checkedStatus = {};
         checkedStatus['Accepter'] = true;
         var allCities = [];
+        let currentPage = 1;
+        const itemsPerPage = 5;
 
         $.ajax({
             url: '/ville',
@@ -252,7 +260,7 @@
 
             },
             error: function() {
-                alert('Failed to fetch data.');
+                alert('Failed to fetch city.');
             }
         });
 
@@ -268,7 +276,7 @@
 
         let isSearching = false;
         let debounceTimer;
-        const itemsPerPage = 100;
+        const segmentPerPage = 100;
 
         function onInputCommodities() {
             firstLoad = false;
@@ -286,7 +294,7 @@
             isSearching = true;
             let searchQuery = $('#searchSegment').val().toLowerCase();
 
-            let url = '/comoditySearch/' + startingComodities + '/' + itemsPerPage;
+            let url = '/comoditySearch/' + startingComodities + '/' + segmentPerPage;
             if (searchQuery !== '') {
                 url += '?comodity=' + encodeURIComponent(searchQuery);
             }
@@ -318,7 +326,7 @@
                     segmentList.append(items.join(''));
                 },
                 error: function() {
-                    alert('Failed to fetch data.');
+                    alert('Failed to fetch segment.');
                 },
                 complete: function() {
                     isSearching = false;
@@ -611,7 +619,62 @@
                 regionsVerification(f.ville)
             );
 
-            filteredFournisseurs.forEach(fournisseur => {
+            function renderPagination(totalPages) {
+                $('#pagination').empty();
+
+                $('#pagination').append(`
+                    <li>
+                        <a class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" ${currentPage === 1 ? 'class="disabled"' : ''} data-page="${currentPage - 1}">Previous</a>
+                    </li>
+                `);
+
+                for (let i = 1; i <= totalPages; i++) {
+                    let li;
+                    if (i === currentPage) {
+                        li = `<li>
+                            <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white" data-page="${i}">${i}</a>
+                        </li>`;
+                    } else {
+                        li = `<li>
+                            <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" data-page="${i}">${i}</a>
+                        </li>`;
+                    }
+
+                    $('#pagination').append(li);
+                }
+
+                $('#pagination').append(`
+                    <li>
+                        <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" ${currentPage === totalPages ? 'class="disabled"' : ''} data-page="${currentPage + 1}">Next</a>
+                    </li>
+                `);
+
+                $('#pagination').on('click', 'a', function(event) {
+                    event.preventDefault();
+                    const page = $(this).data('page');
+                    if (page) {
+                        changePage(page);
+                    }
+                });
+            }
+
+            function changePage(page) {
+                const totalPages = Math.ceil(filteredFournisseurs.length / itemsPerPage);
+                if (page < 1 || page > totalPages) return;
+                currentPage = page;
+                filterFournisseurs();
+            }
+            const totalPages = Math.ceil(filteredFournisseurs.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentFournisseurs = filteredFournisseurs.slice(startIndex, endIndex);
+
+            renderPagination(totalPages);
+
+            $('#nbAffichage').text(`${startIndex + 1}-${Math.min(endIndex, filteredFournisseurs.length)}`);
+            $('#nbAffichageTotal').text(filteredFournisseurs.length);
+
+            currentFournisseurs.forEach(fournisseur => {
                 var etat = demandes.filter(d => d.neqFournisseur === fournisseur.neq)[0].etatDemande;
 
                 switch (etat) {
