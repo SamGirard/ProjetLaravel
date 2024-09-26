@@ -286,8 +286,6 @@
             isSearching = true;
             let searchQuery = $('#searchSegment').val().toLowerCase();
 
-            $('#breadcrumbs').children('li:not(:first)').remove();
-
             let url = '/comoditySearch/' + startingComodities + '/' + itemsPerPage;
             if (searchQuery !== '') {
                 url += '?comodity=' + encodeURIComponent(searchQuery);
