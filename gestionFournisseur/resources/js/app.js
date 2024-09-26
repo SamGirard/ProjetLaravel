@@ -72,3 +72,18 @@ document.addEventListener("DOMContentLoaded", function(){
         });
     });
 });
+
+
+//function pour l'affichage de la page modeleCourriel
+
+function showContent(contentId){
+    const contents = document.querySelector('.content');
+    contents.forEach(content => {
+        content.classList.add('hidden');
+    });
+
+    const selectedContent = document.getElementById('contentId');
+    if(selectedContent){
+        selectedContent.classList.remove('hidden');
+    }
+}

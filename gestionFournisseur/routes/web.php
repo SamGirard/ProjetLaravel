@@ -66,6 +66,10 @@ Route::get('/liste',
 [EmployeController::class, 'index'])->name('menuListe')
 ->middleware('auth');
 
+//route pour la gestion des courriels
+Route::get('/modeleCourriel',
+[EmployeController::class, 'afficherModeleCourriel'])->name('modeleCourriel');
+
 //route welcome
 Route::get('/', function () {
     return view('welcome');

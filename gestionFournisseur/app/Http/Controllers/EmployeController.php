@@ -44,20 +44,24 @@ class EmployeController extends Controller
         $fournisseurs = Fournisseur::all();
         $demandes = Demande::all();
         $infosRbq = InfosRbq::all();
-
-
+    
+        if (session()->has('user')) {
+            logger('User session exists: ' . session('user'));
+        } else {
+            logger('No user session found.');
+        }
+    
         if ($user) {
             Auth::login($user);
             logger('Utilisateur connecté : ' . $user->role);
             
-            if($user->role == "Administrateur"){
+            session(['user' => $user->courriel]);
+    
+            if ($user->role == "Administrateur") {
                 return view('GestionRole.role', compact('employes'));
-
-            } else if ($user->role == "Responsable" || $employe->role == "Commis"){
-                //return view('listeFournisseurs', compact('employes', 'categoriesLicences', 'licences', 'fournisseurs', 'demandes', 'infosRbq'));
-                return redirect()->route('liste');
+            } elseif ($user->role == "Responsable" || $user->role == "Commis") {
+                return view('listeFournisseurs', compact('employes', 'categoriesLicences', 'licences', 'fournisseurs', 'demandes', 'infosRbq'));
             }
-
         } else {
             return redirect()->route('loginEmploye')->withErrors(["Information invalide"]);
         }
@@ -115,5 +119,9 @@ class EmployeController extends Controller
     
         // Rediriger avec un message de succès
         return redirect()->back()->with('success', 'Les employés sélectionnés ont été supprimés.');
+        }
+
+        public function afficherModeleCourriel(){
+            return view('modeleCourriel');
         }
     }
