@@ -152,25 +152,47 @@
     </aside>
 
     <div class="relative overflow-x-auto sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <caption class="pt-5 pr-5 pb-2 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                Liste des fournisseurs
-            </caption>
-        </table>
-        <div class="pb-4 bg-white dark:bg-gray-900 flex justify-between items-center">
-            <label for="table-search" class="sr-only">Search</label>
-            <div class="relative mt-1 flex-grow">
-                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                    </svg>
+        <div class="pb-2 pt-5 flex justify-between items-center">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <caption class="pr-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+                    Liste des fournisseurs
+                </caption>
+            </table>
+        </div>
+        <div class="mt-1 pb-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="relative flex-grow">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="table-search" class="block p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher un fournisseur...">
                 </div>
-                <input type="text" id="table-search" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher un fournisseur...">
-                </div>
-                <button id="open-list" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 ms-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Liste des fournisseurs sélectionnés</button>
+
+                <select id="itemsPerPage" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option selected value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                </select>
+                <label for="itemsPerPage" class="ml-1 block text-sm font-medium text-gray-900 dark:text-white">entrées par page</label>
             </div>
 
-            <div class="border-t border-gray-200 dark:border-gray-700 pb-4"></div>
+            <div class="flex items-center space-x-2">
+                <button id="open-list" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                    Liste des fournisseurs sélectionnés
+                </button>
+                <button type="button" class="flex-shrink-0 z-10 inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm py-2.5 px-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 hover:text-blue-600">
+                    <svg class="w-5 h-5 pr-1 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8"/>
+                    </svg>
+                    Exporter
+                </button>
+            </div>
+        </div>
+        <div class="border-t border-gray-200 dark:border-gray-700 pb-4"></div>
             <div class="flex pb-4">
                 <div class="flex items-center me-4">
                     <input id="En attente" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
@@ -244,8 +266,9 @@
         var checkedStatus = {};
         checkedStatus['Accepter'] = true;
         var allCities = [];
-        let currentPage = 1;
-        const itemsPerPage = 10;
+        var currentPage = 1;
+        var itemsPerPage = $('#itemsPerPage').val();
+        var filteredFournisseurs = [];
 
         $.ajax({
             url: '/ville',
@@ -560,14 +583,93 @@
             });
         });
 
+        $('#itemsPerPage').on('change', function() {
+                itemsPerPage = $(this).val();
+                const totalPages = Math.ceil(filteredFournisseurs.length / itemsPerPage);
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const currentFournisseurs = filteredFournisseurs.slice(startIndex, endIndex);
+
+                $('#nbAffichage').text(`${startIndex + 1}-${Math.min(endIndex, filteredFournisseurs.length)}`);
+
+                renderPagination(totalPages);
+                renderFournisseur(currentFournisseurs);
+            });
+
+        function renderPagination(totalPages) {
+            const maxPagesToShow = 5;
+            let startPage = currentPage - Math.floor(maxPagesToShow / 2);
+            let endPage = currentPage + Math.floor(maxPagesToShow / 2);
+
+            if (startPage < 1) {
+                startPage = 1;
+                endPage = Math.min(maxPagesToShow, totalPages);
+            }
+            if (endPage > totalPages) {
+                endPage = totalPages;
+                startPage = Math.max(1, totalPages - maxPagesToShow + 1);
+            }
+
+            $('#pagination').empty();
+
+            $('#pagination').append(`
+                <li>
+                    <a class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" 
+                        ${currentPage === 1 ? 'class="disabled"' : ''} 
+                        data-page="${currentPage - 1}"><</a>
+                </li>
+            `);
+
+            for (let i = startPage; i <= endPage; i++) {
+                let li;
+                if (i === currentPage) {
+                    li = `<li>
+                        <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white" data-page="${i}">${i}</a>
+                    </li>`;
+                } else {
+                    li = `<li>
+                        <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" data-page="${i}">${i}</a>
+                    </li>`;
+                }
+                $('#pagination').append(li);
+            }
+
+            $('#pagination').append(`
+                <li>
+                    <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" 
+                        ${currentPage === totalPages ? 'class="disabled"' : ''} 
+                        data-page="${currentPage + 1}">></a>
+                </li>
+            `);
+
+            $('#pagination').on('click', 'a', function(event) {
+                event.preventDefault();
+                const page = $(this).data('page');
+                if (page) {
+                    changePage(page);
+                }
+            });
+        }
+
+        function changePage(page) {
+            const totalPages = Math.ceil(filteredFournisseurs.length / itemsPerPage);
+
+            if (page < 1 || page > totalPages) return;
+
+            currentPage = page;
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentFournisseurs = filteredFournisseurs.slice(startIndex, endIndex);
+
+            $('#nbAffichage').text(`${startIndex + 1}-${Math.min(endIndex, filteredFournisseurs.length)}`);
+
+            renderPagination(totalPages);
+            renderFournisseur(currentFournisseurs);
+        }
 
         function filterFournisseurs() {
-            $('#fournisseurs-list').empty();
-
             let searchValue = $('#table-search').val();
             let regex = new RegExp(searchValue, 'i');
-            let compteurCommodities = 0;
-            let compteurLicences = 0;
             
             function nameVerification(name) {
                 return searchValue === "" || regex.test(name);
@@ -619,63 +721,26 @@
                 regionsVerification(f.ville)
             );
 
-            function renderPagination(totalPages) {
-                $('#pagination').empty();
-
-                $('#pagination').append(`
-                    <li>
-                        <a class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" ${currentPage === 1 ? 'class="disabled"' : ''} data-page="${currentPage - 1}"><</a>
-                    </li>
-                `);
-
-                for (let i = 1; i <= totalPages; i++) {
-                    let li;
-                    if (i === currentPage) {
-                        li = `<li>
-                            <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white" data-page="${i}">${i}</a>
-                        </li>`;
-                    } else {
-                        li = `<li>
-                            <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" data-page="${i}">${i}</a>
-                        </li>`;
-                    }
-
-                    $('#pagination').append(li);
-                }
-
-                $('#pagination').append(`
-                    <li>
-                        <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" ${currentPage === totalPages ? 'class="disabled"' : ''} data-page="${currentPage + 1}">></a>
-                    </li>
-                `);
-
-                $('#pagination').on('click', 'a', function(event) {
-                    event.preventDefault();
-                    const page = $(this).data('page');
-                    if (page) {
-                        changePage(page);
-                    }
-                });
-            }
-
-            function changePage(page) {
-                const totalPages = Math.ceil(filteredFournisseurs.length / itemsPerPage);
-                if (page < 1 || page > totalPages) return;
-                currentPage = page;
-                filterFournisseurs();
-            }
             const totalPages = Math.ceil(filteredFournisseurs.length / itemsPerPage);
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
             const currentFournisseurs = filteredFournisseurs.slice(startIndex, endIndex);
 
-            renderPagination(totalPages);
-
             $('#nbAffichage').text(`${startIndex + 1}-${Math.min(endIndex, filteredFournisseurs.length)}`);
             $('#nbAffichageTotal').text(filteredFournisseurs.length);
 
+            renderPagination(totalPages);
+            renderFournisseur(currentFournisseurs);
+        }
+
+        function renderFournisseur(currentFournisseurs) {
+            $('#fournisseurs-list').empty();
+
+            let compteurCommodities = 0;
+            let compteurLicences = 0;
+
             currentFournisseurs.forEach(fournisseur => {
-                var etat = demandes.filter(d => d.neqFournisseur === fournisseur.neq)[0].etatDemande;
+                var etat = demandes.find(d => d.neqFournisseur === fournisseur.neq).etatDemande;
 
                 switch (etat) {
                     case "Accepter":
