@@ -151,7 +151,7 @@
         </div>
     </aside>
 
-    <div class="relative overflow-x-auto sm:rounded-lg">
+    <div class="relative overflow-x-auto sm:rounded-lg max-w-screen-xl w-full">
         <div class="pb-2 pt-5 flex justify-between items-center">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <caption class="pr-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
@@ -585,16 +585,8 @@
 
         $('#itemsPerPage').on('change', function() {
                 itemsPerPage = $(this).val();
-                const totalPages = Math.ceil(filteredFournisseurs.length / itemsPerPage);
-                const startIndex = (currentPage - 1) * itemsPerPage;
-                const endIndex = startIndex + itemsPerPage;
-                const currentFournisseurs = filteredFournisseurs.slice(startIndex, endIndex);
-
-                $('#nbAffichage').text(`${startIndex + 1}-${Math.min(endIndex, filteredFournisseurs.length)}`);
-
-                renderPagination(totalPages);
-                renderFournisseur(currentFournisseurs);
-            });
+                changePage(1)
+        });
 
         function renderPagination(totalPages) {
             const maxPagesToShow = 5;
