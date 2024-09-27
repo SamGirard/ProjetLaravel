@@ -171,13 +171,17 @@
                 </div>
 
                 <select id="itemsPerPage" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="1">1</option>
                     <option selected value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
                     <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="75">75</option>
+                    <option value="100">100</option>
                 </select>
-                <label for="itemsPerPage" class="ml-1 block text-sm font-medium text-gray-900 dark:text-white">entrées par page</label>
+                <label for="itemsPerPage" class="ml-1 block text-sm font-medium text-gray-900 dark:text-white">fournisseurs par page</label>
             </div>
 
             <div class="flex items-center space-x-2">
@@ -650,7 +654,7 @@
 
             currentPage = page;
             const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
+            const endIndex = startIndex + Number(itemsPerPage);
             const currentFournisseurs = filteredFournisseurs.slice(startIndex, endIndex);
 
             $('#nbAffichage').text(`${startIndex + 1}-${Math.min(endIndex, filteredFournisseurs.length)}`);
