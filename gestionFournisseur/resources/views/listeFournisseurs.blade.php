@@ -247,7 +247,6 @@
             <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
                 <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Affichage de <span id="nbAffichage" class="font-semibold text-gray-900 dark:text-white">1-10</span> sur <span id="nbAffichageTotal" class="font-semibold text-gray-900 dark:text-white">{{count($fournisseurs)}}</span></span>
                 <ul id="pagination"class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-                    <p>allo</p>
                 </ul>
             </nav>
     </div>
@@ -593,7 +592,7 @@
         });
 
         function renderPagination(totalPages) {
-            const maxPagesToShow = 5;
+            const maxPagesToShow = 3;
             let startPage = currentPage - Math.floor(maxPagesToShow / 2);
             let endPage = currentPage + Math.floor(maxPagesToShow / 2);
 
@@ -616,11 +615,27 @@
                 </li>
             `);
 
+            if(currentPage > 2) {
+                $('#pagination').append(`
+                    <li>
+                        <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" data-page="1">1</a>
+                    </li>
+            `);
+            }
+
+            if(currentPage > 3) {
+                $('#pagination').append(`
+                    <li>
+                        <a class="disabled flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">...</a>
+                    </li>
+            `);
+            }
+
             for (let i = startPage; i <= endPage; i++) {
                 let li;
                 if (i === currentPage) {
                     li = `<li>
-                        <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white" data-page="${i}">${i}</a>
+                        <a aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white" data-page="${i}">${i}</a>
                     </li>`;
                 } else {
                     li = `<li>
@@ -628,6 +643,22 @@
                     </li>`;
                 }
                 $('#pagination').append(li);
+            }
+
+            if(currentPage < totalPages-2) {
+                $('#pagination').append(`
+                    <li>
+                        <a class="disabled flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">...</a>
+                    </li>
+            `);
+            }
+
+            if(currentPage < totalPages-1) {
+                $('#pagination').append(`
+                    <li>
+                        <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" data-page="${totalPages}">${totalPages}</a>
+                    </li>
+            `);
             }
 
             $('#pagination').append(`
