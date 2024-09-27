@@ -3,7 +3,7 @@
 
     @include('partials/barre_ajout')
     <div class="container mx-auto mt-6">
-        <form action="{{ route('store_indentification') }}" method="post"
+        <form action="{{ route('store_identification') }}" method="post"
               class="bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4">
             @csrf
             <div class="mb-4">
@@ -15,8 +15,7 @@
                            id="neq" name="neq" type="text" placeholder="1164568745" value="{{ old('neq') }}">
                     @error('neq')
                     <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
-                    @else
-                        <i class="fa-solid fa-check text-lg ml-2 text-green-500 icon-validate"></i>
+
                     @enderror
 
                 </div>
@@ -33,8 +32,7 @@
                            id="nom" name="nom" type="text" value="{{ old('nom') }}">
                     @error('nom')
                     <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
-                    @else
-                        <i class="fa-solid fa-check text-lg ml-2 text-green-500 icon-validate"></i>
+
                     @enderror
                 </div>
                 @error('nom')
@@ -54,8 +52,7 @@
                             id="email" name="email" type="email" value="{{ old('email') }}">
                         @error('email')
                         <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
-                        @else
-                            <i class="fa-solid fa-check text-lg ml-2 text-green-500 icon-validate"></i>
+
                         @enderror
                     </div>
                     @error('email')
@@ -82,7 +79,7 @@
                     <label for="password_confirmation" class="block text-gray-700 text-sm font-bold mb-2">Confimrer le
                         mot de passe</label>
                     <div class="flex">
-                        <input
+                        <input id="password_confirmation"
                             class="@error('password_confirmation') border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             name="password_confirmation" required autocomplete="new-password" type="password">
                         @error('password_confirmation')
