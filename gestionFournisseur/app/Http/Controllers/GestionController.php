@@ -21,4 +21,12 @@ class GestionController extends Controller
 
         return View('listeFournisseurs', compact('fournisseurs', 'categoriesLicences', 'licences', 'demandes', 'infosRbq'));
     }
+
+    public function listeContact(Request $request) {
+        $ids = $request->query('ids');
+        $idsArray = explode(',', $ids);
+        $fournisseurs = Fournisseur::whereIn('neq', $idsArray)->get();
+
+        return View('liste-contact', compact('fournisseurs'));
+    }
 }

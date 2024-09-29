@@ -182,7 +182,7 @@
             </div>
 
             <div class="flex items-center space-x-2">
-                <button id="open-list" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                <button id="open-list"  onclick="redirectToList()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                     Liste des fournisseurs sélectionnés
                 </button>
                 <button type="button" class="flex-shrink-0 z-10 inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm py-2.5 px-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 hover:text-blue-600">
@@ -277,6 +277,37 @@
     </div>
 
     <script>
+        function redirectToList() {
+            const checkedBoxes = document.querySelectorAll('.fournisseur-checkbox:checked');
+            const ids = Array.from(checkedBoxes).map(checkbox => checkbox.id);
+
+            if(ids.length > 0) {
+                const queryString = '?ids=' + ids.join(',');
+                window.location.href = '{{ route('liste-contact') }}' + queryString;
+            }
+            else {
+                const toastHTML = `
+                    <div id="toast-danger" class="fixed top-0 right-0 m-4 flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow-lg dark:text-gray-400 dark:bg-gray-800" role="alert">
+                        <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
+                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/>
+                            </svg>
+                            <span class="sr-only">Error icon</span>
+                        </div>
+                        <div class="ms-3 text-sm font-normal">Veuillez sélectonner au moins 1 fournisseur.</div>
+                        <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-danger" aria-label="Close" onclick="this.parentElement.remove();">
+                            <span class="sr-only">Close</span>
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                
+                document.body.insertAdjacentHTML('beforeend', toastHTML);
+            }
+        }
+        
     $(document).ready(function() {
         let selectedRegions = new Set();
         let currentCities = new Set();
@@ -706,8 +737,8 @@
                         const categoryB = compteurLicences[b.neq] || 0;
                         return categoryA - categoryB;
                     };
-                    fournisseurs.sort(ascNumComparator);
-                    filteredFournisseurs.sort(ascNumComparator);
+                    fournisseurs.sort(ascLicencesComparator);
+                    filteredFournisseurs.sort(ascLicencesComparator);
                     break;
                 case 'Catégories de travaux-desc':
                     const descLicencesComparator = (a, b) => {
@@ -715,8 +746,8 @@
                         const categoryB = compteurLicences[b.neq] || 0; 
                         return categoryB - categoryA; 
                     };
-                    fournisseurs.sort(descNumComparator);
-                    filteredFournisseurs.sort(descNumComparator);
+                    fournisseurs.sort(descLicencesComparator);
+                    filteredFournisseurs.sort(descLicencesComparator);
                     break;
                 case 'Produits et services-asc':
                     const ascCommodityComparator = (a, b) => {
@@ -724,8 +755,8 @@
                         const categoryB = compteurCommodities[b.neq] || 0;
                         return categoryA - categoryB;
                     };
-                    fournisseurs.sort(ascNumComparator);
-                    filteredFournisseurs.sort(ascNumComparator);
+                    fournisseurs.sort(ascCommodityComparator);
+                    filteredFournisseurs.sort(ascCommodityComparator);
                     break;
                 case 'Produits et services-desc':
                     const descCommodityComparator = (a, b) => {
@@ -733,8 +764,8 @@
                         const categoryB = compteurCommodities[b.neq] || 0; 
                         return categoryB - categoryA; 
                     };
-                    fournisseurs.sort(descNumComparator);
-                    filteredFournisseurs.sort(descNumComparator);
+                    fournisseurs.sort(descCommodityComparator);
+                    filteredFournisseurs.sort(descCommodityComparator);
                     break;
                 }
 
@@ -935,8 +966,8 @@
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td class="w-4 p-4">
                         <div class="flex items-center">
-                            <input id="check-${fournisseur.neq}" type="checkbox" ${$('#checkall').is(':checked') ? 'checked' : ''} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="check-${fournisseur.neq}" class="sr-only">checkbox</label>
+                            <input id="${fournisseur.neq}" type="checkbox" ${$('#checkall').is(':checked') ? 'checked' : ''} class="fournisseur-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="${fournisseur.neq}" class="sr-only">checkbox</label>
                         </div>
                     </td>
                     <td class="px-6 py-4">
