@@ -171,14 +171,11 @@
                 </div>
 
                 <select id="itemsPerPage" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option value="1">1</option>
                     <option selected value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
-                    <option value="25">25</option>
                     <option value="50">50</option>
-                    <option value="75">75</option>
                     <option value="100">100</option>
                 </select>
                 <label for="itemsPerPage" class="ml-1 block text-sm font-medium text-gray-900 dark:text-white">fournisseurs par page</label>
@@ -219,21 +216,46 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                            État
+                            <div class="sortable-header flex items-center cursor-pointer w-min">
+                                <span class="text-inherit">État</span>
+                                <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                </svg>
+                            </div>
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Fournisseurs
+                            <div class="sortable-header flex items-center  cursor-pointer w-min">
+                                <span class="text-inherit">Fournisseurs</span>
+                                <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                </svg>
+                            </div>
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Ville
+                            <div class="sortable-header flex items-center cursor-pointer w-min">
+                                <span class="text-inherit">Ville</span>
+                                <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                </svg>
+                            </div>
                         </th>
-                        <th scope="col" class="px-6 py-3">
-                            Produits et services
+                        <th scope="col" class="px-6 py-3 whitespace-nowrap truncate w-min">
+                            <div class="sortable-header flex items-center cursor-pointer w-min">
+                                <span class="text-inherit">Produits et services</span>
+                                <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                </svg>
+                            </div>
                         </th>
-                        <th scope="col" class="px-6 py-3">
-                            Catégories de travaux
+                        <th scope="col" class="px-6 py-3 whitespace-nowrap truncate w-min">
+                            <div class="sortable-header flex items-center cursor-pointer w-min">
+                                <span class="text-inherit">Catégories de travaux</span>
+                                <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                </svg>
+                            </div>
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 whitespace-nowrap truncate">
                             Fiche fournisseur
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -272,6 +294,8 @@
         var currentPage = 1;
         var itemsPerPage = $('#itemsPerPage').val();
         var filteredFournisseurs = [];
+        let compteurCommodities = {};
+        let compteurLicences = {};
 
         $.ajax({
             url: '/ville',
@@ -591,6 +615,99 @@
                 changePage(1)
         });
 
+        $('.sortable-header').on('click', function() {
+            if ($(this).hasClass('text-black font-extrabold asc')) {
+                $(this).removeClass(' asc');
+                $(this).addClass(' desc');
+                sortTable($(this).find('span').text() + "-desc")
+            } 
+            else {
+                $('.sortable-header').removeClass('text-black font-extrabold desc asc');
+                $(this).addClass(' text-black font-extrabold asc');
+                sortTable($(this).find('span').text() + "-asc")
+            }
+        });
+
+        function sortTable(header) {
+            const sortSuppliers = (key, order) => {
+                const comparator = (a, b) => {
+                    if (a[key] < b[key]) return order === 'asc' ? -1 : 1;
+                    if (a[key] > b[key]) return order === 'asc' ? 1 : -1;
+                    return 0;
+                };
+
+                fournisseurs.sort(comparator);
+                filteredFournisseurs.sort(comparator);
+            };
+
+            const getRequestState = (supplier) => {
+                const request = demandes.find(d => d.neqFournisseur === supplier.neq);
+                return request ? request.etatDemande : '';
+            };
+
+            switch (header) {
+                case 'État-asc':
+                    fournisseurs.sort((a, b) => getRequestState(a).localeCompare(getRequestState(b)));
+                    filteredFournisseurs.sort((a, b) => getRequestState(a).localeCompare(getRequestState(b)));
+                    break;
+                case 'État-desc':
+                    fournisseurs.sort((a, b) => getRequestState(b).localeCompare(getRequestState(a)));
+                    filteredFournisseurs.sort((a, b) => getRequestState(b).localeCompare(getRequestState(a)));
+                    break;
+                case 'Fournisseurs-asc':
+                    sortSuppliers('nomEntreprise', 'asc');
+                    break;
+                case 'Fournisseurs-desc':
+                    sortSuppliers('nomEntreprise', 'desc');
+                    break;
+                case 'Ville-asc':
+                    sortSuppliers('ville', 'asc');
+                    break;
+                case 'Ville-desc':
+                    sortSuppliers('ville', 'desc');
+                    break;
+                case 'Catégories de travaux-asc':
+                    const ascLicencesComparator = (a, b) => {
+                        const categoryA = compteurLicences[a.neq] || 0;
+                        const categoryB = compteurLicences[b.neq] || 0;
+                        return categoryA - categoryB;
+                    };
+                    fournisseurs.sort(ascNumComparator);
+                    filteredFournisseurs.sort(ascNumComparator);
+                    break;
+                case 'Catégories de travaux-desc':
+                    const descLicencesComparator = (a, b) => {
+                        const categoryA = compteurLicences[a.neq] || 0;
+                        const categoryB = compteurLicences[b.neq] || 0; 
+                        return categoryB - categoryA; 
+                    };
+                    fournisseurs.sort(descNumComparator);
+                    filteredFournisseurs.sort(descNumComparator);
+                    break;
+                case 'Produits et services-asc':
+                    const ascCommodityComparator = (a, b) => {
+                        const categoryA = compteurCommodities[a.neq] || 0;
+                        const categoryB = compteurCommodities[b.neq] || 0;
+                        return categoryA - categoryB;
+                    };
+                    fournisseurs.sort(ascNumComparator);
+                    filteredFournisseurs.sort(ascNumComparator);
+                    break;
+                case 'Produits et services-desc':
+                    const descCommodityComparator = (a, b) => {
+                        const categoryA = compteurCommodities[a.neq] || 0;
+                        const categoryB = compteurCommodities[b.neq] || 0; 
+                        return categoryB - categoryA; 
+                    };
+                    fournisseurs.sort(descNumComparator);
+                    filteredFournisseurs.sort(descNumComparator);
+                    break;
+                }
+
+            changePage(currentPage);
+        }
+
+
         function renderPagination(totalPages) {
             const maxPagesToShow = 3;
             let startPage = currentPage - Math.floor(maxPagesToShow / 2);
@@ -605,78 +722,72 @@
                 startPage = Math.max(1, totalPages - maxPagesToShow + 1);
             }
 
-            $('#pagination').empty();
-
-            $('#pagination').append(`
+            let paginationHtml = `
                 <li>
-                    <a class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" 
-                        ${currentPage === 1 ? 'class="disabled"' : ''} 
+                    <a class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${currentPage === 1 ? 'disabled' : ''}" 
                         data-page="${currentPage - 1}"><</a>
                 </li>
-            `);
+            `;
 
-            if(currentPage > 2) {
-                $('#pagination').append(`
+            if (currentPage > 2) {
+                paginationHtml += `
                     <li>
                         <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" data-page="1">1</a>
                     </li>
-            `);
+                `;
             }
 
-            if(currentPage > 3) {
-                $('#pagination').append(`
+            if (currentPage > 3) {
+                paginationHtml += `
                     <li>
                         <a class="disabled flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">...</a>
                     </li>
-            `);
+                `;
             }
 
             for (let i = startPage; i <= endPage; i++) {
-                let li;
-                if (i === currentPage) {
-                    li = `<li>
-                        <a aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white" data-page="${i}">${i}</a>
-                    </li>`;
-                } else {
-                    li = `<li>
-                        <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" data-page="${i}">${i}</a>
-                    </li>`;
-                }
-                $('#pagination').append(li);
+                paginationHtml += `
+                    <li>
+                        <a class="flex items-center justify-center px-3 h-8 ${i === currentPage ? 'text-blue-600 border border-gray-300 bg-blue-50' : 'leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'}" 
+                            data-page="${i}">${i}</a>
+                    </li>
+                `;
             }
 
-            if(currentPage < totalPages-2) {
-                $('#pagination').append(`
+            if (currentPage < totalPages - 2) {
+                paginationHtml += `
                     <li>
                         <a class="disabled flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">...</a>
                     </li>
-            `);
+                `;
             }
 
-            if(currentPage < totalPages-1) {
-                $('#pagination').append(`
+            if (currentPage < totalPages - 1) {
+                paginationHtml += `
                     <li>
                         <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" data-page="${totalPages}">${totalPages}</a>
                     </li>
-            `);
+                `;
             }
 
-            $('#pagination').append(`
+            paginationHtml += `
                 <li>
-                    <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" 
-                        ${currentPage === totalPages ? 'class="disabled"' : ''} 
+                    <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${currentPage === totalPages ? 'disabled' : ''}" 
                         data-page="${currentPage + 1}">></a>
                 </li>
-            `);
+            `;
 
-            $('#pagination').on('click', 'a', function(event) {
-                event.preventDefault();
-                const page = $(this).data('page');
-                if (page) {
-                    changePage(page);
-                }
-            });
+            $('#pagination').html(paginationHtml);
         }
+
+        $('#pagination').on('click', 'a[data-page]', function(event) {
+            event.preventDefault();
+            const page = $(this).data('page');
+            if (page && !$(this).hasClass('disabled')) {
+                changePage(page);
+            }
+        });
+
 
         function changePage(page) {
             const totalPages = Math.ceil(filteredFournisseurs.length / itemsPerPage);
@@ -695,6 +806,8 @@
         }
 
         function filterFournisseurs() {
+            compteurLicences = {};
+            compteurCommodities = {};
             let searchValue = $('#table-search').val();
             let regex = new RegExp(searchValue, 'i');
             
@@ -703,7 +816,10 @@
             }
 
             function statusVerification(status) {
-                return checkedStatus[status[0].etatDemande] === true
+                compteurLicences[status.neqFournisseur] = 0;
+                compteurCommodities[status.neqFournisseur] = 0;
+
+                return checkedStatus[status.etatDemande] === true
             }
 
             function commoditiesVerification(commodities) {
@@ -711,7 +827,7 @@
 
                 commodities.forEach(commodity => {
                     console.log(commodity);
-                    compteurCommodities++;
+                    compteurLicences[commodity.neqFournisseur]++;
                 })
 
                 return !Object.values(checkedCommodities).includes(true) || isChecked;
@@ -723,7 +839,7 @@
                 infosRbq.forEach(infoRbq => {
                     if(checkedLicences[infoRbq.codeSousCategorie] === true) {
                         isChecked = true;
-                        compteurLicences++;
+                        compteurLicences[infoRbq.neqFournisseur]++;
                     }
                 })
 
@@ -741,8 +857,8 @@
             }
             
             filteredFournisseurs = fournisseurs.filter(f => 
-                nameVerification(f.name) &&
-                statusVerification(demandes.filter(d => d.neqFournisseur === f.neq)) &&
+                nameVerification(f.nomEntreprise) &&
+                statusVerification(demandes.find(d => d.neqFournisseur === f.neq)) &&
                 licencesVerification(infosRbq.filter(i => i.neqFournisseur === f.neq)) && 
                 citiesVerification(f.ville) &&
                 regionsVerification(f.ville)
@@ -763,9 +879,6 @@
         function renderFournisseur(currentFournisseurs) {
             $('#fournisseurs-list').empty();
 
-            let compteurCommodities = 0;
-            let compteurLicences = 0;
-
             currentFournisseurs.forEach(fournisseur => {
                 var etat = demandes.find(d => d.neqFournisseur === fournisseur.neq).etatDemande;
 
@@ -780,7 +893,7 @@
                         etat = '<span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">À réviser</span>'
                         break;
                     case "En attente":
-                        etat = '<span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">En attente</span>'
+                        etat = '<span class="whitespace-nowrap bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">En attente</span>'
                         break;
                 }
 
@@ -796,10 +909,10 @@
                         ${fournisseur.ville}
                     </td>
                     <td class="px-6 py-4">
-                        ${compteurCommodities}/${Object.values(checkedCommodities).filter(value => value === true).length}
+                        ${compteurCommodities[fournisseur.neq]}/${Object.values(checkedCommodities).filter(value => value === true).length}
                     </td>
                     <td class="px-6 py-4">
-                        ${compteurLicences}/${Object.values(checkedLicences).filter(value => value === true).length}
+                        ${compteurLicences[fournisseur.neq]}/${Object.values(checkedLicences).filter(value => value === true).length}
                     </td>
                     <td class="px-6 py-4">
                         <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Ouvrir</a>
