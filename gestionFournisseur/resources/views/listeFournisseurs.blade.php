@@ -215,6 +215,12 @@
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
+                        <th scope="col" class="w4 p-4">
+                        <div class="flex items-center">
+                            <input id="checkall" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="checkall" class="sr-only">checkbox</label>
+                        </div>
+                        </th>
                         <th scope="col" class="px-6 py-3">
                             <div class="sortable-header flex items-center cursor-pointer w-min">
                                 <span class="text-inherit">État</span>
@@ -258,9 +264,6 @@
                         <th scope="col" class="px-6 py-3 whitespace-nowrap truncate">
                             Fiche fournisseur
                         </th>
-                        <th scope="col" class="px-6 py-3">
-                            Sélectionner
-                        </th>
                     </tr>
                 </thead>
                 <tbody id="fournisseurs-list">
@@ -296,6 +299,7 @@
         var filteredFournisseurs = [];
         let compteurCommodities = {};
         let compteurLicences = {};
+        let isAllChecked = false;
 
         $.ajax({
             url: '/ville',
@@ -531,7 +535,6 @@
             checkedCities[this.id] = $(this).is(':checked');
         });
 
-
         function filterLicences() {
             let searchValue = $('#searchCategorie').val().toLowerCase();
             let regex = new RegExp(searchValue, 'i');
@@ -611,8 +614,12 @@
         });
 
         $('#itemsPerPage').on('change', function() {
-                itemsPerPage = $(this).val();
-                changePage(1)
+            itemsPerPage = $(this).val();
+            changePage(1)
+        });
+
+        $('#checkall').on('change', function() {
+            changePage(currentPage);
         });
 
         $('.sortable-header').on('click', function() {
@@ -899,6 +906,12 @@
 
                 fournisseurItem = $(`
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td class="w-4 p-4">
+                        <div class="flex items-center">
+                            <input id="check-${fournisseur.neq}" type="checkbox" ${$('#checkall').is(':checked') ? 'checked' : ''} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="check-${fournisseur.neq}" class="sr-only">checkbox</label>
+                        </div>
+                    </td>
                     <td class="px-6 py-4">
                         ${etat}
                     </td>
@@ -914,14 +927,11 @@
                     <td class="px-6 py-4">
                         ${compteurLicences[fournisseur.neq]}/${Object.values(checkedLicences).filter(value => value === true).length}
                     </td>
-                    <td class="px-6 py-4">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Ouvrir</a>
-                    </td>
-                    <td class="w-4 p-4">
-                        <div class="flex items-center">
-                            <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                        </div>
+                    <td class="flex items-center cursor-pointer w-min px-6 py-4 font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                        <svg class="w-5 h-5 mr-1 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"/>
+                        </svg>
+                        <a href="#" >Ouvrir</a>
                     </td>
                 </tr>
                 `);
