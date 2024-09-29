@@ -10,8 +10,6 @@
       <sourceFolder url="file://$MODULE_DIR$/portailFournisseur/database/factories" isTestSource="false" packagePrefix="Database\Factories\" />
       <sourceFolder url="file://$MODULE_DIR$/portailFournisseur/database/seeders" isTestSource="false" packagePrefix="Database\Seeders\" />
       <sourceFolder url="file://$MODULE_DIR$/portailFournisseur/tests" isTestSource="true" packagePrefix="Tests\" />
-      <sourceFolder url="file://$MODULE_DIR$/gestionFournisseur/tests/Feature" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/gestionFournisseur/tests/Unit" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/gestionFournisseur/vendor/brianium/paratest" />
       <excludeFolder url="file://$MODULE_DIR$/gestionFournisseur/vendor/brick/math" />
       <excludeFolder url="file://$MODULE_DIR$/gestionFournisseur/vendor/carbonphp/carbon-doctrine-types" />

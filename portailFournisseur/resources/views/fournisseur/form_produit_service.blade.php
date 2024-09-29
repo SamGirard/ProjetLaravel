@@ -1,76 +1,68 @@
 @extends('app')
 @section('content')
-
+    @include('partials/header')
     @include('partials/barre_ajout')
 
     <!-- service offerts -->
-
     <div class="container mx-auto mt-6">
         <form action="{{ route('store_service') }}" method="post"
-              class="bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4">
+              class="bg-white shadow-lg rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl">
             @csrf
-            <div class="flex flex-row justify-between">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Services et Licences</h1>
+            <div class="grid grid-cols-2 gap-6">
 
-                <fieldset class="border border-solid border-gray-300 p-3 w-full mr-2">
-                    <legend class="ml-4 text-sm font-medium text-gray-900">Produits et services offerts</legend>
+                <!-- Produits et services offerts -->
+                <fieldset class="border border-gray-300 rounded-lg p-6 bg-gray-50">
+                    <legend class="text-lg font-semibold text-gray-700 mb-4">Produits et services offerts</legend>
                     <div class="mb-4">
-                        <label for="services" class="block text-gray-700 text-sm font-bold mb-2">SERVICES</label>
+                        <label for="services" class="block text-gray-600 text-sm font-bold mb-2">SERVICES</label>
                         <input required
-                               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                               class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
                                id="email" name="email" type="email">
                     </div>
-
                     <div class="mb-4">
-                        <label for="details" class="block text-gray-700 text-sm font-bold mb-2">Détails et
-                            spécifications</label>
+                        <label for="details" class="block text-gray-600 text-sm font-bold mb-2">Détails et spécifications</label>
                         <textarea
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="details" name="details"></textarea>
+                                class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                id="details" name="details"></textarea>
                     </div>
                 </fieldset>
 
                 <!-- Licence RBQ -->
-
-                <fieldset class="border border-solid border-gray-300 p-3 w-full">
-                    <legend class="ml-4 text-sm font-medium text-gray-900">Licence RBQ</legend>
-                    <div class="mb-4 flex">
-                        <div>
-                            <label for="rbq" class="block text-gray-700 text-sm font-bold mb-2">Licence RBQ</label>
+                <fieldset class="border border-gray-300 rounded-lg p-6 bg-gray-50">
+                    <legend class="text-lg font-semibold text-gray-700 mb-4">Licence RBQ</legend>
+                    <div class="mb-4 flex space-x-4">
+                        <div class="flex-grow">
+                            <label for="rbq" class="block text-gray-600 text-sm font-bold mb-2">Licence RBQ</label>
                             <input required id="rbq" name="rbq" type="text"
-                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                            <span class="text-red-500" id="erreur_rbq"></span>
+                                   class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            <span class="text-red-500 text-sm" id="erreur_rbq"></span>
                         </div>
-                        <div class="ml-2">
-                            <label for="statut_licence_rbq"
-                                   class="block text-gray-700 text-sm font-bold mb-2">Statut</label>
+                        <div class="flex-grow">
+                            <label for="statut_licence_rbq" class="block text-gray-600 text-sm font-bold mb-2">Statut</label>
                             <select id="statut_licence_rbq" name="statut_licence_rbq"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
+                                    class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                             </select>
                         </div>
                     </div>
                     <div class="mb-4">
-                        <label for="type_licence_rbq"
-                               class="block text-gray-700 text-sm font-bold mb-2">Type de licence</label>
+                        <label for="type_licence_rbq" class="block text-gray-600 text-sm font-bold mb-2">Type de licence</label>
                         <select id="type_licence_rbq" name="type_licence_rbq"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
+                                class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                         </select>
                     </div>
                 </fieldset>
-
-
             </div>
 
-            <fieldset class="border border-solid border-gray-300 mt-4 p-3 w-full">
-                <legend class="ml-4 text-sm font-medium text-gray-900">Catégories et sous-catégories autorisées</legend>
+            <!-- Catégories et sous-catégories autorisées -->
+            <fieldset class="border border-gray-300 rounded-lg mt-6 p-6 bg-gray-50">
+                <legend class="text-lg font-semibold text-gray-700 mb-4">Catégories et sous-catégories autorisées</legend>
                 <div class="mb-4">
-                    <label for="categorie_generale"
-                           class="block text-gray-700 text-sm font-bold mb-2">CATÉGORIE ENTREPRENEUR GÉNÉRAL</label>
+                    <label for="categorie_generale" class="block text-gray-600 text-sm font-bold mb-2">CATÉGORIE ENTREPRENEUR GÉNÉRAL</label>
                     <select multiple id="categorie_generale" name="categorie_generale[]"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                         @foreach($categorie_services as $categorie_service)
-                            @if($categorie_service['type']=='Général')
+                            @if($categorie_service['type'] == 'Général')
                                 <option value="{{ $categorie_service['id'] }}">{{ $categorie_service['code'] }} {{ $categorie_service['nom'] }}</option>
                             @endif
                         @endforeach
@@ -78,36 +70,35 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="categorie_specialise"
-                           class="block text-gray-700 text-sm font-bold mb-2">CATÉGORIE ENTREPRENEUR SPÉCIALISÉ</label>
+                    <label for="categorie_specialise" class="block text-gray-600 text-sm font-bold mb-2">CATÉGORIE ENTREPRENEUR SPÉCIALISÉ</label>
                     <select multiple id="categorie_specialise" name="categorie_specialise[]"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                         @foreach($categorie_services as $categorie_service)
-                            @if($categorie_service['type']=='Spécialisé')
+                            @if($categorie_service['type'] == 'Spécialisé')
                                 <option value="{{ $categorie_service['id'] }}">{{ $categorie_service['code'] }} {{ $categorie_service['nom'] }}</option>
                             @endif
                         @endforeach
                     </select>
                 </div>
-
             </fieldset>
 
-            <div class="flex justify-between mt-3">
+            <!-- Boutons -->
+            <div class="flex justify-between mt-6">
                 <button
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    onclick="window.history.back();">
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
+                        onclick="window.history.back();">
                     Précédent
                 </button>
                 <button
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    type="submit">
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
+                        type="submit">
                     Suivant
                 </button>
             </div>
         </form>
     </div>
-
 @endsection
+
 @section('scripts')
     <script !src="">
 

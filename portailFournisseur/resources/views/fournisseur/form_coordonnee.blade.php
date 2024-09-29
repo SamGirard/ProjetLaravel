@@ -1,263 +1,267 @@
 @extends('app')
 @section('content')
-
+    @include('partials/header')
     @include('partials/barre_ajout')
     <div class="container mx-auto mt-6">
         <form action="{{ route('store_coordonnee') }}" method="post"
               class="bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4">
             @csrf
-
+            <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Coordonnées</h1>
             <!--  ************* section adresse ******************** -->
 
-            <fieldset class="border border-solid border-gray-300 p-3">
-                <legend class="ml-4 text-sm font-medium text-gray-900">Adresse</legend>
-                <div class="mb-4">
-                    <label for="adresse_complete" class="block text-gray-700 text-sm font-bold mb-2">Adresse complète
-                    </label>
+            <div class="grid grid-cols-2 gap-8">
 
-                    <input
-                        class=" shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="adresse_complete" name="adresse_complete" type="text">
+                <div>
+                    <fieldset class="border border-gray-200 rounded-lg p-6 bg-gray-50">
+                        <legend class="text-lg font-semibold text-gray-800 mb-4">Adresse</legend>
 
-                </div>
-                <div class="flex justify-start">
-                    <div class="mb-4">
-                        <label for="numero_civique" class="block text-gray-700 text-sm font-bold mb-2">Numero
-                            civique</label>
-                        <div class="flex">
-                            <input readonly value="{{ old('numero_civique') }}"
-                                   class="@error('numero_civique')  border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                   id="numero_civique" name="numero_civique" type="text">
-                            @error('numero_civique')
-                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
-                            @enderror
-                        </div>
-                        @error('numero_civique')
-                        <span class="text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="mb-4 mx-2">
-                        <label for="rue" class="block text-gray-700 text-sm font-bold mb-2">Rue</label>
-                        <div class="flex">
-                            <input readonly value="{{ old('rue') }}"
-                                   class="@error('rue')  border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                   id="rue" name="rue" type="text">
-                            @error('rue')
-                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
-                            @enderror
-                        </div>
-
-                        @error('rue')
-                        <span class="text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="mb-4 mx-2">
-                        <label for="bureau" class="block text-gray-700 text-sm font-bold mb-2">Bureau</label>
-                        <div class="flex">
-                            <input value="{{ old('bureau') }}"
-                                   class="@error('bureau')  border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                   id="bureau" name="bureau" type="text">
-                            @error('bureau')
-                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
-                            @enderror
-                        </div>
-                        @error('bureau')
-                        <span class="text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-                <div class="mb-4 mx-2">
-                    <label for="ville" class="block text-gray-700 text-sm font-bold mb-2">Ville</label>
-                    <select id="ville" name="ville"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
-                    </select>
-                </div>
-
-                <div class="flex justify-start">
-                    <div class="mb-4 mx-2">
-                        <label for="province" class="block text-gray-700 text-sm font-bold mb-2">Province</label>
-                        <select id="province" name="province"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            @foreach($provinces as $province)
-                                <option value="{{ $province }}">{{ $province }}</option>
-                            @endforeach
-
-                        </select>
-                    </div>
-                    <div class="mb-4 mx-2">
-                        <label for="code_postal" class="block text-gray-700 text-sm font-bold mb-2">Code postal</label>
-                        <div class="flex">
-                            <input readonly value="{{ old('code_postal') }}"
-                                   class="@error('code_postal')  border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                   id="code_postal" name="code_postal" type="text">
-                            @error('code_postal')
-                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
-                            @enderror
-                        </div>
-                        @error('code_postal')
-                        <span class="text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-                <div class="flex justify-start">
-                    <div class="mb-4 mx-2">
-                        <label for="region_administrative" class="block text-gray-700 text-sm font-bold mb-2">Région
-                            administrative</label>
-                        <div class="flex">
+                        <div class="mb-4">
+                            <label for="adresse_complete" class="block text-lg text-gray-600 mb-2">Adresse complète</label>
                             <input
-                                value="{{ old('region_administrative') }}"
-                                class="@error('region_administrative') border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="region_administrative" name="region_administrative" type="text">
-                            @error('region_administrative')
-                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
-                           @enderror
+                                    class="@error('adresse_complete') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    id="adresse_complete" name="adresse_complete" type="text" placeholder="Entrez l'adresse complète">
                         </div>
-                        @error('region_administrative')
-                        <span class="text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
 
-                    <div class="mb-4 mx-2">
-                        <label for="code_administratif" class="block text-gray-700 text-sm font-bold mb-2">Code administratif</label>
-                        <div class="flex">
-                            <input
-                                value="{{ old('code_administratif') }}"
-                                class="@error('code_administratif') border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="code_administratif" name="code_administratif" type="text">
-                            @error('code_administratif')
-                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                        <div class="flex justify-start">
+                            <div class="mb-4">
+                                <label for="numero_civique" class="block text-lg text-gray-600 mb-2">Numéro civique</label>
+                                <div class="flex">
+                                    <input readonly value="{{ old('numero_civique') }}"
+                                           class="@error('numero_civique') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                           id="numero_civique" name="numero_civique" type="text" placeholder="Numéro civique">
+                                    @error('numero_civique')
+                                    <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                                    @enderror
+                                </div>
+                                @error('numero_civique')
+                                <span class="text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="mb-4 mx-2">
+                                <label for="rue" class="block text-lg text-gray-600 mb-2">Rue</label>
+                                <div class="flex">
+                                    <input readonly value="{{ old('rue') }}"
+                                           class="@error('rue') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                           id="rue" name="rue" type="text" placeholder="Nom de la rue">
+                                    @error('rue')
+                                    <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                                    @enderror
+                                </div>
+                                @error('rue')
+                                <span class="text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="mb-4 mx-2">
+                                <label for="bureau" class="block text-lg text-gray-600 mb-2">Bureau</label>
+                                <div class="flex">
+                                    <input value="{{ old('bureau') }}"
+                                           class="@error('bureau') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                           id="bureau" name="bureau" type="text" placeholder="Bureau">
+                                    @error('bureau')
+                                    <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                                    @enderror
+                                </div>
+                                @error('bureau')
+                                <span class="text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="mb-4 mx-2">
+                            <label for="ville" class="block text-lg text-gray-600 mb-2">Ville</label>
+                            <select id="ville" name="ville"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <!-- Options pour les villes ici -->
+                            </select>
+                        </div>
+
+                        <div class="flex justify-start">
+                            <div class="mb-4 mx-2">
+                                <label for="province" class="block text-lg text-gray-600 mb-2">Province</label>
+                                <select id="province" name="province"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                    @foreach($provinces as $province)
+                                        <option value="{{ $province }}">{{ $province }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-4 mx-2">
+                                <label for="code_postal" class="block text-lg text-gray-600 mb-2">Code postal</label>
+                                <div class="flex">
+                                    <input readonly value="{{ old('code_postal') }}"
+                                           class="@error('code_postal') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                           id="code_postal" name="code_postal" type="text" placeholder="Code postal">
+                                    @error('code_postal')
+                                    <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                                    @enderror
+                                </div>
+                                @error('code_postal')
+                                <span class="text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="flex justify-start">
+                            <div class="mb-4 mx-2">
+                                <label for="region_administrative" class="block text-lg text-gray-600 mb-2">Région administrative</label>
+                                <div class="flex">
+                                    <input value="{{ old('region_administrative') }}"
+                                           class="@error('region_administrative') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                           id="region_administrative" name="region_administrative" type="text" placeholder="Région administrative">
+                                    @error('region_administrative')
+                                    <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                                    @enderror
+                                </div>
+                                @error('region_administrative')
+                                <span class="text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="mb-4 mx-2">
+                                <label for="code_administratif" class="block text-lg text-gray-600 mb-2">Code administratif</label>
+                                <div class="flex">
+                                    <input value="{{ old('code_administratif') }}"
+                                           class="@error('code_administratif') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                           id="code_administratif" name="code_administratif" type="text" placeholder="Code administratif">
+                                    @error('code_administratif')
+                                    <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                                    @enderror
+                                </div>
+                                @error('code_administratif')
+                                <span class="text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="mb-4 mx-2">
+                            <label for="site_internet" class="block text-lg text-gray-600 mb-2">Site internet</label>
+                            <div class="flex">
+                                <input value="{{ old('site_internet') }}"
+                                       class="@error('site_internet') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                       id="site_internet" name="site_internet" type="text" placeholder="Site internet">
+                                @error('site_internet')
+                                <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                                @enderror
+                            </div>
+                            @error('site_internet')
+                            <span class="text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
-                        @error('region_administrative')
-                        <span class="text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                </div>
-                <div class="mb-4 mx-2">
-                    <label for="site_internet" class="block text-gray-700 text-sm font-bold mb-2">Site internet</label>
-                    <div class="flex">
-                        <input
-                            value="{{ old('site_internet') }}"
-                            class="@error('site_internet') border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="site_internet" name="site_internet" type="text">
-                        @error('site_internet')
-                        <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
-                        @enderror
-                    </div>
-                    @error('site_internet')
-                    <span class="text-red-500">{{ $message }}</span>
-                    @enderror
-                </div>
-            </fieldset>
-
-            <!-- section telephone -->
-
-            <fieldset class="border border-solid border-gray-300 p-3 mt-2" id="section_telephone">
-
-                <!-- bouton pour ajouter un nouveau telephone -->
-                <div class="w-full my-2 flex justify-end" id="ajouter_telephone">
-                    <i class="text-right fa-solid fa-plus bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"></i>
+                    </fieldset>
                 </div>
 
-                <legend class="ml-4 text-sm font-medium text-gray-900">Téléphones</legend>
+                <!-- section telephone -->
 
-                <div class="mb-4 flex justify-between" >
-                    <div>
-                        <label for='type_telephone0' class="block text-gray-700 text-sm font-bold mb-2 mr-2">Type</label>
-                        <select id="type_telephone0" name="type_telephone[]"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option value="Bureau">Bureau</option>
-                            <option value="Telecopieur">Télécopieur</option>
-                            <option value="Cellulaire">Cellulaire</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="telephone0" class="block text-gray-700 text-sm font-bold mb-2">Telephone</label>
-                        <div class="flex">
-                            <input value="{{ old('telephone.0') }}"
-                                   class="@error('telephone.0') border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                   id="telephone0" name="telephone[]" type="text" placeholder="8165668877">
-                            @error('telephone.0')
-                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
-                            @enderror
+                <div>
+                    <fieldset class="border border-gray-200 rounded-lg p-6 bg-gray-50" id="section_telephone">
+
+                        <!-- bouton pour ajouter un nouveau telephone -->
+                        <div class="w-full my-2 flex justify-end" id="ajouter_telephone">
+                            <i class="text-right fa-solid fa-plus bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"></i>
                         </div>
-                        @error('telephone.0')
-                        <span class="text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div>
-                        <label for="poste0" class="block text-gray-700 text-sm font-bold mb-2">Poste</label>
-                        <div class="flex">
-                            <input value="{{ old('poste.0') }}"
-                                   class="@error('poste.0') border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                   id="poste0" name="poste[]" type="text">
-                            @error('poste.0')
-                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
 
-                            @enderror
-                        </div>
-                        @error('poste.0')
-                        <span class="text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
+                        <legend class="text-lg font-semibold text-gray-800 mb-4">Téléphones</legend>
 
-                @foreach(old('telephone',[]) as $index => $value)
-                    @if($index>0)
                         <div class="mb-4 flex justify-between">
                             <div>
-                                <label for='type_telephone{{$index}}' class="block text-gray-700 text-sm font-bold mb-2 mr-2">Type</label>
-                                <select id="type_telephone{{$index}}" name="type_telephone[]"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <label for='type_telephone0' class="block text-lg text-gray-600 mb-2">Type</label>
+                                <select id="type_telephone0" name="type_telephone[]"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     <option value="Bureau">Bureau</option>
                                     <option value="Telecopieur">Télécopieur</option>
                                     <option value="Cellulaire">Cellulaire</option>
                                 </select>
                             </div>
                             <div>
-                                <label for="telephone{{$index}}" class="block text-gray-700 text-sm font-bold mb-2">Telephone</label>
+                                <label for="telephone0" class="block text-lg text-gray-600 mb-2">Téléphone</label>
                                 <div class="flex">
-                                    <input value="{{ $value }}"
-                                           class="@error("telephone.$index") border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                           id="telephone{{$index}}" name="telephone[]" type="text" placeholder="8165668877">
-                                    @error("telephone.$index")
+                                    <input value="{{ old('telephone.0') }}"
+                                           class="@error('telephone.0') border-red-500 @else border-gray-300 @enderror shadow-sm appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                           id="telephone0" name="telephone[]" type="text" placeholder="8165668877">
+                                    @error('telephone.0')
                                     <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
                                     @enderror
                                 </div>
-                                @error("telephone.$index")
+                                @error('telephone.0')
                                 <span class="text-red-500">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div>
-                                <label for="poste{{$index}}" class="block text-gray-700 text-sm font-bold mb-2">Poste</label>
+                                <label for="poste0" class="block text-lg text-gray-600 mb-2">Poste</label>
                                 <div class="flex">
-                                    <input value="{{ old('poste.'.$index) }}"
-                                           class="@error("poste.$index") border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                           id="poste{{$index}}" name="poste[]" type="text">
-                                    @error("poste.$index")
+                                    <input value="{{ old('poste.0') }}"
+                                           class="@error('poste.0') border-red-500 @else border-gray-300 @enderror shadow appearance-none border rounded w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                           id="poste0" name="poste[]" type="text">
+                                    @error('poste.0')
                                     <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
                                     @enderror
                                 </div>
-                                @error("poste.$index")
+                                @error('poste.0')
                                 <span class="text-red-500">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
-                    @endif
-                @endforeach
 
-            </fieldset>
+                        @foreach(old('telephone',[]) as $index => $value)
+                            @if($index>0)
+                                <div class="mb-4 flex justify-between">
+                                    <div>
+                                        <label for='type_telephone{{$index}}' class="block text-lg text-gray-600 mb-2">Type</label>
+                                        <select id="type_telephone{{$index}}" name="type_telephone[]"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                            <option value="Bureau">Bureau</option>
+                                            <option value="Telecopieur">Télécopieur</option>
+                                            <option value="Cellulaire">Cellulaire</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="telephone{{$index}}" class="block text-lg text-gray-600 mb-2">Téléphone</label>
+                                        <div class="flex">
+                                            <input value="{{ $value }}"
+                                                   class="@error("telephone.$index") border-red-500 @else border-gray-300 @enderror shadow-sm appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                                   id="telephone{{$index}}" name="telephone[]" type="text" placeholder="8165668877">
+                                            @error("telephone.$index")
+                                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                                            @enderror
+                                        </div>
+                                        @error("telephone.$index")
+                                        <span class="text-red-500">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div>
+                                        <label for="poste{{$index}}" class="block text-lg text-gray-600 mb-2">Poste</label>
+                                        <div class="flex">
+                                            <input value="{{ old('poste.'.$index) }}"
+                                                   class="@error("poste.$index") border-red-500 @else border-gray-300 @enderror shadow-sm appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                                   id="poste{{$index}}" name="poste[]" type="text">
+                                            @error("poste.$index")
+                                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                                            @enderror
+                                        </div>
+                                        @error("poste.$index")
+                                        <span class="text-red-500">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+
+                    </fieldset>
+                </div>
+
+            </div>
 
             <div class="flex justify-between mt-3">
                 <button
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
                     onclick="window.history.back();">
                     Précédent
                 </button>
                 <button
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
                     type="submit">
                     Suivant
                 </button>
@@ -328,7 +332,7 @@
             nb_telephone++;
             let nouveau_telephone = `<div class="mb-4 flex justify-between">
             <div>
-            <label for="type_telephone${nb_telephone}" class="block text-gray-700 text-sm font-bold mb-2 mr-2">Type</label>
+            <label for="type_telephone${nb_telephone}" class="block text-lg text-gray-600 mb-2">Type</label>
             <select name="type_telephone[]"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="Bureau">Bureau</option>
@@ -337,15 +341,15 @@
             </select>
         </div>
             <div>
-                <label for="telephone" class="block text-gray-700 text-sm font-bold mb-2">Telephone</label>
+                <label for="telephone" class="block text-lg text-gray-600 mb-2">Telephone</label>
                 <input
-                    class=" shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    class=" border-gray-300 shadow appearance-none border rounded w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     id="telephone${nb_telephone}" name="telephone[]" type="text">
             </div>
             <div>
-                <label for="poste${nb_telephone}" class="block text-gray-700 text-sm font-bold mb-2">Poste</label>
+                <label for="poste${nb_telephone}" class="block text-lg text-gray-600 mb-2">Poste</label>
                 <input
-                    class=" shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    class=" border-gray-300 shadow appearance-none border rounded w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     id="poste${nb_telephone}" name="poste[]" type="text">
             </div>
         </div>`;
