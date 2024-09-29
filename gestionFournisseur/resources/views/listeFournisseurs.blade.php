@@ -280,7 +280,7 @@
     $(document).ready(function() {
         let selectedRegions = new Set();
         let currentCities = new Set();
-        let startingComodities = 0;
+        let startingCommodities = 0;
         let firstLoad = false;
         let checkedRegions = filterFournisseursOnUpdate({});
         let checkedCities = filterFournisseursOnUpdate({});
@@ -335,10 +335,10 @@
         function onInputCommodities() {
             firstLoad = false;
             clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(() => {
-                    startingComodities = 0;
-                    searchCommodities();
-                }, 300);
+            debounceTimer = setTimeout(() => {
+                startingCommodities = 0;
+                searchCommodities();
+            }, 300);
             document.getElementById('segment-list').scrollTop = 0;
         }
 
@@ -347,10 +347,10 @@
 
             isSearching = true;
             let searchQuery = $('#searchSegment').val().toLowerCase();
+            let url = `/comoditySearch/${startingCommodities}/${segmentPerPage}`;
 
-            let url = '/comoditySearch/' + startingComodities + '/' + segmentPerPage;
             if (searchQuery !== '') {
-                url += '?comodity=' + encodeURIComponent(searchQuery);
+                url += `?comodity=${encodeURIComponent(searchQuery)}`;
             }
 
             $.ajax({
@@ -363,24 +363,21 @@
                         firstLoad = true;
                     }
 
-                    let items = [];
-
-                    $.each(data, function(index, item) {
-                            let isChecked = checkedCommodities[item] ? 'checked' : '';
-                            items.push(`
-                                <li>
-                                    <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                        <input id="${item}" type="checkbox" value="${item}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
-                                        <label for="${item}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${item}</label>
-                                    </div>
-                                </li>
-                            `);
+                    let items = data.map(item => {
+                        let isChecked = checkedCommodities[item] ? 'checked' : '';
+                        return `
+                            <li>
+                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                    <input id="${item}" type="checkbox" value="${item}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
+                                    <label for="${item}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${item}</label>
+                                </div>
+                            </li>`;
                     });
 
                     segmentList.append(items.join(''));
                 },
                 error: function() {
-                    alert('Failed to fetch segment.');
+                    alert('Failed to fetch segments.');
                 },
                 complete: function() {
                     isSearching = false;
@@ -399,72 +396,92 @@
             const clientHeight = element.clientHeight;
             const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
-            if (scrollPercentage > 80) {
+            if (scrollPercentage > 80 && !isSearching) {
                 clearTimeout(debounceTimer);
                 debounceTimer = setTimeout(() => {
-                    startingComodities += itemsPerPage;
+                    startingCommodities += segmentPerPage;
                     searchCommodities();
                 }, 100);
             }
         }
 
+        let cachedRegions = null;
+
         function loadRegions() {
             let searchQuery = $('#searchRegion').val().trim().toLowerCase();
             let regex = new RegExp(searchQuery, 'i');
 
-            $.ajax({
-                url: '/regions',
-                method: 'GET',
-                success: function(data) {
-                    let regionList = $('#region-list');
-                    regionList.empty();
-                    let items = [];
+            if (cachedRegions) {
+                renderRegions(cachedRegions, searchQuery, regex);
+            } else {
+                $.ajax({
+                    url: '/regions',
+                    method: 'GET',
+                    success: function(data) {
+                        cachedRegions = data.result.records;
+                        renderRegions(cachedRegions, searchQuery, regex);
+                    },
+                    error: function() {
+                        alert('Failed to fetch regions.');
+                    }
+                });
+            }
+        }
 
-                    $.each(data.result.records, function(index, item) {
-                        let regionName = item.regadm;
-                        if (searchQuery === "" || regex.test(regionName)) {
-                            let isChecked = checkedRegions[regionName] ? 'checked' : '';
-                            items.push(`
-                                <li>
-                                    <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                        <input id="${regionName}" type="checkbox" value="${regionName}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
-                                        <label for="${regionName}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${regionName}</label>
-                                    </div>
-                                </li>
-                            `);
-                        }
-                    });
+        function renderRegions(data, searchQuery, regex) {
+            let regionList = $('#region-list');
+            regionList.empty();
+            let items = [];
 
-                    regionList.append(items.join(''));
-
-                },
-                error: function() {
-                    alert('Failed to fetch regions.');
+            $.each(data, function(index, item) {
+                let regionName = item.regadm;
+                if (searchQuery === "" || regex.test(regionName)) {
+                    let isChecked = checkedRegions[regionName] ? 'checked' : '';
+                    items.push(`
+                        <li>
+                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                <input id="${regionName}" type="checkbox" value="${regionName}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
+                                <label for="${regionName}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${regionName}</label>
+                            </div>
+                        </li>
+                    `);
                 }
             });
+
+            regionList.append(items.join(''));
         }
+
 
         $('#region-list').on('change', 'input[type="checkbox"]', function() {
             checkedRegions[this.id] = $(this).is(':checked');
             filterCities();
         });
 
+        let cachedCities = {}; 
+
         function loadCities(region, callback) {
-            $.ajax({
-                url: '/ville/' + encodeURIComponent(region),
-                method: 'GET',
-                success: callback,
-                error: function() {
-                    alert('Failed to fetch cities for region: ' + region);
-                }
-            });
+            if (cachedCities[region]) {
+                callback(cachedCities[region]);
+            } else {
+                $.ajax({
+                    url: '/ville/' + encodeURIComponent(region),
+                    method: 'GET',
+                    success: function(data) {
+                        cachedCities[region] = data;
+                        callback(data);
+                    },
+                    error: function() {
+                        alert('Failed to fetch cities for region: ' + region);
+                    }
+                });
+            }
         }
 
         function filterCities() {
             let selectedRegions = $('#region-list input:checked').map(function() {
                 return $(this).val();
             }).get();
-            
+
             let searchQuery = $('#searchCity').val().trim().toLowerCase();
             let regex = new RegExp(searchQuery, 'i');
             let cityList = $('#city-list');
@@ -501,35 +518,45 @@
                     });
                 });
             } else {
-                $.ajax({
-                    url: '/ville',
-                    method: 'GET',
-                    success: function(data) {
-                        let cityItems = [];
-                        $.each(data.result.records, function(index, item) {
-                            let cityName = item.munnom.toLowerCase();
-                            if (searchQuery === "" || regex.test(cityName)) {
-                                let isChecked = checkedCities[cityName] ? 'checked' : '';
-                                cityItems.push(`
-                                    <li>
-                                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input id="${cityName}" type="checkbox" value="${item.munnom}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
-                                            <label for="${cityName}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${item.munnom}</label>
-                                        </div>
-                                    </li>
-                                `);
-                            }
-                        });
-
-                        cityList.append(cityItems.join(''));
-                        cityList.toggleClass('hidden', cityItems.length === 0);
-                    },
-                    error: function() {
-                        alert('Failed to fetch all cities.');
-                    }
-                });
+                if (cachedCities['all']) {
+                    renderAllCities(cachedCities['all'], searchQuery, regex, cityList);
+                } else {
+                    $.ajax({
+                        url: '/ville',
+                        method: 'GET',
+                        success: function(data) {
+                            cachedCities['all'] = data;
+                            renderAllCities(data, searchQuery, regex, cityList);
+                        },
+                        error: function() {
+                            alert('Failed to fetch all cities.');
+                        }
+                    });
+                }
             }
         }
+
+        function renderAllCities(data, searchQuery, regex, cityList) {
+            let cityItems = [];
+            $.each(data.result.records, function(index, item) {
+                let cityName = item.munnom.toLowerCase();
+                if (searchQuery === "" || regex.test(cityName)) {
+                    let isChecked = checkedCities[cityName] ? 'checked' : '';
+                    cityItems.push(`
+                        <li>
+                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                <input id="${cityName}" type="checkbox" value="${item.munnom}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
+                                <label for="${cityName}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${item.munnom}</label>
+                            </div>
+                        </li>
+                    `);
+                }
+            });
+
+            cityList.append(cityItems.join(''));
+            cityList.toggleClass('hidden', cityItems.length === 0);
+        }
+
 
         $('#city-list').on('change', 'input[type="checkbox"]', function() {
             checkedCities[this.id] = $(this).is(':checked');
@@ -939,26 +966,15 @@
                 $('#fournisseurs-list').append(fournisseurItem);
             })
         }
-
-        function debounce(func, wait) {
-            let timeout;
-            return function(...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(this, args), wait);
-            };
-        }
-
+        
         loadRegions();
         filterCities();
         filterLicences();
         filterFournisseurs();
         searchCommodities();
 
-        const debouncedFilterCities = debounce(filterCities, 300);
-        const debouncedLoadRegions = debounce(loadRegions, 300);
-
-        $('#searchCity').on('input', debouncedFilterCities);
-        $('#searchRegion').on('input', debouncedLoadRegions);
+        $('#searchCity').on('input', filterCities);
+        $('#searchRegion').on('input', loadRegions);
         $('#searchSegment').on('input', onInputCommodities);
         $('#segment-list').on('scroll', handleScroll);
         $('#searchCategorie').on('input', filterLicences);
