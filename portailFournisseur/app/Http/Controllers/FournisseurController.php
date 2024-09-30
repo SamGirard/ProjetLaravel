@@ -40,12 +40,12 @@ class FournisseurController extends Controller
             'neq' => ['required', 'size:10', 'regex:/^(11|22|33|88)[4-9]\d{7}$/', 'unique:' . User::class],
             'nom' => ['required', 'max:64'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:64', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', 'min:7','max:12',Rules\Password::defaults()],
         ]);
 
         $request->session()->put('form_identification', $request->all());
-
-        return redirect()->route('create_service');
+        //if($request->input('neq')!=null)
+        return redirect()->route('create_service',['neq'=>$request->input('neq')]);
     }
 
     public function create_service(Request $request)
