@@ -52,6 +52,7 @@ class EmployeController extends Controller
         }
     
         if ($user) {
+            logger('Utilisateur connecté : ' . $user->courriel);
             Auth::login($user);
             logger('Utilisateur connecté : ' . $user->role);
             

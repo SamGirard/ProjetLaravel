@@ -8,7 +8,7 @@
 </head>
     <body>
         <div class="items-center h-screen flex justify-center">
-            <form method="POST" action="{{ route('loginEmploye') }}" class="px-8 pt-6 pb-8 mb-4">
+            <form method="POST" action="{{ route('loginPost') }}" class="px-8 pt-6 pb-8 mb-4">
                 <h1 class="font-bold text-2xl mb-5">Connexion</h1>
                 @csrf
 
