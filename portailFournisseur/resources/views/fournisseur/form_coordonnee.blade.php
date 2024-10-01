@@ -328,7 +328,16 @@
                         }
                     });
                 }else{
-                    console.log(JSON.parse(localStorage.getItem('coordonneesFournisseur')))
+                    /*
+                    'code_region': items['Code de région administrative'],
+                                    'adresse': items['Adresse'],
+                                    'municipalite': items['Municipalité'],
+                                    'region_administrative': items['Région administrative']
+                     */
+                   let coordonnesFournisseur = JSON.parse(localStorage.getItem('coordonnesFournisseur'));
+                    console.log(coordonnesFournisseur);
+                    document.getElementById('region_administrative').value= coordonnesFournisseur['region_administrative'];
+                    document.getElementById('code_administratif').value=coordonnesFournisseur['code_region'];
                 }
         }
 

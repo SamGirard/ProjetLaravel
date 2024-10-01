@@ -6,7 +6,7 @@
     <!-- service offerts -->
     <div class="container mx-auto mt-6">
         <form action="{{ route('store_service') }}" method="post"
-              class=" w-1/2 bg-white shadow-lg rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl">
+              class=" bg-white shadow-lg rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl">
             @csrf
             <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Services et Licences</h1>
             <div class="grid grid-cols-2 gap-6">
@@ -188,8 +188,10 @@
                             if (neq == items[j]) {
 
                                 insererData(items);
+
+                                //sauvegarder les coordonnees du fournisseurs pour les afficher dans la page coordonnes
                                 let coordonneesFournisseurs = {
-                                    'code_Region': items['Code de région administrative'],
+                                    'code_region': items['Code de région administrative'],
                                     'adresse': items['Adresse'],
                                     'municipalite': items['Municipalité'],
                                     'region_administrative': items['Région administrative']
@@ -197,7 +199,6 @@
                                 localStorage.setItem(
                                     'coordonnesFournisseur', JSON.stringify(coordonneesFournisseurs)
                                 )
-
                                 break;
                             }
                         }
@@ -283,7 +284,6 @@
             document.getElementById('type_licence_rbq').innerHTML = "";
             document.getElementById('type_licence_rbq').appendChild(option_type_licence);
         }
-
 
     </script>
 @endsection
