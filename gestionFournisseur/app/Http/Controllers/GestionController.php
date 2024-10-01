@@ -8,6 +8,7 @@ use App\Models\CategoriesLicence;
 use App\Models\Licence;
 use App\Models\Demande;
 use App\Models\InfosRbq;
+use App\Models\Contact;
 
 class GestionController extends Controller
 {
@@ -26,7 +27,8 @@ class GestionController extends Controller
         $ids = $request->query('ids');
         $idsArray = explode(',', $ids);
         $fournisseurs = Fournisseur::whereIn('neq', $idsArray)->get();
+        $contacts = Contact::all();
 
-        return View('liste-contact', compact('fournisseurs'));
+        return View('liste-contact', compact('fournisseurs', 'contacts'));
     }
 }
