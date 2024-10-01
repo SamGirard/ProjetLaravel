@@ -35,42 +35,46 @@ class EmployeController extends Controller
         return view('GestionRole.create');
     }
 
-    public function login(Request $request)
-    {
-        $employes = Employe::all();
-        $user = Employe::where('courriel', $request->courriel)->first();
-        $categoriesLicences = CategoriesLicence::all();
-        $licences = Licence::all();
-        $fournisseurs = Fournisseur::all();
-        $demandes = Demande::all();
-        $infosRbq = InfosRbq::all();
-    
-        if (session()->has('user')) {
-            logger('User session exists: ' . session('user'));
-        } else {
-            logger('No user session found.');
-        }
-    
-        if ($user) {
-            logger('Utilisateur connecté : ' . $user->courriel);
-            Auth::login($user);
-            logger('Utilisateur connecté : ' . $user->role);
-            
-            session(['user' => $user->courriel]);
-    
-            if ($user->role == "Administrateur") {
-                return view('GestionRole.role', compact('employes'));
-            } elseif ($user->role == "Responsable" || $user->role == "Commis") {
-                return view('listeFournisseurs', compact('employes', 'categoriesLicences', 'licences', 'fournisseurs', 'demandes', 'infosRbq'));
-            }
-        } else {
-            return redirect()->route('loginEmploye')->withErrors(["Information invalide"]);
-        }
+    public function login(): RedirectResponse
+{
+    // Validation basique pour s'assurer qu'un courriel est sélectionné
+    request()->validate(['email' => 'required']);
+
+    // Recherche de l'utilisateur via le courriel
+    $user = Employe::where(['courriel' => request(courriel)])->first();
+
+    // Vérification si l'utilisateur existe
+    if (!$user) {
+        return redirect()->back()->withErrors(['courriel' => 'Employé introuvable']);
     }
 
-    public function showLoginForm()
+    // Récupération des données nécessaires pour les vues
+    $employes = Employe::all();
+    $categoriesLicences = CategoriesLicence::all();
+    $licences = Licence::all();
+    $fournisseurs = Fournisseur::all();
+    $demandes = Demande::all();
+    $infosRbq = InfosRbq::all();
+
+    // Créer une URL temporairement signée
+    
+
+    // Rediriger l'utilisateur vers la bonne vue selon son rôle
+    if ($user->role == "Administrateur") {
+        return view('GestionRole.role', compact('employes'));
+    } elseif ($user->role == "Responsable" || $user->role == "Commis") {
+        return view('listeFournisseurs', compact('employes', 'categoriesLicences', 'licences', 'fournisseurs', 'demandes', 'infosRbq'));
+    }
+
+    // Si aucun rôle ne correspond
+    return redirect()->back()->withErrors(['role' => 'Accès refusé']);
+}
+
+    public function showLoginForm(Request $request)
     {
-        return View('GestionRole.login');
+        $employes = Employe::all();
+
+        return View('GestionRole.login', compact('employes'));
     }
 
     public function logout(Request $request)

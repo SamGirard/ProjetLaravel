@@ -68,7 +68,7 @@
                         <button type="submit" class="mt-8 shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded my-4">
                             Enregistrer les modifications 
                         </button>
-                        <button class="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
+                        <button class="ml-4">
                             Annuler
                         </button>            
                 </form>

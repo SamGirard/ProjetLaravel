@@ -2,7 +2,6 @@
     @section('title', "Gestion des employés")
     
     @section('contenu')
-    @auth
         <div class="bg-white py-24 sm:py-32">
             <div class="flex justify-center">
                 @if (session('success'))
@@ -124,9 +123,5 @@
         </div>
 
         <div>
-            @else
-                <h1>Veuillez vous connecter en administrateur</h1>
-                <a href="{{route('loginEmploye')}}">Se connecter</a>
-            @endauth
         </div>
     @endsection
