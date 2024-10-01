@@ -37,7 +37,7 @@ class FournisseurController extends Controller
     public function store_identification(Request $request)
     {
         $validated = $request->validate([
-            'neq' => ['required', 'size:10', 'regex:/^(11|22|33|88)[4-9]\d{7}$/', 'unique:' . User::class],
+            'neq' => ['nullable', 'size:10', 'regex:/^(11|22|33|88)[4-9]\d{7}$/', 'unique:' . User::class],
             'nom' => ['required', 'max:64'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:64', 'unique:' . User::class],
             'password' => ['required', 'confirmed', 'min:7','max:12',Rules\Password::defaults()],

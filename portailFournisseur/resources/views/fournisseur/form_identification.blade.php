@@ -16,7 +16,7 @@
                         <div class="relative">
                             <input required
                                    class="shadow-sm appearance-none border @error('neq') border-red-500 @else border-gray-300 @enderror rounded-lg w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                   id="neq" name="neq" type="text" placeholder="1164568745" value="{{ old('neq') }}">
+                                   id="neq" name="neq" type="text" placeholder="1142808063" value="{{ old('neq') }}">
                             @error('neq')
                             <i class="fa-solid fa-circle-xmark absolute right-4 top-1/2 transform -translate-y-1/2 text-red-500"></i>
                             <span class="text-red-500 text-sm">{{ $message }}</span>

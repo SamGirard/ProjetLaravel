@@ -16,19 +16,23 @@
                         <legend class="text-lg font-semibold text-gray-800 mb-4">Adresse</legend>
 
                         <div class="mb-4">
-                            <label for="adresse_complete" class="block text-lg text-gray-600 mb-2">Adresse complète</label>
+                            <label for="adresse_complete" class="block text-lg text-gray-600 mb-2">Adresse
+                                complète</label>
                             <input
                                     class="@error('adresse_complete') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    id="adresse_complete" name="adresse_complete" type="text" placeholder="Entrez l'adresse complète">
+                                    id="adresse_complete" name="adresse_complete" type="text"
+                                    placeholder="Entrez l'adresse complète">
                         </div>
 
                         <div class="flex justify-start">
                             <div class="mb-4">
-                                <label for="numero_civique" class="block text-lg text-gray-600 mb-2">Numéro civique</label>
+                                <label for="numero_civique" class="block text-lg text-gray-600 mb-2">Numéro
+                                    civique</label>
                                 <div class="flex">
                                     <input readonly value="{{ old('numero_civique') }}"
                                            class="@error('numero_civique') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                           id="numero_civique" name="numero_civique" type="text" placeholder="Numéro civique">
+                                           id="numero_civique" name="numero_civique" type="text"
+                                           placeholder="Numéro civique">
                                     @error('numero_civique')
                                     <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
                                     @enderror
@@ -106,11 +110,13 @@
 
                         <div class="flex justify-start">
                             <div class="mb-4 mx-2">
-                                <label for="region_administrative" class="block text-lg text-gray-600 mb-2">Région administrative</label>
+                                <label for="region_administrative" class="block text-lg text-gray-600 mb-2">Région
+                                    administrative</label>
                                 <div class="flex">
                                     <input value="{{ old('region_administrative') }}"
                                            class="@error('region_administrative') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                           id="region_administrative" name="region_administrative" type="text" placeholder="Région administrative">
+                                           id="region_administrative" name="region_administrative" type="text"
+                                           placeholder="Région administrative">
                                     @error('region_administrative')
                                     <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
                                     @enderror
@@ -121,11 +127,13 @@
                             </div>
 
                             <div class="mb-4 mx-2">
-                                <label for="code_administratif" class="block text-lg text-gray-600 mb-2">Code administratif</label>
+                                <label for="code_administratif" class="block text-lg text-gray-600 mb-2">Code
+                                    administratif</label>
                                 <div class="flex">
                                     <input value="{{ old('code_administratif') }}"
                                            class="@error('code_administratif') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                           id="code_administratif" name="code_administratif" type="text" placeholder="Code administratif">
+                                           id="code_administratif" name="code_administratif" type="text"
+                                           placeholder="Code administratif">
                                     @error('code_administratif')
                                     <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
                                     @enderror
@@ -222,7 +230,8 @@
                                         <div class="flex">
                                             <input value="{{ $value }}"
                                                    class="@error("telephone.$index") border-red-500 @else border-gray-300 @enderror shadow-sm appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                                   id="telephone{{$index}}" name="telephone[]" type="text" placeholder="8165668877">
+                                                   id="telephone{{$index}}" name="telephone[]" type="text"
+                                                   placeholder="8165668877">
                                             @error("telephone.$index")
                                             <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
                                             @enderror
@@ -232,7 +241,8 @@
                                         @enderror
                                     </div>
                                     <div>
-                                        <label for="poste{{$index}}" class="block text-lg text-gray-600 mb-2">Poste</label>
+                                        <label for="poste{{$index}}"
+                                               class="block text-lg text-gray-600 mb-2">Poste</label>
                                         <div class="flex">
                                             <input value="{{ old('poste.'.$index) }}"
                                                    class="@error("poste.$index") border-red-500 @else border-gray-300 @enderror shadow-sm appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -257,72 +267,69 @@
             <div class="flex justify-between mt-3">
                 <button
                         class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
-                    onclick="window.history.back();">
+                        onclick="window.history.back();">
                     Précédent
                 </button>
                 <button
                         class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
-                    type="submit">
+                        type="submit">
                     Suivant
                 </button>
             </div>
         </form>
     </div>
 
-
-
 @endsection
 @section('scripts')
     <script>
 
         function initMap() {
-            const center = {lat: 50.064192, lng: -130.605469};
-        // Create a bounding box with sides ~10km away from the center point
-            const defaultBounds = {
-                north: center.lat + 0.1,
-                south: center.lat - 0.1,
-                east: center.lng + 0.1,
-                west: center.lng - 0.1,
-            };
-            const input = document.getElementById('adresse_complete');
-            const options = {
-                bounds: defaultBounds,
-                componentRestrictions: {country: "ca"},
-                fields: ['address_components', 'geometry', 'icon', 'name'],
-                strictBounds: false,
-            };
-            const autocomplete = new google.maps.places.Autocomplete(input, options);
+                if(localStorage.getItem('coordonnesFournisseur')==null){
+                    const center = {lat: 50.064192, lng: -130.605469};
+                    // Create a bounding box with sides ~10km away from the center point
+                    const defaultBounds = {
+                        north: center.lat + 0.1,
+                        south: center.lat - 0.1,
+                        east: center.lng + 0.1,
+                        west: center.lng - 0.1,
+                    };
+                    const input = document.getElementById('adresse_complete');
+                    const options = {
+                        bounds: defaultBounds,
+                        componentRestrictions: {country: "ca"},
+                        fields: ['address_components', 'geometry', 'icon', 'name'],
+                        strictBounds: false,
+                    };
+                    const autocomplete = new google.maps.places.Autocomplete(input, options);
 
-            autocomplete.addListener('place_changed', function () {
-                const place = autocomplete.getPlace();
+                    autocomplete.addListener('place_changed', function () {
+                        const place = autocomplete.getPlace();
 
-                if (place.address_components) {
-                    console.log(place.address_components);
-                    console.log(place.address_components);
+                        if (place.address_components) {
+                            console.log(place.address_components);
 
-                    for (const component of place.address_components) {
-                        if (component.types.includes('postal_code')) {
+                            for (const component of place.address_components) {
+                                if (component.types.includes('postal_code')) {
 
-                           document.getElementById('code_postal').value = component.long_name;
+                                    document.getElementById('code_postal').value = component.long_name;
+                                } else if (component.types.includes('street_number')) {
+                                    document.getElementById('numero_civique').value = component.long_name;
+                                } else if (component.types.includes('route')) {
+                                    document.getElementById('rue').value = component.long_name;
+                                } else if (component.types.includes('"administrative_area_level_3"')) {
+                                    console.log(component.long_name);
+                                    document.getElementById('ville').value = place.address_components[2].long_name;
+                                } else if (component.types.includes('administrative_area_level_2')) {
+                                    document.getElementById('region_administrative').value = component.long_name;
+                                }
+
+                            }
+
                         }
-                        else if(component.types.includes('street_number')){
-                            document.getElementById('numero_civique').value = component.long_name;
-                        }
-                        else if(component.types.includes('route')){
-                            document.getElementById('rue').value = component.long_name;
-                        }
-                        else if(component.types.includes('"administrative_area_level_3"')){
-                            console.log(component.long_name);
-                            document.getElementById('ville').value = place.address_components[2].long_name;
-                        }
-                        else if(component.types.includes('administrative_area_level_2')){
-                            document.getElementById('region_administrative').value = component.long_name;
-                        }
-
-                    }
-
+                    });
+                }else{
+                    console.log(JSON.parse(localStorage.getItem('coordonneesFournisseur')))
                 }
-            });
         }
 
         let section_telephone = document.getElementById('section_telephone');
@@ -354,13 +361,13 @@
             </div>
         </div>`;
 
-            section_telephone.insertAdjacentHTML('beforeend',nouveau_telephone);
+            section_telephone.insertAdjacentHTML('beforeend', nouveau_telephone);
             console.log(section_telephone);
         });
 
-        async function chagerToutesLesVilles(code_province){
+        async function chagerToutesLesVilles(code_province) {
 
-            try{
+            try {
                 const response = await fetch(`https://geogratis.gc.ca/services/geoname/en/geonames.json?province=${code_province}&concise=CITY`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -368,11 +375,11 @@
 
                 const data = await response.json();
 
-                for(let i=0;i<data.items.length;i++){
-                    console.log(data.items[i].name);
-                }
+                /* for(let i=0;i<data.items.length;i++){
+                     console.log(data.items[i].name);
+                 }*/
 
-            }catch (error) {
+            } catch (error) {
                 console.error('Erreur lors du chargement des villes :', error);
             }
         }

@@ -6,7 +6,7 @@
     <!-- service offerts -->
     <div class="container mx-auto mt-6">
         <form action="{{ route('store_service') }}" method="post"
-              class="bg-white shadow-lg rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl">
+              class=" w-1/2 bg-white shadow-lg rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl">
             @csrf
             <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Services et Licences</h1>
             <div class="grid grid-cols-2 gap-6">
@@ -18,7 +18,7 @@
                         <label for="services" class="block text-gray-600 text-sm font-bold mb-2">SERVICES</label>
                         <input required
                                class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-                               id="email" name="email" type="email">
+                               id="text" name="text" type="text">
                     </div>
                     <div class="mb-4">
                         <label for="details" class="block text-gray-600 text-sm font-bold mb-2">Détails et
@@ -52,6 +52,8 @@
                             licence</label>
                         <select id="type_licence_rbq" name="type_licence_rbq"
                                 class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            <option value="Entrepreneur">Entrepreneur</option>
+                            <option value="Constructeur-proprietaire">Constructeur-proprietaire</option>
                         </select>
                     </div>
                 </fieldset>
@@ -143,7 +145,7 @@
             let optionExsitantes = [];
             // Parcourir toutes les options du select
             for (let i = 0; i < selectElement.options.length; i++) {
-                if (extraireAvantEspace(selectElement.options[i].textContent.trim())===optionValue.trim()) {
+                if (extraireAvantEspace(selectElement.options[i].textContent.trim()) === optionValue.trim()) {
                     optionExists = true;
                     optionExsitantes.push(i.toString());
 
@@ -151,7 +153,7 @@
                 }
             }
 
-            for(let i=0;i<tomSelect.getValue().length;i++){
+            for (let i = 0; i < tomSelect.getValue().length; i++) {
                 optionExsitantes.push(tomSelect.getValue()[i]);
             }
 
@@ -186,7 +188,16 @@
                             if (neq == items[j]) {
 
                                 insererData(items);
-                                console.log(items);
+                                let coordonneesFournisseurs = {
+                                    'code_Region': items['Code de région administrative'],
+                                    'adresse': items['Adresse'],
+                                    'municipalite': items['Municipalité'],
+                                    'region_administrative': items['Région administrative']
+                                };
+                                localStorage.setItem(
+                                    'coordonnesFournisseur', JSON.stringify(coordonneesFournisseurs)
+                                )
+
                                 break;
                             }
                         }
