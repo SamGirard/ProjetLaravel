@@ -122,6 +122,10 @@ class EmployeController extends Controller
         }
 
         public function afficherModeleCourriel(){
-            return view('modeleCourriel');
+            return view('optionAdmin/modeleCourriel');
+        }
+
+        public function afficherParametre(){
+            return view('optionAdmin/parametres');
         }
     }

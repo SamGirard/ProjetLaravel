@@ -69,6 +69,8 @@ Route::get('/liste',
 //route pour la gestion des courriels
 Route::get('/modeleCourriel',
 [EmployeController::class, 'afficherModeleCourriel'])->name('modeleCourriel');
+Route::get('/parametre',
+[EmployeController::class, 'afficherParametre'])->name('parametre');
 
 //route welcome
 Route::get('/', function () {
