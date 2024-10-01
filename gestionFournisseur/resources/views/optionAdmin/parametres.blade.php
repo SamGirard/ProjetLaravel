@@ -34,7 +34,7 @@
             </div>
             <div class="items-center flex justify-center grid grid-cols-3">
                 <form method="post" action="{{ route('employes.store') }}" class="px-8 mb-4 col-start-2">
-                        <h1 class="font-bold text-2xl mb-5">Modèle de courriel</h1>
+                        <h1 class="font-bold text-2xl mb-5">Gestion des paramètres</h1>
                         @csrf
 
                         <label for="courrielAppro" class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white">Courriel de l'Approvisionnement</label>
@@ -65,7 +65,7 @@
                             <div class="mb-5 mt-2 text-red-500">{{ $message }}</div>
                         @enderror
 
-                        <button type="submit" class="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded my-4">
+                        <button type="submit" class="mt-8 shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded my-4">
                             Enregistrer les modifications 
                         </button>
                         <button class="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
