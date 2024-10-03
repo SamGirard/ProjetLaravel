@@ -277,9 +277,19 @@
     </div>
 
     <script>
+        var filteredFournisseurs = [];
+        var checkedFournisseurs = [];
+
         function redirectToList() {
-            const checkedBoxes = document.querySelectorAll('.fournisseur-checkbox:checked');
-            const ids = Array.from(checkedBoxes).map(checkbox => checkbox.id);
+            let ids = [];
+
+            if ($('#checkall').is(':checked')) {
+                ids = Array.from(filteredFournisseurs).map(f => f.neq);
+            } else {
+                ids = checkedFournisseurs;
+            }
+
+            console.log(ids)
 
             if(ids.length > 0) {
                 const queryString = '?ids=' + ids.join(',');
@@ -327,7 +337,6 @@
         var allCities = [];
         var currentPage = 1;
         var itemsPerPage = $('#itemsPerPage').val();
-        var filteredFournisseurs = [];
         let compteurCommodities = {};
         let compteurLicences = {};
         let isAllChecked = false;
@@ -677,6 +686,7 @@
         });
 
         $('#checkall').on('change', function() {
+            checkedFournisseurs = [];
             changePage(currentPage);
         });
 
@@ -997,6 +1007,12 @@
                 $('#fournisseurs-list').append(fournisseurItem);
             })
         }
+
+        $('#fournisseurs-list').on('change', 'input[type="checkbox"]', function() {
+            const isChecked = $(this).is(':checked');
+            const fournisseurId = $(this).attr('id');
+            checkedFournisseurs[fournisseurId] = isChecked ? true : false;
+        });
         
         loadRegions();
         filterCities();

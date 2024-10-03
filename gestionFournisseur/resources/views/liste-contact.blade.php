@@ -6,77 +6,75 @@
 <script src="https://unpkg.com/alpinejs" defer></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<div class="pb-2 pt-5 px-5 flex justify-between items-center">
-    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <caption class="text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+<div class="container mx-auto">
+    <table class="mx-auto text-sm text-left text-gray-500">
+        <caption class="pt-5 px-6 text-lg font-semibold text-left text-gray-900 bg-white">
             Liste des fournisseurs sélectionnés
         </caption>
-    </table>
-</div>
-
-<table class="m-5 text-sm text-left text-gray-500 dark:text-gray-400">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        <tr>
-            <th scope="col" class="px-6 py-3">
-                Fournisseur
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Courriel
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Téléphone
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Contacté
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <div id="accordion-collapse" data-accordion="open">
+        <thead class="font-medium text-gray-900">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col" class="px-6 py-3">Contactés</th>
+            </tr>
+        </thead>
+        <tbody>
             @foreach($fournisseurs as $fournisseur)
-                <tr
-                    class="cursor-pointer bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-800">
-                    <div>
-                        <button type="button" id="heading-{{ $fournisseur->neq }}" aria-expanded="false"
-                            data-accordion-target="#body-{{ $fournisseur->neq }}"
-                            aria-controls="body-{{ $fournisseur->neq }}">
-                            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <div class="flex items-center w-min">
-                                    <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m19 9-7 7-7-7" />
+                <tr class="bg-white border-b dark:bg-gray-800" x-data="{ currentContactIndex: 0 }">
+                    <td class="px-6 py-4">
+                        <div class="font-medium text-gray-900">{{ $fournisseur->nomEntreprise }}</div>
+                        <div class="text-sm">{{ $fournisseur->courriel }}</div>
+                        <div class="text-sm">{{ $fournisseur->numéroTelephone }}</div>
+                    </td>
+
+                    <td class="px-6 py-4">
+                        @php $fournisseurContacts = $contacts->where('neqFournisseur', $fournisseur->neq); @endphp
+                        <div class="flex">
+                            <div class="flex flex-col justify-center items-center space-y-2 mr-2">
+                                <button 
+                                    @click="currentContactIndex = Math.max(0, currentContactIndex - 1)" 
+                                    :disabled="currentContactIndex === 0"
+                                    class="rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
                                     </svg>
-                                    {{ $fournisseur->nomEntreprise }}
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $fournisseur->courriel }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $fournisseur->numéroTelephone }}
-                            </td>
-                            <td class="w-4 p-4">
-                                <div class="flex items-center">
-                                    <input id="{{ $fournisseur->neq }}" type="checkbox"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="{{ $fournisseur->neq }}" class="sr-only">checkbox</label>
-                                </div>
-                            </td>
-                        </button>
-                    </div>
-                    <div id="body-{{ $fournisseur->neq }}" class="hidden" aria-labelledby="heading-{{ $fournisseur->neq }}">
-                        @foreach($contacts as $contact)
-                            @if($contact->neqFournisseur == $fournisseur->neq)
-                                <p>{{ $contact->numTelephone }}</p>
-                            @endif
-                        @endforeach
-                    </div>
+                                </button>
+
+                                <button 
+                                    @click="currentContactIndex = Math.min({{ $fournisseurContacts->count() - 1 }}, currentContactIndex + 1)" 
+                                    :disabled="currentContactIndex === {{ $fournisseurContacts->count() - 1 }}"
+                                    class="rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div>
+                                @foreach($fournisseurContacts as $contact)
+                                    <div x-show="currentContactIndex === {{ $loop->index }}" class="flex items-center mb-2">
+                                        <div class="text-sm">
+                                            <div>{{ $contact->prenom }} {{ $contact->nom }}, {{ $contact->fonction }}</div>
+                                            <div>{{ $contact->courriel }}</div>
+                                            <div>{{ $contact->numTelephone }}</div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="w-4 p-4">
+                        <div class="flex justify-center items-center">
+                            <input id="{{ $fournisseur->neq }}" type="checkbox"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
+                            <label for="{{ $fournisseur->neq }}" class="sr-only">checkbox</label>
+                        </div>
+                    </td>
                 </tr>
             @endforeach
-            </div>
-        </div>
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 
 @endsection
