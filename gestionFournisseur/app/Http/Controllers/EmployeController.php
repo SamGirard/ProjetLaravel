@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Session;
 
 use App\Models\Employe;
 use App\Http\Requests\EmployeRequest;
+use App\Http\Requests\CourrielRequest;
+
 
 use App\Models\CategoriesLicence;
 use App\Models\Licence;
@@ -17,6 +19,7 @@ use App\Models\Fournisseur;
 use App\Models\Demande;
 use App\Models\InfosRbq;
 use App\Models\Parametre;
+use App\Models\Courriel;
 use App\Models\RoleCourriel;
 
 
@@ -38,39 +41,33 @@ class EmployeController extends Controller
     }
 
     public function login(): RedirectResponse
-{
-    // Validation basique pour s'assurer qu'un courriel est sélectionné
-    request()->validate(['email' => 'required']);
+    {
+        request()->validate(['courriel' => 'required']);
+        $user = Employe::where(['courriel' => request('courriel')])->first();
 
-    // Recherche de l'utilisateur via le courriel
-    $user = Employe::where(['courriel' => request(courriel)])->first();
+        if (!$user) {
+            return redirect()->back()->withErrors(['courriel' => 'Employé introuvable']);
+        }
 
-    // Vérification si l'utilisateur existe
-    if (!$user) {
-        return redirect()->back()->withErrors(['courriel' => 'Employé introuvable']);
+        $employes = Employe::all();
+        $categoriesLicences = CategoriesLicence::all();
+        $licences = Licence::all();
+        $fournisseurs = Fournisseur::all();
+        $demandes = Demande::all();
+        $infosRbq = InfosRbq::all();
+
+        Auth::login($user);
+        session()->regenerate();    
+
+        // Rediriger l'utilisateur vers la bonne vue selon son rôle
+        if ($user->role == "Administrateur") {
+            return redirect()->route('role'); 
+        } elseif ($user->role == "Responsable" || $user->role == "Commis") {
+            return view('listeFournisseurs', compact('employes', 'categoriesLicences', 'licences', 'fournisseurs', 'demandes', 'infosRbq'));
+        }
+
+        return redirect()->back()->withErrors(['role' => 'Accès refusé']);
     }
-
-    // Récupération des données nécessaires pour les vues
-    $employes = Employe::all();
-    $categoriesLicences = CategoriesLicence::all();
-    $licences = Licence::all();
-    $fournisseurs = Fournisseur::all();
-    $demandes = Demande::all();
-    $infosRbq = InfosRbq::all();
-
-    // Créer une URL temporairement signée
-    
-
-    // Rediriger l'utilisateur vers la bonne vue selon son rôle
-    if ($user->role == "Administrateur") {
-        return view('GestionRole.role', compact('employes'));
-    } elseif ($user->role == "Responsable" || $user->role == "Commis") {
-        return view('listeFournisseurs', compact('employes', 'categoriesLicences', 'licences', 'fournisseurs', 'demandes', 'infosRbq'));
-    }
-
-    // Si aucun rôle ne correspond
-    return redirect()->back()->withErrors(['role' => 'Accès refusé']);
-}
 
     public function showLoginForm(Request $request)
     {
@@ -129,7 +126,9 @@ class EmployeController extends Controller
         }
 
         public function afficherModeleCourriel(){
-            return view('optionAdmin/modeleCourriel');
+            $courriels = Courriel::all();
+
+            return view('optionAdmin/modeleCourriel', compact('courriels'));
         }
 
         public function afficherParametre(){
@@ -147,5 +146,21 @@ class EmployeController extends Controller
                 Log::debug($e);
             }
             return redirect()->route('modeleCourriel')->with('success', 'Role ajouté avec succès!');
+        }
+
+        public function updateCourriel(CourrielRequest $request, Courriel $courriel){
+            try{
+                $courriel->objet = $request->objet;
+                $courriel->message = $request->message;
+                $courriel->role = $request->role;
+    
+                $courriel->save();
+                return redirect()->route('modeleCourriel')->with('message', 'Le modèle de courriel est modifier!');
+            }
+            catch(\Throwable $e){
+                Log::debug($e);
+                return redirect()->route('modeleCourriel')->withErrors('Erreur lors de la modification!');
+            }
+            return redirect()->route('modeleCourriel');
         }
     }

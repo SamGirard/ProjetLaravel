@@ -19,8 +19,7 @@ Route::get('/fournisseurs/{fournisseur}/',
 
 //Route de Sam pour les role
 Route::get('/Gestion_des_roles', 
-[EmployeController::class, 'index'])->name('role')
-->middleware('auth');
+[EmployeController::class, 'index'])->name('role');
 
 Route::get('/employes/creation',
 [EmployeController::class, 'create'])->name('employes.create');
@@ -74,7 +73,11 @@ Route::get('/parametre',
 
 //route pour ajouter les role de courriel
 Route::post('/employes/courrielRoleEnregistre',
-[EmployeController::class, 'store'])->name('employes.storeCourrielRole');
+[EmployeController::class, 'storeCourrielRole'])->name('employes.storeCourrielRole');
+
+//Route pour modifier les modele de courriel et les parametre
+Route::patch('/modifierCourriel',
+[EmployeController::class, 'updateCourriel'])->name('modifierCourriel');
 
 //route welcome
 Route::get('/', function () {

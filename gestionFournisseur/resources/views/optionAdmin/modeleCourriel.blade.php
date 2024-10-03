@@ -35,45 +35,49 @@
                 </div>
             </div>
             <div class="items-center flex justify-center grid grid-cols-3">
-                <form method="post" action="{{ route('employes.store') }}" class="px-8 mb-4 col-start-2">
+                <form method="post" action="{{ route('modifierCourriel') }}" class="px-8 mb-4 col-start-2">
+                    @csrf
+                    @method('PATCH')
                         <h1 class="font-bold text-2xl mb-5">Modèle de courriel</h1>
-                        @csrf
+                        @if($courriels)
+                            @foreach($courriels as $courriel)
+                                <label for="objet" class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white">Objet</label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100" name="objet" id="objet" type="text" placeholder="Objet" value="{{$courriel->objet}}">
+                                @error('objet')
+                                    <div class="mb-5 mt-2 text-red-500">{{ $message }}</div>
+                                @enderror
+                                
+                                <label for="message" class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white">Message</label>
+                                <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100" placeholder="Message à envoyer...">{{$courriel->message}}</textarea>
 
-                        <label for="objet" class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white">Objet</label>
-                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100" name="objet" id="objet" type="text" placeholder="Objet">
-                        @error('objet')
-                            <div class="mb-5 mt-2 text-red-500">{{ $message }}</div>
-                        @enderror
-                        
-                        <label for="message" class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white">Message</label>
-                        <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100" placeholder="Message à envoyer..."></textarea>
+                                @error('message')
+                                    <div class="mb-5 mt-2 text-red-500">{{ $message }}</div>
+                                @enderror
 
-                        @error('message')
-                            <div class="mb-5 mt-2 text-red-500">{{ $message }}</div>
-                        @enderror
+                                <label for="modele" class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white">Rôle</label>
+                                <div class="grid grid-cols-8 flex space-around">
+                                    <select name="modele" id="modele" class="col-span-4 block appearance-none w-full bg-white px-4 py-2 border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100">
+                                        <option>Choisissez le modèle</option>
+                                        <option>Accusé de réception</option>
+                                        <option>Approbation</option>
+                                        <option>Refus</option>
+                                    </select>
+                                    <button type="button" data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="col-start-5 col-span-2 mx-2 text-sm appearance-none bg-white py-2 border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100">
+                                        Ajouter
+                                    </button>
+                                    <button class="col-start-7 col-span-2 mx-1 text-sm appearance-none bg-white py-2 border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100">
+                                        Supprimer
+                                    </button>
+                                </div>    
 
-                        <label for="modele" class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white">Rôle</label>
-                        <div class="grid grid-cols-8 flex space-around">
-                            <select name="modele" id="modele" class="col-span-4 block appearance-none w-full bg-white px-4 py-2 border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100">
-                                <option>Choisissez le modèle</option>
-                                <option>Accusé de réception</option>
-                                <option>Approbation</option>
-                                <option>Refus</option>
-                            </select>
-                            <button type="button" data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="col-start-5 col-span-2 mx-2 text-sm appearance-none bg-white py-2 border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100">
-                                Ajouter
-                            </button>
-                            <button class="col-start-7 col-span-2 mx-1 text-sm appearance-none bg-white py-2 border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100">
-                                Supprimer
-                            </button>
-                        </div>    
-
-                        <button type="submit" class="mt-8 shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded my-4">
-                            Enregistrer les modifications 
-                        </button>
-                        <button class="ml-4">
-                            Annuler
-                        </button>            
+                                <button type="submit" class="mt-8 shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded my-4">
+                                    Enregistrer les modifications 
+                                </button>
+                                <button class="ml-4">
+                                    Annuler
+                                </button>   
+                            @endforeach
+                        @endif         
                 </form>
 
                 <!-- Main modal -->
