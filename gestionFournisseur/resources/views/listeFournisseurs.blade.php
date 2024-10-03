@@ -850,6 +850,7 @@
         }
 
         function filterFournisseurs() {
+            checkedFournisseurs = [];
             compteurLicences = {};
             compteurCommodities = {};
             let searchValue = $('#table-search').val();

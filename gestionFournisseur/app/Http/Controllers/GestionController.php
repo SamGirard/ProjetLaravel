@@ -25,10 +25,12 @@ class GestionController extends Controller
 
     public function listeContact(Request $request) {
         $ids = $request->query('ids');
-        $idsArray = explode(',', $ids);
+        $request->session()->put('ids', $ids);
+    
+        $idsArray = explode(',', $request->session()->get('ids'));
         $fournisseurs = Fournisseur::whereIn('neq', $idsArray)->get();
         $contacts = Contact::all();
-
-        return View('liste-contact', compact('fournisseurs', 'contacts'));
+    
+        return view('liste-contact', compact('fournisseurs', 'contacts'));
     }
 }
