@@ -16,6 +16,8 @@ use App\Models\Licence;
 use App\Models\Fournisseur;
 use App\Models\Demande;
 use App\Models\InfosRbq;
+use App\Models\Parametre;
+use App\Models\RoleCourriel;
 
 
 class EmployeController extends Controller
@@ -35,37 +37,46 @@ class EmployeController extends Controller
         return view('GestionRole.create');
     }
 
-    public function login(Request $request)
-    {
-        $employes = Employe::all();
-        $user = Employe::where('courriel', $request->courriel)->first();
-        $categoriesLicences = CategoriesLicence::all();
-        $licences = Licence::all();
-        $fournisseurs = Fournisseur::all();
-        $demandes = Demande::all();
-        $infosRbq = InfosRbq::all();
+    public function login(): RedirectResponse
+{
+    // Validation basique pour s'assurer qu'un courriel est sélectionné
+    request()->validate(['email' => 'required']);
 
+    // Recherche de l'utilisateur via le courriel
+    $user = Employe::where(['courriel' => request(courriel)])->first();
 
-        if ($user) {
-            Auth::login($user);
-            logger('Utilisateur connecté : ' . $user->role);
-            
-            if($user->role == "Administrateur"){
-                return view('GestionRole.role', compact('employes'));
-
-            } else if ($user->role == "Responsable" || $employe->role == "Commis"){
-                //return view('listeFournisseurs', compact('employes', 'categoriesLicences', 'licences', 'fournisseurs', 'demandes', 'infosRbq'));
-                return redirect()->route('liste');
-            }
-
-        } else {
-            return redirect()->route('loginEmploye')->withErrors(["Information invalide"]);
-        }
+    // Vérification si l'utilisateur existe
+    if (!$user) {
+        return redirect()->back()->withErrors(['courriel' => 'Employé introuvable']);
     }
 
-    public function showLoginForm()
+    // Récupération des données nécessaires pour les vues
+    $employes = Employe::all();
+    $categoriesLicences = CategoriesLicence::all();
+    $licences = Licence::all();
+    $fournisseurs = Fournisseur::all();
+    $demandes = Demande::all();
+    $infosRbq = InfosRbq::all();
+
+    // Créer une URL temporairement signée
+    
+
+    // Rediriger l'utilisateur vers la bonne vue selon son rôle
+    if ($user->role == "Administrateur") {
+        return view('GestionRole.role', compact('employes'));
+    } elseif ($user->role == "Responsable" || $user->role == "Commis") {
+        return view('listeFournisseurs', compact('employes', 'categoriesLicences', 'licences', 'fournisseurs', 'demandes', 'infosRbq'));
+    }
+
+    // Si aucun rôle ne correspond
+    return redirect()->back()->withErrors(['role' => 'Accès refusé']);
+}
+
+    public function showLoginForm(Request $request)
     {
-        return View('GestionRole.login');
+        $employes = Employe::all();
+
+        return View('GestionRole.login', compact('employes'));
     }
 
     public function logout(Request $request)
@@ -115,5 +126,26 @@ class EmployeController extends Controller
     
         // Rediriger avec un message de succès
         return redirect()->back()->with('success', 'Les employés sélectionnés ont été supprimés.');
+        }
+
+        public function afficherModeleCourriel(){
+            return view('optionAdmin/modeleCourriel');
+        }
+
+        public function afficherParametre(){
+            $parametres = Parametre::all();
+
+            return view('optionAdmin/parametres', compact('parametres'));
+        }
+
+        public function storeCourrielRole(Request $request){
+            try{
+                $roleCourriel = new RoleCourriel($request->all());
+                $roleCourriel->save();
+            }
+            catch(\Throwable $e){
+                Log::debug($e);
+            }
+            return redirect()->route('modeleCourriel')->with('success', 'Role ajouté avec succès!');
         }
     }

@@ -15,10 +15,6 @@ return Application::configure()
         $middleware->alias([
             'CheckRole' => \App\Http\Middleware\CheckRole::class,
         ]);
-        $middleware->web(replace: [
-            Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class =>
-            App\Http\Middleware\CheckCsrf::class
-        ]);
     })
 
     

@@ -66,6 +66,16 @@ Route::get('/liste',
 [EmployeController::class, 'index'])->name('menuListe')
 ->middleware('auth');
 
+//route pour la gestion des courriels
+Route::get('/modeleCourriel',
+[EmployeController::class, 'afficherModeleCourriel'])->name('modeleCourriel');
+Route::get('/parametre',
+[EmployeController::class, 'afficherParametre'])->name('parametre');
+
+//route pour ajouter les role de courriel
+Route::post('/employes/courrielRoleEnregistre',
+[EmployeController::class, 'store'])->name('employes.storeCourrielRole');
+
 //route welcome
 Route::get('/', function () {
     return view('welcome');
