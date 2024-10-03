@@ -72,6 +72,10 @@ Route::get('/modeleCourriel',
 Route::get('/parametre',
 [EmployeController::class, 'afficherParametre'])->name('parametre');
 
+//route pour ajouter les role de courriel
+Route::post('/employes/courrielRoleEnregistre',
+[EmployeController::class, 'store'])->name('employes.storeCourrielRole');
+
 //route welcome
 Route::get('/', function () {
     return view('welcome');

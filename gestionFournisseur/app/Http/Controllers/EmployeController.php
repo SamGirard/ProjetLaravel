@@ -16,6 +16,8 @@ use App\Models\Licence;
 use App\Models\Fournisseur;
 use App\Models\Demande;
 use App\Models\InfosRbq;
+use App\Models\Parametre;
+use App\Models\RoleCourriel;
 
 
 class EmployeController extends Controller
@@ -131,6 +133,19 @@ class EmployeController extends Controller
         }
 
         public function afficherParametre(){
-            return view('optionAdmin/parametres');
+            $parametres = Parametre::all();
+
+            return view('optionAdmin/parametres', compact('parametres'));
+        }
+
+        public function storeCourrielRole(Request $request){
+            try{
+                $roleCourriel = new RoleCourriel($request->all());
+                $roleCourriel->save();
+            }
+            catch(\Throwable $e){
+                Log::debug($e);
+            }
+            return redirect()->route('modeleCourriel')->with('success', 'Role ajouté avec succès!');
         }
     }

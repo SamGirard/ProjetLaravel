@@ -60,7 +60,7 @@
                                 <option>Approbation</option>
                                 <option>Refus</option>
                             </select>
-                            <button class="col-start-5 col-span-2 mx-2 text-sm appearance-none bg-white py-2 border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100">
+                            <button type="button" data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="col-start-5 col-span-2 mx-2 text-sm appearance-none bg-white py-2 border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100">
                                 Ajouter
                             </button>
                             <button class="col-start-7 col-span-2 mx-1 text-sm appearance-none bg-white py-2 border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100">
@@ -75,6 +75,35 @@
                             Annuler
                         </button>            
                 </form>
+
+                <!-- Main modal -->
+                <div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                    <div class="relative p-4 w-full max-w-md max-h-full">
+                        <!-- Modal content -->
+                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                            <!-- Modal header -->
+                            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    Ajouter un rôle
+                                </h3>
+                            </div>
+                            <!-- Modal body -->
+                            <form class="p-4 md:p-5" method="post" action="{{ route('employes.storeCourrielRole') }}">
+                                @csrf
+                                <div class="grid gap-4 mb-4 grid-cols-2">
+                                    <div class="col-span-2">
+                                        <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rôle</label>
+                                        <input type="text" name="role" id="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Nom du rôle">
+                                    </div>
+                                <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                                    Ajouter le rôle
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div> 
+
             </div>
 
         </div>

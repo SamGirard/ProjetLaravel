@@ -3,7 +3,6 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\VerifyCsrfToken;
 
 return Application::configure()
     ->withProviders()
@@ -15,9 +14,6 @@ return Application::configure()
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'CheckRole' => \App\Http\Middleware\CheckRole::class,
-        ]);
-        $middleware->web(replace: [
-            VerifyCsrfToken::class,
         ]);
     })
 
