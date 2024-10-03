@@ -235,6 +235,16 @@
                 }
                 if (dataNEQ != null) {
                     insererData(dataNEQ);
+                    //sauvegarder les coordonnees du fournisseurs pour les afficher dans la page coordonnes
+                    let coordonneesFournisseurs = {
+                        'code_region': dataNEQ['Code de région administrative'],
+                        'adresse': dataNEQ['Adresse'],
+                        'municipalite': dataNEQ['Municipalité'],
+                        'region_administrative': dataNEQ['Région administrative']
+                    };
+                    localStorage.setItem(
+                        'coordonnesFournisseur', JSON.stringify(coordonneesFournisseurs)
+                    )
                     this.classList.remove('border-red-500');
                 } else {
                     // ajouter les messages d'Erreur si rbq valide

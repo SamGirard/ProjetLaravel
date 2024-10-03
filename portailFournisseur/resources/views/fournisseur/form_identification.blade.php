@@ -14,7 +14,7 @@
                     <div class="mb-8">
                         <label for="neq" class="block text-lg text-gray-600 mb-2">NEQ</label>
                         <div class="relative">
-                            <input required
+                            <input
                                    class="shadow-sm appearance-none border @error('neq') border-red-500 @else border-gray-300 @enderror rounded-lg w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
                                    id="neq" name="neq" type="text" placeholder="1142808063" value="{{ old('neq') }}">
                             @error('neq')

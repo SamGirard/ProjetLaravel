@@ -19,9 +19,9 @@
                             <label for="adresse_complete" class="block text-lg text-gray-600 mb-2">Adresse
                                 complète</label>
                             <input
-                                    class="@error('adresse_complete') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    id="adresse_complete" name="adresse_complete" type="text"
-                                    placeholder="Entrez l'adresse complète">
+                                class="@error('adresse_complete') border-red-500 @enderror shadow appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                id="adresse_complete" name="adresse_complete" type="text"
+                                placeholder="Entrez l'adresse complète">
                         </div>
 
                         <div class="flex justify-start">
@@ -266,13 +266,13 @@
 
             <div class="flex justify-between mt-3">
                 <button
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
-                        onclick="window.history.back();">
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
+                    onclick="window.history.back();">
                     Précédent
                 </button>
                 <button
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
-                        type="submit">
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
+                    type="submit">
                     Suivant
                 </button>
             </div>
@@ -284,61 +284,69 @@
     <script>
 
         function initMap() {
-                if(localStorage.getItem('coordonnesFournisseur')==null){
-                    const center = {lat: 50.064192, lng: -130.605469};
-                    // Create a bounding box with sides ~10km away from the center point
-                    const defaultBounds = {
-                        north: center.lat + 0.1,
-                        south: center.lat - 0.1,
-                        east: center.lng + 0.1,
-                        west: center.lng - 0.1,
-                    };
-                    const input = document.getElementById('adresse_complete');
-                    const options = {
-                        bounds: defaultBounds,
-                        componentRestrictions: {country: "ca"},
-                        fields: ['address_components', 'geometry', 'icon', 'name'],
-                        strictBounds: false,
-                    };
-                    const autocomplete = new google.maps.places.Autocomplete(input, options);
+            if (localStorage.getItem('coordonnesFournisseur') == null) {
+                const center = {lat: 50.064192, lng: -130.605469};
+                // Create a bounding box with sides ~10km away from the center point
+                const defaultBounds = {
+                    north: center.lat + 0.1,
+                    south: center.lat - 0.1,
+                    east: center.lng + 0.1,
+                    west: center.lng - 0.1,
+                };
+                const input = document.getElementById('adresse_complete');
+                const options = {
+                    bounds: defaultBounds,
+                    componentRestrictions: {country: "ca"},
+                    fields: ['address_components', 'geometry', 'icon', 'name'],
+                    strictBounds: false,
+                };
+                const autocomplete = new google.maps.places.Autocomplete(input, options);
 
-                    autocomplete.addListener('place_changed', function () {
-                        const place = autocomplete.getPlace();
+                autocomplete.addListener('place_changed', function () {
+                    const place = autocomplete.getPlace();
 
-                        if (place.address_components) {
-                            console.log(place.address_components);
+                    if (place.address_components) {
+                        console.log(place.address_components);
 
-                            for (const component of place.address_components) {
-                                if (component.types.includes('postal_code')) {
+                        for (const component of place.address_components) {
+                            if (component.types.includes('postal_code')) {
 
-                                    document.getElementById('code_postal').value = component.long_name;
-                                } else if (component.types.includes('street_number')) {
-                                    document.getElementById('numero_civique').value = component.long_name;
-                                } else if (component.types.includes('route')) {
-                                    document.getElementById('rue').value = component.long_name;
-                                } else if (component.types.includes('"administrative_area_level_3"')) {
-                                    console.log(component.long_name);
-                                    document.getElementById('ville').value = place.address_components[2].long_name;
-                                } else if (component.types.includes('administrative_area_level_2')) {
-                                    document.getElementById('region_administrative').value = component.long_name;
-                                }
-
+                                document.getElementById('code_postal').value = component.long_name;
+                            } else if (component.types.includes('street_number')) {
+                                document.getElementById('numero_civique').value = component.long_name;
+                            } else if (component.types.includes('route')) {
+                                document.getElementById('rue').value = component.long_name;
+                            } else if (component.types.includes('"administrative_area_level_3"')) {
+                                console.log(component.long_name);
+                                document.getElementById('ville').value = place.address_components[2].long_name;
+                            } else if (component.types.includes('administrative_area_level_2')) {
+                                document.getElementById('region_administrative').value = component.long_name;
                             }
 
                         }
-                    });
-                }else{
-                    /*
-                    'code_region': items['Code de région administrative'],
-                                    'adresse': items['Adresse'],
-                                    'municipalite': items['Municipalité'],
-                                    'region_administrative': items['Région administrative']
-                     */
-                   let coordonnesFournisseur = JSON.parse(localStorage.getItem('coordonnesFournisseur'));
-                    console.log(coordonnesFournisseur);
-                    document.getElementById('region_administrative').value= coordonnesFournisseur['region_administrative'];
-                    document.getElementById('code_administratif').value=coordonnesFournisseur['code_region'];
-                }
+
+                    }
+                });
+            } else {
+                /*
+                'code_region': items['Code de région administrative'],
+                                'adresse': items['Adresse'],
+                                'municipalite': items['Municipalité'],
+                                'region_administrative': items['Région administrative']
+                 */
+                let coordonnesFournisseur = JSON.parse(localStorage.getItem('coordonnesFournisseur'));
+                console.log(coordonnesFournisseur);
+                document.getElementById('region_administrative').value = coordonnesFournisseur['region_administrative'];
+                document.getElementById('code_administratif').value = coordonnesFournisseur['code_region'];
+                document.getElementById('numero_civique').value = coordonnesFournisseur['adresse'].split(' ')[0];
+                let code_postal = coordonnesFournisseur['adresse'].split(' ').slice(-2).join(' ');
+                document.getElementById('code_postal').value = code_postal;
+                let indexRue = coordonnesFournisseur['adresse'].indexOf('CANADA');
+                let rue = coordonnesFournisseur['adresse'].slice(0, indexRue).trim();
+                indexRue = rue.indexOf(' ');
+                document.getElementById('rue').value = rue.slice(indexRue + 1).trim();
+                ;
+            }
         }
 
         let section_telephone = document.getElementById('section_telephone');
