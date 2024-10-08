@@ -1,6 +1,5 @@
     @extends('layouts.app')
     @section('title', "Gestion des employés")
-    
     @section('contenu')
         <div class="bg-white py-24 sm:py-32">
             <div class="flex justify-center">

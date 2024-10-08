@@ -26,21 +26,14 @@ use App\Models\RoleCourriel;
 class EmployeController extends Controller
 {
     public function index(){
-        $employes = Employe::all();
-
-        if($employe->role == "Administrateur"){
-            return view('GestionRole.role', compact('employes'));
-            
-        } else if ($employe->role == "Responsable" || $employe->role == "Commis"){
-            return view('liste', compact('employes'));
-        }
+        
     }
 
     public function create(){
         return view('GestionRole.create');
     }
 
-    public function login(): RedirectResponse
+    public function login()
     {
         request()->validate(['courriel' => 'required']);
         $user = Employe::where(['courriel' => request('courriel')])->first();
@@ -60,10 +53,11 @@ class EmployeController extends Controller
         session()->regenerate();    
 
         // Rediriger l'utilisateur vers la bonne vue selon son rôle
+        // Rediriger l'utilisateur selon son rôle
         if ($user->role == "Administrateur") {
-            return redirect()->route('role'); 
+            return redirect()->route('role');
         } elseif ($user->role == "Responsable" || $user->role == "Commis") {
-            return view('listeFournisseurs', compact('employes', 'categoriesLicences', 'licences', 'fournisseurs', 'demandes', 'infosRbq'));
+            return redirect()->route('liste');
         }
 
         return redirect()->back()->withErrors(['role' => 'Accès refusé']);
@@ -123,6 +117,13 @@ class EmployeController extends Controller
     
         // Rediriger avec un message de succès
         return redirect()->back()->with('success', 'Les employés sélectionnés ont été supprimés.');
+        }
+
+
+        public function afficherRole(){
+            $employes = Employe::all();
+
+            return view('GestionRole.role', compact('employes'));
         }
 
         public function afficherModeleCourriel(){

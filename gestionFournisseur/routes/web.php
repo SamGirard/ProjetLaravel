@@ -19,36 +19,26 @@ Route::get('/fournisseurs/{fournisseur}/',
 
 //Route de Sam pour les role
 Route::get('/Gestion_des_roles', 
-[EmployeController::class, 'index'])->name('role');
+[EmployeController::class, 'afficherRole'])->name('role')
+->middleware('CheckRole:Administrateur');
 
 Route::get('/employes/creation',
-[EmployeController::class, 'create'])->name('employes.create');
+[EmployeController::class, 'create'])->name('employes.create')
+->middleware('CheckRole:Administrateur');
 
 Route::post('/employes',
-[EmployeController::class, 'store'])->name('employes.store');
-
-
-Route::get('/employes/creation',
-[EmployeController::class, 'create'])->name('employes.create');
-
-Route::post('/employes',
-[EmployeController::class, 'store'])->name('employes.store');
-
-
-//Route pour créer les employé
-Route::get('/employes/creation',
-[EmployeController::class, 'create']) -> name('employes.create');
-
-Route::post('/employes',
-[EmployeController::class, 'store'])->name('employes.store');
+[EmployeController::class, 'store'])->name('employes.store')
+->middleware('CheckRole:Administrateur');
 
 //Route pour le delete d'employé
 Route::delete('/supprimerEmploye',
-[EmployeController::class, 'destroy'])->name('supprimerEmploye');
+[EmployeController::class, 'destroy'])->name('supprimerEmploye')
+->middleware('CheckRole:Administrateur');
 
 //Route pour modifier le role des employé
 Route::patch('/modifierEmploye',
-[EmployeController::class, 'update'])->name('modifierEmploye');
+[EmployeController::class, 'update'])->name('modifierEmploye')
+->middleware('CheckRole:Administrateur');
 
 
 //Route pour le login d'employe
@@ -61,23 +51,24 @@ Route::post('/loginEmploye',
 Route::post('/logout', 
 [EmployeController::class, 'logout'])->name('logout');
 
-Route::get('/liste', 
-[EmployeController::class, 'index'])->name('menuListe')
-->middleware('auth');
-
 //route pour la gestion des courriels
 Route::get('/modeleCourriel',
-[EmployeController::class, 'afficherModeleCourriel'])->name('modeleCourriel');
+[EmployeController::class, 'afficherModeleCourriel'])->name('modeleCourriel')
+->middleware('CheckRole:Administrateur');
+
 Route::get('/parametre',
-[EmployeController::class, 'afficherParametre'])->name('parametre');
+[EmployeController::class, 'afficherParametre'])->name('parametre')
+->middleware('CheckRole:Administrateur');
 
 //route pour ajouter les role de courriel
 Route::post('/employes/courrielRoleEnregistre',
-[EmployeController::class, 'storeCourrielRole'])->name('employes.storeCourrielRole');
+[EmployeController::class, 'storeCourrielRole'])->name('employes.storeCourrielRole')
+->middleware('CheckRole:Administrateur');
 
 //Route pour modifier les modele de courriel et les parametre
 Route::patch('/modifierCourriel',
-[EmployeController::class, 'updateCourriel'])->name('modifierCourriel');
+[EmployeController::class, 'updateCourriel'])->name('modifierCourriel')
+->middleware('CheckRole:Administrateur');
 
 //route welcome
 Route::get('/', function () {
@@ -94,5 +85,6 @@ Route::get('/family/{segment}', [ApiController::class, 'fetchUNSPSCFamily']);
 Route::get('/class/{family}', [ApiController::class, 'fetchUNSPSCClass']);
 Route::get('/comodity/{class}', [ApiController::class, 'fetchUNSPSCComodity']);
 Route::get('/comoditySearch/{start}/{number}', [ApiController::class, 'fetchUNSPSCComodityFromName']);
-Route::get('/liste', [GestionController::class, 'listeFournisseur'])->name('liste');
+Route::get('/liste', [GestionController::class, 'listeFournisseur'])->name('liste')->middleware('CheckRole:Administrateur,Commis,Responsable');
+;
 
