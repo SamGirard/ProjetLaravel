@@ -91,7 +91,8 @@ Route::get('/family/{segment}', [ApiController::class, 'fetchUNSPSCFamily']);
 Route::get('/class/{family}', [ApiController::class, 'fetchUNSPSCClass']);
 Route::get('/comodity/{class}', [ApiController::class, 'fetchUNSPSCComodity']);
 Route::get('/comoditySearch/{start}/{number}', [ApiController::class, 'fetchUNSPSCComodityFromName']);
+
 Route::get('/liste', [GestionController::class, 'listeFournisseur'])->name('liste');
 Route::get('/liste-contact', [GestionController::class, 'listeContact'])->name('liste-contact');
-
+Route::get('/export-fournisseurs', [GestionController::class, 'exportFournisseurs'])->name('export.fournisseurs');
 

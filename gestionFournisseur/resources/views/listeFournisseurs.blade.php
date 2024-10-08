@@ -185,17 +185,21 @@
                 <button id="open-list" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                     Liste des fournisseurs sélectionnés
                 </button>
-                <button type="button" class="flex-shrink-0 z-10 inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm py-2.5 px-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 hover:text-blue-600">
-                    <svg class="w-5 h-5 pr-1 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8"/>
-                    </svg>
-                    Exporter
-                </button>
+                <form id="exportForm" action="{{ route('export.fournisseurs') }}" method="GET">
+                    @csrf
+                    <input type="hidden" name="filteredFournisseurs" id="filteredFournisseurs">
+                    <button type="submit" class="flex-shrink-0 z-10 inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm py-2.5 px-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 hover:text-blue-600">
+                        <svg class="w-5 h-5 pr-1 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8"/>
+                        </svg>
+                        Exporter
+                    </button>
+                </form>
             </div>
         </div>
         <div class="border-t border-gray-200 dark:border-gray-700 pb-4"></div>
             <div class="flex pb-4">
-                <div class="flex items-center me-4">
+                <div class="flex items-center me-4 ml-1">
                     <input id="En attente" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     <label for="En attente" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">En attente</label>
                 </div>
@@ -216,10 +220,10 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="w4 p-4">
-                        <div class="flex items-center">
-                            <input id="checkall" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="checkall" class="sr-only">checkbox</label>
-                        </div>
+                            <div class="flex items-center">
+                                <input id="checkall" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="checkall" class="sr-only">checkbox</label>
+                            </div>
                         </th>
                         <th scope="col" class="px-6 py-3">
                             <div class="sortable-header flex items-center cursor-pointer w-min">
@@ -301,7 +305,6 @@
         let isAllChecked = false;
         var filteredFournisseurs = [];
         var checkedFournisseurs = [];
-
 
         $.ajax({
             url: '/ville',
@@ -978,7 +981,6 @@
 
                 $('#fournisseurs-list').find('input').change(function() {
                     checkedFournisseurs[this.id] = $(this).is(':checked');
-                    console.log(checkedFournisseurs);
                 });
             })
         }
@@ -998,7 +1000,7 @@
             }
             else {
                 const toastHTML = `
-                    <div id="toast-danger" class="fixed top-0 right-0 m-4 flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow-lg dark:text-gray-400 dark:bg-gray-800" role="alert">
+                    <div id="toast-danger" class="fixed top-0 right-0 z-[9999] m-4 flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow-lg dark:text-gray-400 dark:bg-gray-800" role="alert">
                         <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
                             <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/>
@@ -1022,6 +1024,18 @@
         $('#open-list').on('click', function(event) {
             redirectToList();
         });
+
+        function populateInputs() {
+            const filteredInput = document.getElementById('filteredFournisseurs');
+
+            filteredInput.value = JSON.stringify(filteredFournisseurs);
+        }
+
+        document.getElementById('exportForm').onsubmit = function() {
+            populateInputs();
+        };
+
+        $('#Accepter').prop('checked', true);
         
         loadRegions();
         filterCities();
