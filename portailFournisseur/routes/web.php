@@ -17,6 +17,8 @@ Route::post('ajouter_coordonnee',[FournisseurController::class,'store_coordonnee
 Route::get('ajouter_contact',[FournisseurController::class,'create_contact'])->name('create_contact');
 Route::post('ajouter_contact',[FournisseurController::class,'store_contact'])->name('store_contact');
 
+Route::get('chercherService',[FournisseurController::class,'chercherService'])->name('cherherService');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

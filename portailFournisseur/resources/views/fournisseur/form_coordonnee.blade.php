@@ -345,7 +345,7 @@
                 let rue = coordonnesFournisseur['adresse'].slice(0, indexRue).trim();
                 indexRue = rue.indexOf(' ');
                 document.getElementById('rue').value = rue.slice(indexRue + 1).trim();
-                ;
+
             }
         }
 
@@ -400,6 +400,8 @@
                 console.error('Erreur lors du chargement des villes :', error);
             }
         }
+
+
 
         // Fonction pour charger les options depuis le fichier CSV
         async function chargerVilles() {

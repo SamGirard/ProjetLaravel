@@ -16,9 +16,17 @@
                     <legend class="text-lg font-semibold text-gray-700 mb-4">Produits et services offerts</legend>
                     <div class="mb-4">
                         <label for="services" class="block text-gray-600 text-sm font-bold mb-2">SERVICES</label>
-                        <input required
-                               class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-                               id="text" name="text" type="text">
+                        <input placeholder="Rechercher un service" id="search_service" type="text"
+                               class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 mb-2 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <select multiple id="services" name="services[]"
+                                class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            <option value="">Selectionner un service</option>
+                            @foreach($categorie_services as $categorie_service)
+                                @if($categorie_service['type'] == 'Général')
+                                    <option value="{{ $categorie_service['id'] }}">{{ $categorie_service['code'] }} {{ $categorie_service['nom'] }}</option>
+                                @endif
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-4">
                         <label for="details" class="block text-gray-600 text-sm font-bold mb-2">Détails et
@@ -112,7 +120,17 @@
 
         let neq = null;
 
+
         // Initialiser les options des select des categories
+
+        const services = new TomSelect(document.getElementById('services'), {
+            create: false, // Empêcher la création de nouvelles options
+            sortField: {
+                field: "text",
+                direction: "asc"
+            }
+        });
+
         const select_categorie_general = new TomSelect(document.getElementById('categorie_generale'), {
             create: false, // Empêcher la création de nouvelles options
             sortField: {
@@ -128,6 +146,7 @@
                 direction: "asc"
             }
         });
+
 
         function extraireAvantEspace(chaine) {
             const index = chaine.indexOf(' '); // Trouve l'index du premier espace
@@ -156,7 +175,6 @@
             for (let i = 0; i < tomSelect.getValue().length; i++) {
                 optionExsitantes.push(tomSelect.getValue()[i]);
             }
-
 
             tomSelect.setValue(optionExsitantes);
 
@@ -294,6 +312,7 @@
             document.getElementById('type_licence_rbq').innerHTML = "";
             document.getElementById('type_licence_rbq').appendChild(option_type_licence);
         }
+
 
     </script>
 @endsection

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategorieService;
+use App\Models\DonneesServices;
 use App\Models\User;
 use Illuminate\Validation\Rules;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use function Webmozart\Assert\Tests\StaticAnalysis\length;
 
 class FournisseurController extends Controller
 {
@@ -40,28 +42,79 @@ class FournisseurController extends Controller
             'neq' => ['nullable', 'size:10', 'regex:/^(11|22|33|88)[4-9]\d{7}$/', 'unique:' . User::class],
             'nom' => ['required', 'max:64'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:64', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', 'min:7','max:12',Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', 'min:7', 'max:12', Rules\Password::defaults()],
         ]);
 
         $request->session()->put('form_identification', $request->all());
         //if($request->input('neq')!=null)
-        return redirect()->route('create_service',['neq'=>$request->input('neq')]);
+        return redirect()->route('create_service', ['neq' => $request->input('neq')]);
     }
 
     public function create_service(Request $request)
     {
+         if ($request->session()->has('form_identification')) {
+             $categorie_services = CategorieService::all();
 
-        if ($request->session()->has('form_identification')) {
-            $categorie_services = CategorieService::all();
-
-            return view('fournisseur/form_produit_service',compact('categorie_services'));
-        } else
-            return redirect()->route('create_identification');
+             return view('fournisseur/form_produit_service',compact('categorie_services'));
+         } else
+             return redirect()->route('create_identification');
     }
 
+    public function chercherService(Request $request)
+    {
+        $this->formaterDonneesServices('app/public/services/Autres.csv');
+    }
+
+    protected function formaterDonneesServices($cheminFichier)
+    {
+        $data = $this->lireFichierCsv($cheminFichier);
+        $donnes = array();
+        foreach ($data as $row) {
+            // Créer un tableau associatif pour chaque ligne
+            array_push($donnes, $row);
+        }
+        $listServices = $donnes[1];
+        return $listServices;
+    }
+    protected function lireFichierCsv($cheminFichier)
+    {
+        $fichier = storage_path($cheminFichier);
+        // Vérification de l'existence et de la lisibilité du fichier
+        if (!file_exists($fichier) || !is_readable($fichier)) {
+            return response()->json(['error' => 'Le fichier n\'existe pas ou n\'est pas lisible.'], 404);
+        }
+        $data = [];
+        // Ouverture du fichier en mode lecture
+        if (($handle = fopen($fichier, 'r')) !== false) {
+            // Lecture du fichier ligne par ligne
+            while (($row = fgetcsv($handle, 1000, ";")) !== false) {
+                // On détecte l'encodage actuel de chaque champ de la ligne
+                $row = array_map(function ($field) {
+                    // Détection de l'encodage initial
+                    $encoding = mb_detect_encoding($field, ['UTF-8', 'ISO-8859-1', 'Windows-1252'], true);
+
+                    // Conversion en UTF-8 si nécessaire
+                    if ($encoding !== 'UTF-8') {
+                        return mb_convert_encoding($field, 'UTF-8', $encoding);
+                    }
+                    return $field; // Si déjà en UTF-8, ne pas convertir
+                }, $row);
+
+                // Ajouter la ligne convertie dans le tableau des données
+                $data[] = $row;
+            }
+            // Fermeture du fichier après lecture
+            fclose($handle);
+        } else {
+            return response()->json(['error' => 'Impossible d\'ouvrir le fichier.'], 500);
+        }
+
+        // Retourner les données sous forme de réponse JSON
+        return response()->json($data);
+    }
     public function store_service(Request $request)
     {
-       // dd($request->all());
+        // dd($request->all());
         $request->session()->put('form_service', $request->all());
         return redirect()->route('create_coordonnee');
     }
@@ -70,7 +123,7 @@ class FournisseurController extends Controller
     {
         $provinces = ['Québec', 'Ontario', 'Alberta', 'Manitoba', 'Saskatchewan', 'Colombie-Britannique', 'Nunavut', 'Territoire du Nort-Ouest', 'Yukon', 'Île-du-Prince-Édouard', 'Nouveau-Brunswick', 'Nouvelle-Écosse', 'Terre-Neuve-et-Labrador'];
 
-        if($request->session()->has('form_service'))
+        if ($request->session()->has('form_service'))
             return view('fournisseur/form_coordonnee', compact('provinces'));
         else
             return redirect()->route('create_identification');
@@ -80,18 +133,18 @@ class FournisseurController extends Controller
     public function store_coordonnee(Request $request)
     {
         $validated = $request->validate([
-            'numero_civique' => ['required', 'max_digits:8','numeric'],
+            'numero_civique' => ['required', 'max_digits:8', 'numeric'],
             'rue' => ['required', 'max:64'],
             'bureau' => ['string', 'size:8'],
             'province' => ['required'],
             'ville' => ['required_if:province,Québec', 'max:64'],
-            'region_administrative' =>['required_if:province,Québec'],
+            'region_administrative' => ['required_if:province,Québec'],
             'code_postal' => ['required', 'size:7', 'regex:/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$/'],
             'site_internet' => ['nullable', 'max:64', 'url:http,https'],
             'type_telephone.0' => ['required'],
             'type_telephone.*' => ['nullable'],
-            'telephone.0' => ['required','numeric','regex:/^(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/'],
-            'telephone.*' => ['nullable','numeric','distinct','regex:/^(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/'],
+            'telephone.0' => ['required', 'numeric', 'regex:/^(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/'],
+            'telephone.*' => ['nullable', 'numeric', 'distinct', 'regex:/^(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/'],
             'poste.0' => ['nullable', 'max_digits:6', 'numeric'],
             'poste.*' => ['nullable', 'max_digits:6', 'numeric']
 
@@ -114,7 +167,7 @@ class FournisseurController extends Controller
             'fonction_contact' => ['required', 'max:32'],
             'email_contact' => ['required', 'string', 'lowercase', 'email', 'max:64'],
             'type_telephone_contact' => ['required'],
-            'telephone_contact' => ['required','numeric','regex:/^(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/'],
+            'telephone_contact' => ['required', 'numeric', 'regex:/^(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/'],
             'poste_contact' => ['nullable', 'max_digits:6', 'numeric'],
         ]);
         $request->session()->put('form_contact', $request->all());
@@ -124,10 +177,10 @@ class FournisseurController extends Controller
 
     public function create_contact(Request $request)
     {
-        if($request->session()->has('form_coordonnee'))
+        if ($request->session()->has('form_coordonnee'))
             return view('fournisseur./form_contact');
         else
-            return redirect()>route('create_identification');
+            return redirect() > route('create_identification');
     }
 
     /**
@@ -152,4 +205,5 @@ class FournisseurController extends Controller
     public function destroy(string $id)
     {
     }
+
 }
