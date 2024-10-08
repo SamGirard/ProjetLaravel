@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Employe;
 use App\Http\Requests\EmployeRequest;
 use App\Http\Requests\CourrielRequest;
+use App\Http\Requests\ParametreRequest;
+
 
 
 use App\Models\CategoriesLicence;
@@ -33,6 +35,8 @@ class EmployeController extends Controller
         return view('GestionRole.create');
     }
 
+
+    //LOGIN EMPLOYE
     public function login()
     {
         request()->validate(['courriel' => 'required']);
@@ -76,6 +80,8 @@ class EmployeController extends Controller
         return redirect()->route('loginEmploye');
     }
 
+
+    //UPDATE EMPLOYE
     public function store(EmployeRequest $request){
         try{
             $employe = new Employe($request->all());
@@ -87,8 +93,6 @@ class EmployeController extends Controller
         return redirect()->route('role')->with('success', 'Employé ajouté avec succès!');
     }
 
-
-
     public function update(Request $request){
         $employe = new Employe($request->all());
 
@@ -99,8 +103,6 @@ class EmployeController extends Controller
         }
         return redirect()->back()->with('success', 'Les employés sont modifiés.');
     }
-
-
 
     public function destroy(Request $request){
         $employe = new Employe($request->all());
@@ -119,25 +121,46 @@ class EmployeController extends Controller
         return redirect()->back()->with('success', 'Les employés sélectionnés ont été supprimés.');
         }
 
-
+        //ROLE
         public function afficherRole(){
             $employes = Employe::all();
 
             return view('GestionRole.role', compact('employes'));
         }
 
-        public function afficherModeleCourriel(){
-            $courriels = Courriel::all();
-
-            return view('optionAdmin/modeleCourriel', compact('courriels'));
-        }
-
+        //PARAMETRE//
         public function afficherParametre(){
             $parametres = Parametre::all();
 
             return view('optionAdmin/parametres', compact('parametres'));
         }
 
+        public function updateParam(ParametreRequest $request, Parametre $parametre){
+            try {
+                $parametre->courrielAppro = $request->courrielAppro;
+                $parametre->delaiRevision = $request->delai;
+                $parametre->tailleMaxFichiers = $request->taille;
+                $parametre->courrielFinance = $request->courrielFinance;
+
+                $parametre->save();
+                return redirect()->route('parametre')->with('message', 'Modification réussie');
+
+            }catch(\Throwable $e){
+                Log::debug($e);
+                return redirect()->route('parametre')->withErrors(['Modification réussie']);
+             }
+             return redirect()->route('parametre');
+        }
+
+
+        //MODELE COURRIEL
+        public function afficherModeleCourriel(){
+            $courriels = Courriel::all();
+
+            return view('optionAdmin/modeleCourriel', compact('courriels'));
+        }
+
+        
         public function storeCourrielRole(Request $request){
             try{
                 $roleCourriel = new RoleCourriel($request->all());

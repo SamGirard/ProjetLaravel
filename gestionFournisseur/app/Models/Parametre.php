@@ -10,12 +10,7 @@ class Parametre extends Model
     use HasFactory;
 
     // Define which attributes are mass assignable
-    protected $fillable = [
-        'courrielAppro', 
-        'delai',
-        'taille',
-        'courrielFinance',
-    ];
+    protected $fillable = ['courrielAppro', 'delaiRevision', 'tailleMaxFichiers', 'courrielFinance'];
 
     protected $table = 'parametre';
 

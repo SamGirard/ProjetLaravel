@@ -60,6 +60,9 @@ Route::get('/parametre',
 [EmployeController::class, 'afficherParametre'])->name('parametre')
 ->middleware('CheckRole:Administrateur');
 
+Route::patch('modifierParametre', 
+[EmployeController::class ,'updateParam'])->name('modifierParam');
+
 //route pour ajouter les role de courriel
 Route::post('/employes/courrielRoleEnregistre',
 [EmployeController::class, 'storeCourrielRole'])->name('employes.storeCourrielRole')
@@ -69,6 +72,9 @@ Route::post('/employes/courrielRoleEnregistre',
 Route::patch('/modifierCourriel',
 [EmployeController::class, 'updateCourriel'])->name('modifierCourriel')
 ->middleware('CheckRole:Administrateur');
+
+
+//route pour les parametre
 
 //route welcome
 Route::get('/', function () {
@@ -85,6 +91,5 @@ Route::get('/family/{segment}', [ApiController::class, 'fetchUNSPSCFamily']);
 Route::get('/class/{family}', [ApiController::class, 'fetchUNSPSCClass']);
 Route::get('/comodity/{class}', [ApiController::class, 'fetchUNSPSCComodity']);
 Route::get('/comoditySearch/{start}/{number}', [ApiController::class, 'fetchUNSPSCComodityFromName']);
-Route::get('/liste', [GestionController::class, 'listeFournisseur'])->name('liste')->middleware('CheckRole:Administrateur,Commis,Responsable');
-;
+Route::get('/liste', [GestionController::class, 'listeFournisseur'])->name('liste');
 

@@ -68,6 +68,9 @@
                                     <button class="col-start-7 col-span-2 mx-1 text-sm appearance-none bg-white py-2 border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100">
                                         Supprimer
                                     </button>
+                                    @error('role')
+                                        <div class="mb-5 mt-2 text-red-500">{{ $message }}</div>
+                                    @enderror
                                 </div>    
 
                                 <button type="submit" class="mt-8 shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded my-4">

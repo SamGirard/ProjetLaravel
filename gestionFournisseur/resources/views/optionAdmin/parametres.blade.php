@@ -33,9 +33,10 @@
                 </div>
             </div>
             <div class="items-center flex justify-center grid grid-cols-3">
-                <form method="post" action="{{ route('employes.store') }}" class="px-8 mb-4 col-start-2">
-                        <h1 class="font-bold text-2xl mb-5">Gestion des paramètres</h1>
+                <form method="POST" action="{{ route('modifierParam') }}" class="px-8 mb-4 col-start-2">
+                        @method('PATCH')
                         @csrf
+                        <h1 class="font-bold text-2xl mb-5">Gestion des paramètres</h1>
                         @if($parametres)
                             @foreach($parametres as $parametre)
                                     <label for="courrielAppro" class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white">Courriel de l'Approvisionnement</label>
@@ -54,23 +55,20 @@
                                         </div>
                                         <div class="col-start-3 col-span-2">
                                             <label for="taille" class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white">Taille maximale des fichiers joints (Mo)</label>
-                                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100" name="delai" value="{{ $parametre->tailleMaxFichiers }}"  id="delai" type="number">
+                                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100" name="taille" value="{{ $parametre->tailleMaxFichiers }}"  id="delai" type="number">
                                             @error('taille')
                                                 <div class="mb-5 mt-2 text-red-500">{{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
                                     <label for="courrielFinance" class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white">Courriel des Finances</label>
-                                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100" name="courrielFin"  value="{{ $parametre->courrielFinance }}"  id="courrielFin" type="text">
+                                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100" name="courrielFinance"  value="{{ $parametre->courrielFinance }}"  id="courrielFin" type="text">
                                     @error('courrielFinance')
                                         <div class="mb-5 mt-2 text-red-500">{{ $message }}</div>
                                     @enderror
 
                                     <button type="submit" class="mt-8 shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded my-4">
                                         Enregistrer les modifications 
-                                    </button>
-                                    <button class="ml-4">
-                                        Annuler
                                     </button>
                                 @endforeach  
                         @endif          
