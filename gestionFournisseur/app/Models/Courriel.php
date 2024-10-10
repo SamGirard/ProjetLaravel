@@ -7,10 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Courriel extends Model
 {
+    use HasFactory;
+
+    protected $primaryKey = 'objet';
+    public $incrementing = false;
+    protected $keyType = 'string';
     //use HasFactory;
-    protected $fillable = ['objet', 'message', 'role'];
+    protected $fillable = ['objet', 'message', 'role', 'raison'];
 
     protected $table = 'modele_courriel';
+
+    public $timestamps = false;
 
 }
 

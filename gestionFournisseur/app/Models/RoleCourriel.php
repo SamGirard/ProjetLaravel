@@ -14,6 +14,12 @@ class RoleCourriel extends Model
         'role', 
     ];
 
-    protected $table = 'roleCourriel';
+    protected $primaryKey = 'role';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected $table = 'role_courriel';
+
+    public $timestamps = false;
 
 }

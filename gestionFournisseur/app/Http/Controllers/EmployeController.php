@@ -119,7 +119,7 @@ class EmployeController extends Controller
     
         // Rediriger avec un message de succès
         return redirect()->back()->with('success', 'Les employés sélectionnés ont été supprimés.');
-        }
+    }
 
         //ROLE
         public function afficherRole(){
@@ -135,15 +135,17 @@ class EmployeController extends Controller
             return view('optionAdmin/parametres', compact('parametres'));
         }
 
-        public function updateParam(ParametreRequest $request, Parametre $parametre){
+        public function updateParam(ParametreRequest $request){
             try {
+                $parametre = Parametre::first();
+
                 $parametre->courrielAppro = $request->courrielAppro;
                 $parametre->delaiRevision = $request->delai;
                 $parametre->tailleMaxFichiers = $request->taille;
                 $parametre->courrielFinance = $request->courrielFinance;
 
                 $parametre->save();
-                return redirect()->route('parametre')->with('message', 'Modification réussie');
+                return redirect()->route('parametre')->with('success', 'Modification réussie');
 
             }catch(\Throwable $e){
                 Log::debug($e);
@@ -156,8 +158,9 @@ class EmployeController extends Controller
         //MODELE COURRIEL
         public function afficherModeleCourriel(){
             $courriels = Courriel::all();
+            $roleCourriels = Rolecourriel::all();
 
-            return view('optionAdmin/modeleCourriel', compact('courriels'));
+            return view('optionAdmin/modeleCourriel', compact('courriels', 'roleCourriels'));
         }
 
         
@@ -169,22 +172,43 @@ class EmployeController extends Controller
             catch(\Throwable $e){
                 Log::debug($e);
             }
-            return redirect()->route('modeleCourriel')->with('success', 'Role ajouté avec succès!');
+            return redirect()->route('modeleCourriel')->with('success', 'Rôle ajouté avec succès!');
         }
 
-        public function updateCourriel(CourrielRequest $request, Courriel $courriel){
+
+        public function updateCourriel(CourrielRequest $request){
             try{
+                $courriel = Courriel::first();
+
                 $courriel->objet = $request->objet;
                 $courriel->message = $request->message;
                 $courriel->role = $request->role;
-    
+                $courriel->raison = $request->raison;
+
                 $courriel->save();
-                return redirect()->route('modeleCourriel')->with('message', 'Le modèle de courriel est modifier!');
+                return redirect()->route('modeleCourriel')->with('success', 'Le modèle de courriel est modifier!');
             }
             catch(\Throwable $e){
-                Log::debug($e);
                 return redirect()->route('modeleCourriel')->withErrors('Erreur lors de la modification!');
             }
             return redirect()->route('modeleCourriel');
         }
+
+
+    public function destroyRoleCourriel(Request $request){
+        $role = new RoleCourriel($request->all());
+
+        if ($request->has('role')) {
+            // Boucler sur chaque employé (par courriel) et les supprimer
+            foreach ($request->input('role') as $role) {
+                $role_detail = RoleCourriel::where('role', $role)->first();
+                if ($role_detail) {
+                    $role_detail->delete();
+                }
+            }
+        }
+    
+        // Rediriger avec un message de succès
+        return redirect()->back()->with('success', 'Les rôles sélectionnés ont été supprimés.');
+    }
     }

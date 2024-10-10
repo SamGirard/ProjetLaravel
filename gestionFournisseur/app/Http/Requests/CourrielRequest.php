@@ -23,8 +23,9 @@ class CourrielRequest extends FormRequest
     {
         return [
             'objet' => 'required|string|min:1|max:64',
-            'message'=> 'required|string|in:Administrateur',
-            'role'=>'required|string|'
+            'message'=> 'required|string|min:1|max:255',
+            'role'=>'required|string|',
+            'raison' => 'nullable|string|max:255',
         ];
     }
 

@@ -51,11 +51,7 @@ Route::post('/loginEmploye',
 Route::post('/logout', 
 [EmployeController::class, 'logout'])->name('logout');
 
-//route pour la gestion des courriels
-Route::get('/modeleCourriel',
-[EmployeController::class, 'afficherModeleCourriel'])->name('modeleCourriel')
-->middleware('CheckRole:Administrateur');
-
+//route pour parametre
 Route::get('/parametre',
 [EmployeController::class, 'afficherParametre'])->name('parametre')
 ->middleware('CheckRole:Administrateur');
@@ -64,6 +60,11 @@ Route::patch('modifierParametre',
 [EmployeController::class ,'updateParam'])->name('modifierParam');
 
 //route pour ajouter les role de courriel
+//route pour la gestion des courriels
+Route::get('/modeleCourriel',
+[EmployeController::class, 'afficherModeleCourriel'])->name('modeleCourriel')
+->middleware('CheckRole:Administrateur');
+
 Route::post('/employes/courrielRoleEnregistre',
 [EmployeController::class, 'storeCourrielRole'])->name('employes.storeCourrielRole')
 ->middleware('CheckRole:Administrateur');
@@ -73,6 +74,10 @@ Route::patch('/modifierCourriel',
 [EmployeController::class, 'updateCourriel'])->name('modifierCourriel')
 ->middleware('CheckRole:Administrateur');
 
+//Route pour le delete d'employé
+Route::delete('/supprimerRoleCourriel',
+[EmployeController::class, 'destroyRoleCourriel'])->name('supprimerRoleCourriel')
+->middleware('CheckRole:Administrateur');
 
 //route pour les parametre
 

@@ -1,21 +1,6 @@
 import './bootstrap';
 import 'flowbite';
 
-//recherche dans la suppression d'employe
-document.getElementById('barre-recherche-emp').addEventListener('input', function() {
-    let searchTerm = this.value.toLowerCase();
-    let employees = document.querySelectorAll('.employe');
-    
-    employees.forEach(function(employee) {
-        let email = employee.querySelector('label').textContent.toLowerCase();
-        if (email.includes(searchTerm)) {
-            employee.style.display = '';
-        } else {
-            employee.style.display = 'none';
-        }
-    });
-});
-
 /////////// script pour verifier si les checkbox sont cocher pour supprimer. page -> role.blade.php ///////////
 function verifCheckSupprimer(){
     const checkboxes = document.querySelectorAll(".checkbox-emp") //recuperer les checkboxs
@@ -70,5 +55,70 @@ document.addEventListener("DOMContentLoaded", function(){
                 select.disabled = false; // Réactive uniquement si aucune des conditions ne s'applique
             }
         });
+    });
+});
+
+
+
+function champRaison() {
+    let champRaison = document.getElementById("champRefus");
+    let choixRole = document.getElementById("choixRole");
+
+    // Vérifiez si les éléments existent
+    if (choixRole && champRaison) {
+        // Vérifiez la valeur initiale au chargement de la page
+        if (choixRole.value === "Refus") {
+            champRaison.style.display = "block"; // Affiche le champ si "Refus" est sélectionné
+        } else {
+            champRaison.style.display = "none"; // Cache le champ sinon
+        }
+
+        // Ajoutez un écouteur d'événement pour le changement de sélection
+        choixRole.addEventListener("change", () => {
+            if (choixRole.value === "Refus") {
+                champRaison.style.display = "block"; // Affiche le champ
+            } else {
+                champRaison.style.display = "none"; // Cache le champ
+            }
+        });
+    } else {
+        console.error("Un des éléments n'existe pas !");
+    }
+}
+
+// Appeler la fonction pour ajouter l'événement
+document.addEventListener("DOMContentLoaded", champRaison);
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("choixRole").addEventListener("change", champRaison);
+});
+
+
+document.getElementById('barre-recherche-roleCourriel').addEventListener('input', function() {
+    let searchTerm = this.value.toLowerCase();
+    let roles = document.querySelectorAll('.roleCourriel');
+    
+    roles.forEach(function(roles) {
+        let role = roles.querySelector('label').textContent.toLowerCase();
+        if (role.includes(searchTerm)) {
+            roles.style.display = '';
+        } else {
+            roles.style.display = 'none';
+        }
+    });
+});
+
+//recherche dans la suppression d'employe
+document.getElementById('barre-recherche-emp').addEventListener('input', function() {
+    let searchTerm = this.value.toLowerCase();
+    let employees = document.querySelectorAll('.employe');
+    
+    employees.forEach(function(employee) {
+        let email = employee.querySelector('label').textContent.toLowerCase();
+        if (email.includes(searchTerm)) {
+            employee.style.display = '';
+        } else {
+            employee.style.display = 'none';
+        }
     });
 });

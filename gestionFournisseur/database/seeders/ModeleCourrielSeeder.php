@@ -17,7 +17,8 @@ class ModeleCourrielSeeder extends Seeder
         DB::table('modele_Courriel')->insert([
             'objet' => 'Bonjour',
             'message' => 'Message concernant les fournisseurs',
-            'role' => 'Approbation'
+            'role' => 'Approbation',
+            'raison' => '',
         ]);
     }
 }
