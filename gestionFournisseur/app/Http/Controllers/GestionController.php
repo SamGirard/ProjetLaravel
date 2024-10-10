@@ -8,10 +8,11 @@ use App\Models\CategoriesLicence;
 use App\Models\Licence;
 use App\Models\Demande;
 use App\Models\InfosRbq;
+use App\Models\InfosUnspsc;
 use App\Models\Contact;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class GestionController extends Controller
+class gestionController extends Controller
 {
     public function listeFournisseur() 
     {
@@ -20,21 +21,27 @@ class GestionController extends Controller
         $licences = Licence::all();
         $demandes = Demande::all();
         $infosRbq = InfosRbq::all();
+        $infosUnspsc = InfosUnspsc::all();
 
-        return View('listeFournisseurs', compact('fournisseurs', 'categoriesLicences', 'licences', 'demandes', 'infosRbq'));
+        return View('listeFournisseurs', compact('fournisseurs', 'categoriesLicences', 'licences', 'demandes', 'infosRbq', 'infosUnspsc'));
     }
 
     public function zoom(Fournisseur $fournisseur) {
-        return view('fiche', compact('fournisseur'));
+        $contacts = Contact::where('neqFournisseur',  $fournisseur->neq)->get();
+        $demandes = Demande::where('neqFournisseur',  $fournisseur->neq)->get();
+        $infosRbq = InfosRbq::where('neqFournisseur', $fournisseur->neq)->get();
+        $infosUnspsc = InfosUnspsc::where('neqFournisseur', $fournisseur->neq)->get();
+
+        return view('fiche', compact('fournisseur', 'contacts', 'demandes', 'infosRbq', 'infosUnspsc'));
     }
 
     public function listeContact(Request $request) {
         $ids = $request->query('ids');
         $request->session()->put('ids', $ids);
     
-        $idsArray = explode(',', $request->session()->get('ids'));
-        $fournisseurs = Fournisseur::whereIn('neq', $idsArray)->get();
-        $contacts = Contact::all();
+        $neqs = explode(',', $request->session()->get('ids'));
+        $fournisseurs = Fournisseur::whereIn('neq', $neqs)->get();
+        $contacts = Contact::whereIn('neqFournisseur', $neqs)->get();
     
         return View('liste-contact', compact('fournisseurs', 'contacts'));
     }

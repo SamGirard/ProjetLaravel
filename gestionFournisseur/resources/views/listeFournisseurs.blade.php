@@ -198,86 +198,86 @@
             </div>
         </div>
         <div class="border-t border-gray-200 dark:border-gray-700 pb-4"></div>
-            <div class="flex pb-4">
-                <div class="flex items-center me-4 ml-1">
-                    <input id="En attente" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="En attente" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">En attente</label>
+                <div class="flex pb-4">
+                    <div class="flex items-center me-4 ml-1">
+                        <input id="En attente" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="En attente" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">En attente</label>
+                    </div>
+                    <div class="flex items-center me-4">
+                        <input checked id="Accepter" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="Accepter" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Acceptées</label>
+                    </div>
+                    <div class="flex items-center me-4">
+                        <input id="Refusé" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="Refusé" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Refusées</label>
+                    </div>
+                    <div class="flex items-center me-4">
+                        <input id="Réviser" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="Réviser" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">À réviser</label>
+                    </div>
                 </div>
-                <div class="flex items-center me-4">
-                    <input checked id="Accepter" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="Accepter" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Acceptées</label>
-                </div>
-                <div class="flex items-center me-4">
-                    <input id="Refusé" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="Refusé" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Refusées</label>
-                </div>
-                <div class="flex items-center me-4">
-                    <input id="Réviser" type="checkbox" value="" class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="Réviser" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">À réviser</label>
-                </div>
-            </div>
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="w4 p-4">
-                            <div class="flex items-center">
-                                <input id="checkall" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label for="checkall" class="sr-only">checkbox</label>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            <div class="sortable-header flex items-center cursor-pointer w-min">
-                                <span class="text-inherit">État</span>
-                                <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                                </svg>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            <div class="sortable-header flex items-center  cursor-pointer w-min">
-                                <span class="text-inherit">Fournisseurs</span>
-                                <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                                </svg>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            <div class="sortable-header flex items-center cursor-pointer w-min">
-                                <span class="text-inherit">Ville</span>
-                                <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                                </svg>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3 whitespace-nowrap truncate w-min">
-                            <div class="sortable-header flex items-center cursor-pointer w-min">
-                                <span class="text-inherit">Produits et services</span>
-                                <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                                </svg>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3 whitespace-nowrap truncate w-min">
-                            <div class="sortable-header flex items-center cursor-pointer w-min">
-                                <span class="text-inherit">Catégories de travaux</span>
-                                <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                                </svg>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3 whitespace-nowrap truncate">
-                            Fiche fournisseur
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="fournisseurs-list">
-                </tbody>
-            </table>
-            <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-                <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Affichage de <span id="nbAffichage" class="font-semibold text-gray-900 dark:text-white">1-10</span> sur <span id="nbAffichageTotal" class="font-semibold text-gray-900 dark:text-white">{{count($fournisseurs)}}</span></span>
-                <ul id="pagination"class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-                </ul>
-            </nav>
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="w4 p-4">
+                        <div class="flex items-center">
+                            <input id="checkall" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="checkall" class="sr-only">checkbox</label>
+                        </div>
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <div class="sortable-header flex items-center cursor-pointer w-min">
+                            <span class="text-inherit">État</span>
+                            <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                            </svg>
+                        </div>
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <div class="sortable-header flex items-center  cursor-pointer w-min">
+                            <span class="text-inherit">Fournisseurs</span>
+                            <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                            </svg>
+                        </div>
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <div class="sortable-header flex items-center cursor-pointer w-min">
+                            <span class="text-inherit">Ville</span>
+                             <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                            </svg>
+                        </div>
+                    </th>
+                    <th scope="col" class="px-6 py-3 whitespace-nowrap truncate w-min">
+                        <div class="sortable-header flex items-center cursor-pointer w-min">
+                            <span class="text-inherit">Produits et services</span>
+                            <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                            </svg>
+                        </div>
+                    </th>
+                    <th scope="col" class="px-6 py-3 whitespace-nowrap truncate w-min">
+                        <div class="sortable-header flex items-center cursor-pointer w-min">
+                            <span class="text-inherit">Catégories de travaux</span>
+                            <svg class="w-5 h-5 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                            </svg>
+                        </div>
+                    </th>
+                    <th scope="col" class="px-6 py-3 whitespace-nowrap truncate">
+                        Fiche fournisseur
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="fournisseurs-list">
+            </tbody>
+        </table>
+        <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
+            <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Affichage de <span id="nbAffichage" class="font-semibold text-gray-900 dark:text-white">1-10</span> sur <span id="nbAffichageTotal" class="font-semibold text-gray-900 dark:text-white">{{count($fournisseurs)}}</span></span>
+            <ul id="pagination"class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+            </ul>
+        </nav>
     </div>
 
     <script>
@@ -295,6 +295,7 @@
         var fournisseurs = @json($fournisseurs);
         var demandes = @json($demandes);
         var infosRbq = @json($infosRbq);
+        var infosUnspsc = @json($infosUnspsc);
         var checkedStatus = {};
         checkedStatus['Accepter'] = true;
         var allCities = [];
@@ -333,79 +334,92 @@
             });
         }
 
-        let isSearching = false;
         let debounceTimer;
+        let isSearching = false;
+        let lastSearchQuery = '';
         const segmentPerPage = 100;
+        const cache = [];
 
-        function onInputCommodities() {
-            firstLoad = false;
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                startingCommodities = 0;
-                searchCommodities();
-            }, 300);
-            document.getElementById('segment-list').scrollTop = 0;
-        }
-
-        function searchCommodities() {
-            if (isSearching) return;
-
-            isSearching = true;
-            let searchQuery = $('#searchSegment').val().toLowerCase();
-            let url = `/comoditySearch/${startingCommodities}/${segmentPerPage}`;
-
-            if (searchQuery !== '') {
-                url += `?comodity=${encodeURIComponent(searchQuery)}`;
-            }
-
+        function fetchCommodities(url, initial = true) {
             $.ajax({
                 url: url,
                 method: 'GET',
                 success: function(data) {
-                    let segmentList = $('#segment-list');
-                    if (!firstLoad) {
-                        segmentList.empty();
-                        firstLoad = true;
-                    }
-
-                    let items = data.map(item => {
-                        let isChecked = checkedCommodities[item] ? 'checked' : '';
-                        return `
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="${item}" type="checkbox" value="${item}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
-                                    <label for="${item}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${item}</label>
-                                </div>
-                            </li>`;
-                    });
-
-                    segmentList.append(items.join(''));
+                    cache.push(...data);
+                    if (initial) displayResults(data, false);
                 },
                 error: function() {
-                    alert('Failed to fetch segments.');
-                },
-                complete: function() {
-                    isSearching = false;
+                    alert('Failed to fetch commodities.');
                 }
             });
+        }
+
+        fetchCommodities('/comoditySearch/0/100');
+        fetchCommodities('/comoditySearch/0/25000', false);
+
+        function onInputCommodities() {
+            const searchQuery = $('#searchSegment').val().toLowerCase();
+
+            if (searchQuery !== lastSearchQuery) {
+                lastSearchQuery = searchQuery;
+                startingCommodities = 0;
+                searchCommodities(searchQuery);
+            }
+
+            document.getElementById('segment-list').scrollTop = 0;
+        }
+
+        function searchCommodities(searchQuery, isScrolling = false) {
+            if (isSearching) return;
+
+            isSearching = true;
+
+            const uniqueResults = [...new Set(cache.filter(unspsc => unspsc.toLowerCase().includes(searchQuery)))];
+
+            const paginatedResults = uniqueResults.slice(startingCommodities, startingCommodities + segmentPerPage);
+            displayResults(paginatedResults, isScrolling);
+
+            isSearching = false;
+        }
+
+        function displayResults(data, isScrolling) {
+            const segmentList = $('#segment-list');
+            if(!isScrolling)
+                segmentList.empty();
+
+            const unspscs = data.map(unspsc => {
+                const code = unspsc.split(" -")[0];
+                const name = unspsc.split("- ")[1];
+                const isChecked = checkedCommodities[code] ? 'checked' : '';
+                return `
+                    <li>
+                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <input id="${code}" type="checkbox" value="${code}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
+                            <label for="${code}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${name}</label>
+                        </div>
+                    </li>`;
+            }).join('');
+
+            segmentList.append(unspscs);
         }
 
         $('#segment-list').on('change', 'input[type="checkbox"]', function() {
             checkedCommodities[this.id] = $(this).is(':checked');
         });
 
+        let scrollTimeout;
+
         function handleScroll() {
             const element = document.getElementById('segment-list');
             const scrollTop = element.scrollTop;
             const scrollHeight = element.scrollHeight;
             const clientHeight = element.clientHeight;
-            const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
-            if (scrollPercentage > 80 && !isSearching) {
-                clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(() => {
+            if ((scrollTop / (scrollHeight - clientHeight)) * 100 > 80 && !isSearching) {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
                     startingCommodities += segmentPerPage;
-                    searchCommodities();
+                    searchCommodities(lastSearchQuery, true);
                 }, 100);
             }
         }
@@ -903,13 +917,27 @@
 
                 return !Object.values(checkedRegions).includes(true) || checkedRegions[region] === true;
             }
+
+            function unspscVerification(infosUnspsc) {
+                var isChecked = false;
+
+                infosUnspsc.forEach(unspsc => {
+                    if(checkedCommodities[unspsc.code] === true) {
+                        isChecked = true;
+                        compteurCommodities[unspsc.neqFournisseur]++;
+                    }
+                })
+
+                return !Object.values(checkedCommodities).includes(true) || isChecked;
+            }
             
             filteredFournisseurs = fournisseurs.filter(f => 
                 nameVerification(f.nomEntreprise) &&
                 statusVerification(demandes.find(d => d.neqFournisseur === f.neq)) &&
-                licencesVerification(infosRbq.filter(i => i.neqFournisseur === f.neq)) && 
+                licencesVerification(infosRbq.filter(r => r.neqFournisseur === f.neq)) && 
                 citiesVerification(f.ville) &&
-                regionsVerification(f.ville)
+                regionsVerification(f.ville) &&
+                unspscVerification(infosUnspsc.filter(u => u.neqFournisseur === f.neq))
             );
 
             const totalPages = Math.ceil(filteredFournisseurs.length / itemsPerPage);
@@ -1043,7 +1071,6 @@
         filterCities();
         filterLicences();
         filterFournisseurs();
-        searchCommodities();
 
         $('#searchCity').on('input', filterCities);
         $('#searchRegion').on('input', loadRegions);

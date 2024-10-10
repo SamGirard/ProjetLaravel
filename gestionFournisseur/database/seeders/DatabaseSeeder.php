@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             EmployesTableSeeders::class,
             InfosRbqTableSeeder::class,
             LicencesTableSeeder::class,
+            InfosUnspscTableSeeder::class,
             RoleCourrielSeeder::class,
             ModeleCourrielSeeder::class,
             ParametreSeeder::class,
