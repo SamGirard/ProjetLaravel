@@ -969,10 +969,12 @@
                         ${compteurLicences[fournisseur.neq]}/${Object.values(checkedLicences).filter(value => value === true).length}
                     </td>
                     <td class="flex items-center cursor-pointer w-min px-6 py-4 font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                        <svg class="w-5 h-5 mr-1 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"/>
-                        </svg>
-                        <a href="#" >Ouvrir</a>
+                        <a href="/fournisseur/${fournisseur.neq}" class="flex items-center">
+                            <svg class="w-5 h-5 mr-1 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"/>
+                            </svg>
+                            Ouvrir
+                        </a>
                     </td>
                 </tr>
                 `);

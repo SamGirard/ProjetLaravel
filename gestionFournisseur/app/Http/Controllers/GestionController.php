@@ -24,6 +24,10 @@ class GestionController extends Controller
         return View('listeFournisseurs', compact('fournisseurs', 'categoriesLicences', 'licences', 'demandes', 'infosRbq'));
     }
 
+    public function zoom(Fournisseur $fournisseur) {
+        return view('fiche', compact('fournisseur'));
+    }
+
     public function listeContact(Request $request) {
         $ids = $request->query('ids');
         $request->session()->put('ids', $ids);
