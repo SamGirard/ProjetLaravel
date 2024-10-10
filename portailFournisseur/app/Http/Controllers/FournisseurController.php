@@ -52,17 +52,31 @@ class FournisseurController extends Controller
 
     public function create_service(Request $request)
     {
-         if ($request->session()->has('form_identification')) {
-             $categorie_services = CategorieService::all();
+        if ($request->session()->has('form_identification')) {
+            $categorie_services = CategorieService::all();
 
-             return view('fournisseur/form_produit_service',compact('categorie_services'));
-         } else
-             return redirect()->route('create_identification');
+            return view('fournisseur/form_produit_service', compact('categorie_services'));
+        } else
+            return redirect()->route('create_identification');
     }
 
-    public function chercherService(Request $request)
+    public function chercherService()
     {
-        $this->formaterDonneesServices('app/public/services/Autres.csv');
+        $valeur = \request('value');
+        $listServices = array();
+        $listCheminServices = ['app/public/services/Approvisionnement.csv', 'app/public/services/Autres.csv', 'app/public/services/Construction.csv', 'app/public/services/Services.csv'];
+
+        for ($k = 0; $k < count($listCheminServices); $k++) {
+            $data = $this->formaterDonneesServices($listCheminServices[$k]);
+            for ($i = 1; $i < count($data); $i++) {
+                for ($j = 0; $j < count($data[$i]); $j++) {
+                    if (str_contains($data[$i][$j], $valeur)) {
+                        array_push($listServices, $data[$i]);
+                    }
+                }
+            }
+        }
+        return $listServices;
     }
 
     protected function formaterDonneesServices($cheminFichier)
@@ -76,6 +90,7 @@ class FournisseurController extends Controller
         $listServices = $donnes[1];
         return $listServices;
     }
+
     protected function lireFichierCsv($cheminFichier)
     {
         $fichier = storage_path($cheminFichier);
@@ -112,6 +127,7 @@ class FournisseurController extends Controller
         // Retourner les données sous forme de réponse JSON
         return response()->json($data);
     }
+
     public function store_service(Request $request)
     {
         // dd($request->all());
@@ -172,7 +188,7 @@ class FournisseurController extends Controller
         ]);
         $request->session()->put('form_contact', $request->all());
 
-        dd($request->all());
+        return redirect()->route('create_brochure_finance');
     }
 
     public function create_contact(Request $request)
@@ -183,6 +199,30 @@ class FournisseurController extends Controller
             return redirect() > route('create_identification');
     }
 
+
+    public function create_brochure_finance(Request $request)
+    {
+        if ($request->session()->has('form_contact'))
+            return view('fournisseur/form_brochure_finance');
+        else
+            return redirect()->route('create_contact');
+    }
+
+    public function store_brochure_contact(Request $request)
+    {
+
+      /*  $validated = $request->validate([
+            'nom_contact' => ['required', 'max:32'],
+            'prenom_contact' => ['required', 'max:32'],
+            'fonction_contact' => ['required', 'max:32'],
+            'email_contact' => ['required', 'string', 'lowercase', 'email', 'max:64'],
+            'type_telephone_contact' => ['required'],
+            'telephone_contact' => ['required', 'numeric', 'regex:/^(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/'],
+            'poste_contact' => ['nullable', 'max_digits:6', 'numeric'],
+        ]);
+        $request->session()->put('form_contact', $request->all()); */
+        dd($request);
+    }
     /**
      * Show the form for editing the specified resource.
      */

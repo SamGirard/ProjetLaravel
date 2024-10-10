@@ -16,8 +16,10 @@ Route::get('ajouter_coordonnee/',[FournisseurController::class,'create_coordonne
 Route::post('ajouter_coordonnee',[FournisseurController::class,'store_coordonnee'])->name('store_coordonnee');
 Route::get('ajouter_contact',[FournisseurController::class,'create_contact'])->name('create_contact');
 Route::post('ajouter_contact',[FournisseurController::class,'store_contact'])->name('store_contact');
+Route::get('ajouter_brochure_finance',[FournisseurController::class,'create_brochure_finance'])->name('create_brochure_finance');
+Route::post('ajouter_brochure_finance',[FournisseurController::class,'store_brochure_finance'])->name('store_brochure_finance');
 
-Route::get('chercherService',[FournisseurController::class,'chercherService'])->name('cherherService');
+Route::get('/chercherService/{value}',[FournisseurController::class,'chercherService'])->name('cherherService');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

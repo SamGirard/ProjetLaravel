@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="35486ead-830c-4d91-914f-9d2f530e1fa0" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/fournisseur/form_brochure_finance.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/fournisseur/form_coordonnee.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/fournisseur/form_coordonnee.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/fournisseur/form_identification.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/fournisseur/form_identification.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/FournisseurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/FournisseurController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/app.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/fournisseur/form_produit_service.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/fournisseur/form_produit_service.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/partials/barre_ajout.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/partials/barre_ajout.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -285,14 +288,21 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;landry&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/projets/projet d'integration 1/portailFournisseur/storage/app/public&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\PhpStorm 2024.2.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\projets\projet d'integration 1\portailFournisseur\storage\app\public" />
+    </key>
+  </component>
   <component name="RunManager" selected="PHPUnit.Main">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/gestionFournisseur/phpunit.xml" scope="XML" use_alternative_configuration_file="true" />
@@ -324,7 +334,9 @@
       <workItem from="1725736388888" duration="590000" />
       <workItem from="1725946247756" duration="2758000" />
       <workItem from="1726038630727" duration="5386000" />
-      <workItem from="1727994290219" duration="2175000" />
+      <workItem from="1727994290219" duration="10959000" />
+      <workItem from="1728403599010" duration="18209000" />
+      <workItem from="1728516414294" duration="16521000" />
     </task>
     <servers />
   </component>

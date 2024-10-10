@@ -18,22 +18,18 @@
                         <label for="services" class="block text-gray-600 text-sm font-bold mb-2">SERVICES</label>
                         <input placeholder="Rechercher un service" id="search_service" type="text"
                                class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 mb-2 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <div id="spinner_service" class="hidden animate-spin rounded-full h-6 w-6 border-t-4 border-blue-500"></div>
                         <select multiple id="services" name="services[]"
                                 class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                             <option value="">Selectionner un service</option>
-                            @foreach($categorie_services as $categorie_service)
-                                @if($categorie_service['type'] == 'Général')
-                                    <option value="{{ $categorie_service['id'] }}">{{ $categorie_service['code'] }} {{ $categorie_service['nom'] }}</option>
-                                @endif
-                            @endforeach
                         </select>
                     </div>
                     <div class="mb-4">
                         <label for="details" class="block text-gray-600 text-sm font-bold mb-2">Détails et
                             spécifications</label>
                         <textarea
-                                class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                id="details" name="details"></textarea>
+                            class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            id="details" name="details"></textarea>
                     </div>
                 </fieldset>
 
@@ -78,7 +74,8 @@
                             class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                         @foreach($categorie_services as $categorie_service)
                             @if($categorie_service['type'] == 'Général')
-                                <option value="{{ $categorie_service['id'] }}">{{ $categorie_service['code'] }} {{ $categorie_service['nom'] }}</option>
+                                <option
+                                    value="{{ $categorie_service['id'] }}">{{ $categorie_service['code'] }} {{ $categorie_service['nom'] }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -91,7 +88,8 @@
                             class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                         @foreach($categorie_services as $categorie_service)
                             @if($categorie_service['type'] == 'Spécialisé')
-                                <option value="{{ $categorie_service['id'] }}">{{ $categorie_service['code'] }} {{ $categorie_service['nom'] }}</option>
+                                <option
+                                    value="{{ $categorie_service['id'] }}">{{ $categorie_service['code'] }} {{ $categorie_service['nom'] }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -101,17 +99,18 @@
             <!-- Boutons -->
             <div class="flex justify-between mt-6">
                 <button
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
-                        onclick="window.history.back();">
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
+                    onclick="window.history.back();">
                     Précédent
                 </button>
                 <button
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
-                        type="submit">
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
+                    type="submit">
                     Suivant
                 </button>
             </div>
         </form>
+
     </div>
 @endsection
 
@@ -124,7 +123,7 @@
         // Initialiser les options des select des categories
 
         const services = new TomSelect(document.getElementById('services'), {
-            create: false, // Empêcher la création de nouvelles options
+            create: true, // Empêcher la création de nouvelles options
             sortField: {
                 field: "text",
                 direction: "asc"
@@ -313,6 +312,40 @@
             document.getElementById('type_licence_rbq').appendChild(option_type_licence);
         }
 
+        document.getElementById('search_service').addEventListener('change', function (e) {
+
+            document.getElementById("spinner_service").classList.remove("hidden");
+
+            services.clearOptions();
+            fetch(`/chercherService/${this.value}`).then(response => {
+                if (!response.ok) {
+                    throw new Error('error de recherche');
+                }
+                return response.json()
+            }).then(data => {
+                console.log(data);
+
+                setTimeout(function (){
+                    const nouvellesOptions = [];
+                    for (let i = 0; i < data.length; i++) {
+                        let nomGroup = data[i][3];
+                        services.addOptionGroup(nomGroup, {label:nomGroup,value:nomGroup});
+                        nouvellesOptions.push({
+                            value: data[i][4].trim() + "-" + data[i][4].trim(),
+                            text: data[i][4].trim() + "-" + data[i][6].trim(),
+                            optgroup:nomGroup
+                        });
+                    }
+                    nouvellesOptions.forEach(option => {
+                        services.addOption(option);
+                    });
+                },3000);
+
+                document.getElementById("spinner_service").classList.add("hidden");
+            }).catch(error => {
+                console.log(error);
+            })
+        });
 
     </script>
 @endsection
