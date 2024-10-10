@@ -335,93 +335,95 @@
         }
 
         let debounceTimer;
-let isSearching = false;
-let lastSearchQuery = '';
-const segmentPerPage = 100;
-const cache = [];
+        let isSearching = false;
+        let lastSearchQuery = '';
+        const segmentPerPage = 100;
+        const cache = [];
 
-function fetchCommodities(url, initial = true) {
-    $.ajax({
-        url: url,
-        method: 'GET',
-        success: function(data) {
-            cache.push(...data);
-            if (initial) displayResults(data, false);
-        },
-        error: function() {
-            alert('Failed to fetch commodities.');
+        function fetchCommodities(url, initial = true) {
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(data) {
+                    cache.push(...data);
+                    if (initial) displayResults(data, false);
+                },
+                error: function() {
+                    alert('Failed to fetch commodities.');
+                }
+            });
         }
-    });
-}
 
-fetchCommodities('/comoditySearch/0/100');
-fetchCommodities('/comoditySearch/0/25000', false);
+        fetchCommodities('/comoditySearch/0/100');
+        fetchCommodities('/comoditySearch/0/25000', false);
 
-function onInputCommodities() {
-    const searchQuery = $('#searchSegment').val().toLowerCase();
+        function onInputCommodities() {
+            const searchQuery = $('#searchSegment').val().toLowerCase();
 
-    if (searchQuery !== lastSearchQuery) {
-        lastSearchQuery = searchQuery;
-        startingCommodities = 0;
-        searchCommodities(searchQuery);
-    }
+            if (searchQuery !== lastSearchQuery) {
+                lastSearchQuery = searchQuery;
+                startingCommodities = 0;
+                searchCommodities(searchQuery);
+            }
 
-    document.getElementById('segment-list').scrollTop = 0;
-}
+            document.getElementById('segment-list').scrollTop = 0;
+        }
 
-function searchCommodities(searchQuery) {
-    if (isSearching) return;
+        function searchCommodities(searchQuery, isScrolling = false) {
+            if (isSearching) return;
 
-    isSearching = true;
+            isSearching = true;
 
-    // Filter and deduplicate results
-    const uniqueResults = [...new Set(cache.filter(unspsc => unspsc.toLowerCase().includes(searchQuery)))];
+            const uniqueResults = [...new Set(cache.filter(unspsc => unspsc.toLowerCase().includes(searchQuery)))];
 
-    const paginatedResults = uniqueResults.slice(startingCommodities, startingCommodities + segmentPerPage);
-    displayResults(paginatedResults);
+            const paginatedResults = uniqueResults.slice(startingCommodities, startingCommodities + segmentPerPage);
+            displayResults(paginatedResults, isScrolling);
 
-    isSearching = false;
-}
+            isSearching = false;
+        }
 
-function displayResults(data) {
-    const segmentList = $('#segment-list');
-    segmentList.empty();
+        function displayResults(data, isScrolling) {
+            const segmentList = $('#segment-list');
+            if(!isScrolling)
+                segmentList.empty();
 
-    const unspscs = data.map(unspsc => {
-        const code = unspsc.split(" -")[0];
-        const isChecked = checkedCommodities[code] ? 'checked' : '';
-        return `
-            <li>
-                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                    <input id="${code}" type="checkbox" value="${code}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
-                    <label for="${code}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${unspsc}</label>
-                </div>
-            </li>`;
-    }).join('');
+            const unspscs = data.map(unspsc => {
+                const code = unspsc.split(" -")[0];
+                const name = unspsc.split("- ")[1];
+                const isChecked = checkedCommodities[code] ? 'checked' : '';
+                return `
+                    <li>
+                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <input id="${code}" type="checkbox" value="${code}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
+                            <label for="${code}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${name}</label>
+                        </div>
+                    </li>`;
+            }).join('');
 
-    segmentList.append(unspscs);
-}
+            segmentList.append(unspscs);
+        }
 
-$('#segment-list').on('change', 'input[type="checkbox"]', function() {
-    checkedCommodities[this.id] = $(this).is(':checked');
-});
+        $('#segment-list').on('change', 'input[type="checkbox"]', function() {
+            checkedCommodities[this.id] = $(this).is(':checked');
+        });
 
-let scrollTimeout;
+        let scrollTimeout;
 
-function handleScroll() {
-    const element = document.getElementById('segment-list');
-    const scrollTop = element.scrollTop;
-    const scrollHeight = element.scrollHeight;
-    const clientHeight = element.clientHeight;
+        function handleScroll() {
+            const element = document.getElementById('segment-list');
+            const scrollTop = element.scrollTop;
+            const scrollHeight = element.scrollHeight;
+            const clientHeight = element.clientHeight;
 
-    if ((scrollTop / (scrollHeight - clientHeight)) * 100 > 80 && !isSearching) {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-            startingCommodities += segmentPerPage;
-            searchCommodities(lastSearchQuery);
-        }, 100);
-    }
-}
+            if ((scrollTop / (scrollHeight - clientHeight)) * 100 > 80 && !isSearching) {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    startingCommodities += segmentPerPage;
+                    searchCommodities(lastSearchQuery, true);
+                }, 100);
+            }
+        }
+
         let cachedRegions = null;
 
         function loadRegions() {
