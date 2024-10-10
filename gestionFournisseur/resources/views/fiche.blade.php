@@ -17,6 +17,9 @@
     @foreach($infosRbq as $rbq)
         <p>{{ $rbq->travauxPermis }}</p>
     @endforeach
+    @foreach ($infosUnspsc as $unspsc)
+    <p>{{ $unspsc->name }}</p>
+    @endforeach
 @endif
 
 @endsection
