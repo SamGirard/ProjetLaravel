@@ -3,10 +3,10 @@
     @include('partials/header')
     @include('partials/barre_ajout')
 
-    <!-- service offerts -->
+
     <div class="container mx-auto mt-6">
-        <form action="{{ route('store_brochure_finance') }}" method="post"
-              class=" bg-white shadow-lg rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl">
+        <form action="{{ route('store_brochure') }}" method="post"
+              class=" bg-white shadow-lg rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl" enctype="multipart/form-data">
             @csrf
             <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Brochures et cartes
                 d'affairess</h1>
@@ -19,7 +19,7 @@
 
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                    for="files_brochure">Telecharger plusieures fichiers</label>
-                            <input name="files_brochure"
+                            <input required name="files_brochure[]"
                                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                    id="files_brochure" type="file" multiple>
                         </div>
@@ -95,48 +95,94 @@
 @endsection
 
 @section('scripts')
-    <script !src="">
+    <script>
         let files_brochure = document.getElementById('files_brochure');
         let list_fichiers = document.getElementById('liste_fichiers');
         let taille_total = 0;
+        let fileList = []; // Tableau pour stocker les fichiers sélectionnés
+
         files_brochure.addEventListener('change', () => {
-            //list_fichiers.innerHTML = "";
-            for (let i = 0; i < files_brochure.files.length; i++) {
-                const file = files_brochure.files[i];
+            // Ajouter les fichiers sélectionnés dans le tableau `fileList`
+            fileList = [...fileList, ...Array.from(files_brochure.files)];
+
+            // Vider la liste actuelle avant de tout afficher
+            list_fichiers.innerHTML = '';
+            taille_total = 0; // Réinitialiser la taille totale
+
+            // Parcourir la liste des fichiers sélectionnés
+            fileList.forEach((file, i) => {
+                const fileSize = (file.size / (1024 * 1024)).toFixed(2); // Taille en Mo, arrondi à 2 décimales
+
                 // Créer un élément div pour chaque fichier
                 const listItem = document.createElement('div');
-                const fileSize = (file.size / (1024 * 1024)).toFixed(2); // Taille en Mo, arrondi à 2 décimales
-                listItem.textContent = `${file.name} - ${fileSize} Mo`; // Afficher le nom et la taille du fichier
+                listItem.textContent = `${file.name} - ${fileSize} Mo`;
+
+                // Créer l'icône de suppression
+                const icon_supprime = document.createElement('i');
+                icon_supprime.className = "fa-solid fa-xmark text-red-500 ml-3 cursor-pointer";
+                icon_supprime.setAttribute('id', file.name + i);
+
+                // Ajouter un événement pour supprimer l'élément de l'interface et de `fileList`
+                icon_supprime.addEventListener('click', function () {
+                    fileList.splice(i, 1); // Supprimer le fichier de la liste
+                    displayFiles(); // Rafraîchir l'affichage
+
+                });
+
+                // Ajouter une classe pour le style
+                listItem.className = 'py-1 border-b border-gray-300';
+                listItem.appendChild(icon_supprime);
+                list_fichiers.appendChild(listItem);
+
+                // Calculer la taille totale
+                taille_total += parseFloat(fileSize);
+            });
+
+            // Ajouter ou mettre à jour l'affichage de la taille totale
+            updateTotalSize();
+        });
+
+        // Fonction pour rafraîchir l'affichage des fichiers
+        function displayFiles() {
+            list_fichiers.innerHTML = ''; // Réinitialiser la liste
+            taille_total = 0;
+
+            fileList.forEach((file, i) => {
+                const fileSize = (file.size / (1024 * 1024)).toFixed(2);
+
+                const listItem = document.createElement('div');
+                listItem.textContent = `${file.name} - ${fileSize} Mo`;
 
                 const icon_supprime = document.createElement('i');
                 icon_supprime.className = "fa-solid fa-xmark text-red-500 ml-3 cursor-pointer";
                 icon_supprime.setAttribute('id', file.name + i);
+
                 icon_supprime.addEventListener('click', function () {
-                    this.parentElement.remove();
-                    list_fichiers.splice(i, 1);
+                    fileList.splice(i, 1); // Supprimer le fichier
+                    displayFiles(); // Mettre à jour l'affichage
                 });
 
-                // Ajouter une classe pour le style
-                listItem.className = 'py-1 border-b border-gray-300'
+                listItem.className = 'py-1 border-b border-gray-300';
                 listItem.appendChild(icon_supprime);
-                if (document.getElementById('taille_totale') == null) {
-                    list_fichiers.appendChild(listItem);
-                } else {
-                    list_fichiers.insertBefore(listItem, document.getElementById('taille_totale'));
-                }
+                list_fichiers.appendChild(listItem);
+
                 taille_total += parseFloat(fileSize);
-            }
+            });
 
-            if (document.getElementById('taille_totale') == null) {
-                const tailleTotal = document.createElement('tailleTotale');
-                tailleTotal.setAttribute('id', 'taille_totale');
-                tailleTotal.className = "font-semibold";
-                tailleTotal.innerHTML = "Total : " + taille_total.toFixed(2) + " Mo";
-                list_fichiers.appendChild(tailleTotal);
-            } else {
-                document.getElementById('taille_totale').innerHTML = "Total : " + taille_total.toFixed(2) + " Mo";
-            }
-        });
+            updateTotalSize();
+        }
 
+        // Fonction pour mettre à jour la taille totale des fichiers
+        function updateTotalSize() {
+            let totalElement = document.getElementById('taille_totale');
+            if (!totalElement) {
+                totalElement = document.createElement('div');
+                totalElement.setAttribute('id', 'taille_totale');
+                totalElement.className = "font-semibold";
+                list_fichiers.appendChild(totalElement);
+            }
+            totalElement.innerHTML = "Total : " + taille_total.toFixed(2) + " Mo";
+        }
     </script>
+
 @endsection

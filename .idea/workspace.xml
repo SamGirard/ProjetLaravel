@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="35486ead-830c-4d91-914f-9d2f530e1fa0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/fournisseur/form_brochure_finance.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/FournisseurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/FournisseurController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/fournisseur/form_produit_service.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/fournisseur/form_produit_service.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/partials/barre_ajout.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/partials/barre_ajout.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/fournisseur/form_brochure_finance.blade.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/portailFournisseur/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -312,6 +310,9 @@
       <option name="pestRunnerSettings">
         <PestRunner configuration_file="$PROJECT_DIR$/gestionFournisseur/phpunit.xml" scope="ConfigurationFile" use_alternative_configuration_file="true" />
       </option>
+      <option name="runnerSettings">
+        <PhpTestRunnerSettings configuration_file="$PROJECT_DIR$/gestionFournisseur/phpunit.xml" scope="ConfigurationFile" use_alternative_configuration_file="true" />
+      </option>
       <method v="2" />
     </configuration>
   </component>
@@ -336,7 +337,8 @@
       <workItem from="1726038630727" duration="5386000" />
       <workItem from="1727994290219" duration="10959000" />
       <workItem from="1728403599010" duration="18209000" />
-      <workItem from="1728516414294" duration="16521000" />
+      <workItem from="1728516414294" duration="16961000" />
+      <workItem from="1728870432366" duration="8663000" />
     </task>
     <servers />
   </component>

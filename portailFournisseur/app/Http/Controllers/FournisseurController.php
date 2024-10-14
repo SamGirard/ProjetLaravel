@@ -188,7 +188,7 @@ class FournisseurController extends Controller
         ]);
         $request->session()->put('form_contact', $request->all());
 
-        return redirect()->route('create_brochure_finance');
+        return redirect()->route('create_brochure');
     }
 
     public function create_contact(Request $request)
@@ -200,15 +200,15 @@ class FournisseurController extends Controller
     }
 
 
-    public function create_brochure_finance(Request $request)
+    public function create_brochure(Request $request)
     {
         if ($request->session()->has('form_contact'))
-            return view('fournisseur/form_brochure_finance');
+            return view('fournisseur/form_brochure');
         else
             return redirect()->route('create_contact');
     }
 
-    public function store_brochure_contact(Request $request)
+    public function store_brochure(Request $request)
     {
 
       /*  $validated = $request->validate([
@@ -221,7 +221,7 @@ class FournisseurController extends Controller
             'poste_contact' => ['nullable', 'max_digits:6', 'numeric'],
         ]);
         $request->session()->put('form_contact', $request->all()); */
-        dd($request);
+        dd($request->all());
     }
     /**
      * Show the form for editing the specified resource.
