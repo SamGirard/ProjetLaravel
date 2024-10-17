@@ -2,9 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brochure;
 use App\Models\CategorieService;
+use App\Models\Contact;
+use App\Models\Coordonnee;
 use App\Models\DonneesServices;
+use App\Models\Service;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -151,7 +159,7 @@ class FournisseurController extends Controller
         $validated = $request->validate([
             'numero_civique' => ['required', 'max_digits:8', 'numeric'],
             'rue' => ['required', 'max:64'],
-            'bureau' => ['string', 'size:8'],
+            'bureau' => ['string', 'max:8'],
             'province' => ['required'],
             'ville' => ['required_if:province,Québec', 'max:64'],
             'region_administrative' => ['required_if:province,Québec'],
@@ -210,19 +218,84 @@ class FournisseurController extends Controller
 
     public function store_brochure(Request $request)
     {
-
-      /*  $validated = $request->validate([
-            'nom_contact' => ['required', 'max:32'],
-            'prenom_contact' => ['required', 'max:32'],
-            'fonction_contact' => ['required', 'max:32'],
-            'email_contact' => ['required', 'string', 'lowercase', 'email', 'max:64'],
-            'type_telephone_contact' => ['required'],
-            'telephone_contact' => ['required', 'numeric', 'regex:/^(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/'],
-            'poste_contact' => ['nullable', 'max_digits:6', 'numeric'],
+        $request->validate([
+            'files_brochure.*' => 'required|file|mimes:pdf,jpg,png,docx|max:2048'
         ]);
-        $request->session()->put('form_contact', $request->all()); */
-        dd($request->all());
+
+        if ($request->hasFile('files_brochure')) {
+            if (session()->has('form_identification') and session()->has('form_identification') and session()->get('form_service') and session()->get('form_contact')) {
+                //dd(session()->all());
+                $form_identification = session()->get('form_identification');
+                $form_service = session()->get('form_service');
+                $form_coordonne = session()->get('form_coordonnee');
+                $form_contact = session()->get('form_contact');
+
+                $user = new User();
+                $user->nomEntreprise = $form_identification['nom'];
+                $user->email = $form_identification['email'];
+                $user->neq = $form_identification['neq'];
+                $user->numeroTelephone = $form_coordonne['telephone'];
+                $user->poste = $form_coordonne['poste'];
+                $user->typeNumTelephone = $form_coordonne['type_telephone'];
+                $user->password = Hash::make($form_identification['password']);
+                $user->save();
+
+                event(new Registered($user));
+
+                $coordonne = new Coordonnee();
+                $coordonne->numCivique = $form_coordonne['numero_civique'];
+                $coordonne->rue = $form_coordonne['rue'];
+                $coordonne->bureau = $form_coordonne['bureau'];
+                $coordonne->codePostal = $form_coordonne['code_postal'];
+                $coordonne->ville = $form_coordonne['ville'];
+                $coordonne->regionAdministrative = $form_coordonne['region_administrative'];
+                $coordonne->code_administratif = $form_coordonne['code_administratif'];
+                $coordonne->siteInternet = $form_coordonne['site_internet'];
+                $coordonne->user_id = $user->id;
+                $coordonne->save();
+
+                $contact = new Contact();
+                $contact->nom = $form_contact['nom_contact'];
+                $contact->prenom = $form_contact['prenom_contact'];
+                $contact->courriel = $form_contact['email_contact'];
+                $contact->fonction = $form_contact['fonction_contact'];
+                $contact->nom = $form_contact['nom_contact'];
+                $contact->typeNumTelephone = $form_contact['type_telephone_contact'];
+                $contact->numTelephone = $form_contact['telephone_contact'];
+                $contact->poste = $form_contact['poste_contact'];
+                $contact->user_id = $user->id;
+                $contact->save();
+
+                $service = new Service();
+                $service->rbq = $form_service['rbq'];
+                $service->type_licence = $form_service['type_licence_rbq'];
+                $service->statut = $form_service['statut_licence_rbq'];
+                $service->categorie_generale = $form_service['categorie_generale'];
+                $service->categorie_specialise = $form_service['categorie_specialise'];
+                $service->produit_services = $form_service['services'];
+                $service->details = $form_service['details'];
+                $service->user_id = $user->id;
+                $service->save();
+
+                foreach ($request->file('files_brochure') as $file) {
+                    $path = $file->store('public/brochures');
+                    $filename = basename($path);
+                    $brochure = new Brochure();
+                    $brochure->fichier = $filename;
+                    $brochure->user_id = $user->id;
+                    $brochure->save();
+                }
+
+                Auth::login($user);
+                session()->forget(['form_identification','form_identification','form_service','form_contact']);
+                return redirect()->route('dashboard')->with('enregistrement', 'Compte créé avec succès !');
+            } else
+                dd('aucune donnees');
+        } else
+            dd('aucun fichiere');
+
     }
+
     /**
      * Show the form for editing the specified resource.
      */

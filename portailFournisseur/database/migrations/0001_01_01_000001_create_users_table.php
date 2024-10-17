@@ -13,30 +13,19 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->integer('neq')->unique();
+            $table->integer('neq')->unique()->nullable();
+            $table->string('nomEntreprise', 64);
+            $table->json('typeNumTelephone');
+            $table->json('numeroTelephone');
+            $table->json('poste', 64)->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('nomEntreprise', 64);
-            $table->unsignedBigInteger('infos_rbq_id');
-            $table->foreign('infos_rbq_id')->references('id')->on('infos_rbqs');
-            $table->string('numCivique', 8);
-            $table->string('rue', 64);
-            $table->string('bureau', 64)->nullable();
-            $table->string('ville', 64);
-            $table->enum('province', ['Québec', 'Ontario', 'Alberta', 'Manitoba', 'Saskatchewan', 'Colombie-Britannique', 'Nunavut', 'Territoire du Nort-Ouest', 'Yukon', 'Île-du-Prince-Édouard', 'Nouveau-Brunswick', 'Nouvelle-Écosse', 'Terre-Neuve-et-Labrador']);
-            $table->string('codePostal', 6);
-            $table->string('siteInternet', 64)->nullable();
-            $table->string('régionAdministrative', 64)->nullable();
-            $table->enum('TypeNumTelephone', ['Bureau', 'Télécopieur', 'Cellulaire']);
-            $table->integer('numéroTelephone');
-            $table->string('poste', 64)->nullable();
-            $table->string('courrielContact', 64);
-            $table->integer('numTPS')->nullable();
+            /*$table->integer('numTPS')->nullable();
             $table->integer('numTVQ')->nullable();
             $table->string('conditionPaiement', 128)->nullable();
             $table->string('devise', 64)->nullable();
-            $table->string('modeCommunication', 64)->nullable();
+            $table->string('modeCommunication', 64)->nullable();*/
             $table->rememberToken();
             $table->timestamps();
         });

@@ -331,7 +331,7 @@
                         let nomGroup = data[i][3];
                         services.addOptionGroup(nomGroup, {label:nomGroup,value:nomGroup});
                         nouvellesOptions.push({
-                            value: data[i][4].trim() + "-" + data[i][4].trim(),
+                            value: data[i][0].trim() + "/"+data[i][3].trim() + "/" + data[i][4].trim()+"/"+data[i][6].trim(),
                             text: data[i][4].trim() + "-" + data[i][6].trim(),
                             optgroup:nomGroup
                         });

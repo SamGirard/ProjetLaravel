@@ -17,7 +17,7 @@ Route::post('ajouter_coordonnee',[FournisseurController::class,'store_coordonnee
 Route::get('ajouter_contact',[FournisseurController::class,'create_contact'])->name('create_contact');
 Route::post('ajouter_contact',[FournisseurController::class,'store_contact'])->name('store_contact');
 Route::get('ajouter_brochure/',[FournisseurController::class,'create_brochure'])->name('create_brochure');
-Route::post('ajouter_brochure/',[FournisseurController::class,'store_brochure'])->name('store_brochure');
+Route::post('ajouter_brochure',[FournisseurController::class,'store_brochure'])->name('store_brochure');
 
 Route::get('/chercherService/{value}',[FournisseurController::class,'chercherService'])->name('cherherService');
 

@@ -3,7 +3,6 @@
     @include('partials/header')
     @include('partials/barre_ajout')
 
-
     <div class="container mx-auto mt-6">
         <form action="{{ route('store_brochure') }}" method="post"
               class=" bg-white shadow-lg rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl" enctype="multipart/form-data">
@@ -21,9 +20,20 @@
                                    for="files_brochure">Telecharger plusieures fichiers</label>
                             <input required name="files_brochure[]"
                                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                                   id="files_brochure" type="file" multiple>
+                                   id="files_brochure" type="file" multiple/>
                         </div>
                         <div id="liste_fichiers" class="mt-4"></div>
+                        @if ($errors->any())
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                                <strong class="font-bold">Oups !</strong> Il y a eu quelques problèmes avec votre soumission :
+                                <ul class="mt-3 list-disc list-inside text-sm text-red-600">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                     </fieldset>
                 </div>
 
