@@ -50,7 +50,7 @@ class User extends Authenticatable
         return $this->hasMany(Brochure::class);
     }
 
-    public function Contact()
+    public function contacts()
     {
         return $this->hasMany(Contact::class);
     }
@@ -60,6 +60,6 @@ class User extends Authenticatable
     }
     public function coordonnee()
     {
-        return $this->hasOne(User::class);
+        return $this->hasOne(Coordonnee::class);
     }
 }
