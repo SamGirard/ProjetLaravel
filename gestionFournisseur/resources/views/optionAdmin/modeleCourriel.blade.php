@@ -55,7 +55,7 @@
                                         Supprimer
                                     </button>
                                     @error('role')
-                                        <div class="mb-5 mt-2 text-red-500">{{ $message }}</div>
+                                        <div class="mb-5 mt-2 w-max text-red-500">{{ $message }}</div>
                                     @enderror
                                 </div>    
                                 <div id="champRefus" style="display: none;">
@@ -120,7 +120,7 @@
                             <!-- Modal header -->
                             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                 <h3 class="text-xl font-medium text-gray-900 dark:text-white">
-                                    Supprimer des utilisateurs
+                                    Supprimer des rôles
                                 </h3>
                                 <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="large-modal">
                                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -157,13 +157,12 @@
                                         @endforeach
                                     @endif
                                     </ul>
-                                </div>
-                                <!-- Modal footer -->
-                                    <button type="submit" id="supprimerBtn" class="flex items-center p-3 text-sm font-medium text-gray-300 rounded-b-lg dark:border-gray-600 dark:bg-gray-700 dark:text-red-500" disabled onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                                    <!-- Modal footer -->
+                                    <button type="submit" id="supprimerBtn" class="flex items-center p-3 text-sm font-medium text-gray-300 rounded-b-lg dark:border-gray-600 dark:bg-gray-700 dark:text-red-500" disabled onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce(s) rôle(s) ?');">
                                         <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                                             <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Zm11-3h-6a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2Z"/>
                                         </svg>
-                                        Supprimer l'utilisateur(s)
+                                        Supprimer le(s) rôle(s)
                                     </button>
                                 </form>
                             </div>

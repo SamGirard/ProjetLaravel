@@ -196,11 +196,11 @@ class EmployeController extends Controller
 
 
     public function destroyRoleCourriel(Request $request){
-        $role = new RoleCourriel($request->all());
+        $roles = new RoleCourriel($request->all());
 
-        if ($request->has('role')) {
+        if ($request->has('roleCourriel')) {
             // Boucler sur chaque employé (par courriel) et les supprimer
-            foreach ($request->input('role') as $role) {
+            foreach ($request->input('roleCourriel') as $role) {
                 $role_detail = RoleCourriel::where('role', $role)->first();
                 if ($role_detail) {
                     $role_detail->delete();
@@ -211,4 +211,4 @@ class EmployeController extends Controller
         // Rediriger avec un message de succès
         return redirect()->back()->with('success', 'Les rôles sélectionnés ont été supprimés.');
     }
-    }
+}
