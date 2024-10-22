@@ -70,26 +70,25 @@
                         </div>
                     </div>
                     <ul id="categorie-list" class="h-64 px-3 pb-3 overflow-y-scroll text-sm text-gray-700 dark:text-gray-200">
-                    @if(count($categoriesLicences))
-                        @foreach($categoriesLicences as $categoriesLicence)
-                            <h2 class="mb-2 text-base">{{ $categoriesLicence->titre }}</h2>
+                        @if(count($categoriesLicences))
+                            @foreach($categoriesLicences as $categoriesLicence)
+                                <h2 class="mb-2 text-base">{{ $categoriesLicence->titre }}</h2>
                                                                     
-                            @php
-                                $filteredLicences = $licences->where('Categorie', $categoriesLicence->id);
-                            @endphp
-                                                                    
-                            @if(count($filteredLicences))
-                                @foreach($filteredLicences as $licence)
-                                    <li>
+                                @php
+                                    $filteredLicences = $licences->where('Categorie', $categoriesLicence->id);
+                                @endphp
+                                                                        
+                                @if(count($filteredLicences))
+                                    @foreach($filteredLicences as $licence)                                        <li>
                                         <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input id="{{ $licence->Numéro }}" type="checkbox" value="{{ $licence->titre }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="{{ $licence->Numéro }}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $licence->titre }}</label>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            @endif
-                        @endforeach
-                    @endif
+                                                <input id="{{ $licence->Numéro }}" type="checkbox" value="{{ $licence->titre }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                                <label for="{{ $licence->Numéro }}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $licence->titre }}</label>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                @endif
+                            @endforeach
+                        @endif
                     </ul>
                 </ul>
 
@@ -344,7 +343,7 @@
                 method: 'GET',
                 success: function(data) {
                     cache.push(...data);
-                    if (initial) displayResults(data, false);
+                    if (initial) displayCommodities(data, false);
                 },
                 error: function() {
                     alert('Failed to fetch commodities.');
@@ -371,16 +370,15 @@
             if (isSearching) return;
 
             isSearching = true;
-
             const uniqueResults = [...new Set(cache.filter(unspsc => unspsc.toLowerCase().includes(searchQuery)))];
-
             const paginatedResults = uniqueResults.slice(startingCommodities, startingCommodities + segmentPerPage);
-            displayResults(paginatedResults, isScrolling);
+            
+            displayCommodities(paginatedResults, isScrolling);
 
             isSearching = false;
         }
 
-        function displayResults(data, isScrolling) {
+        function displayCommodities(data, isScrolling) {
             const segmentList = $('#segment-list');
 
             if(!isScrolling)
@@ -390,13 +388,14 @@
                 const code = unspsc.split(" -")[0];
                 const name = unspsc.split("- ")[1];
                 const isChecked = checkedCommodities[code] ? 'checked' : '';
+
                 return `
                     <li>
                         <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="${code}" type="checkbox" value="${code}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
-                            <label for="${code}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${name}</label>
+                            <input id="${code}" type="checkbox" value="${code}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>                                <label for="${code}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${name}</label>
                         </div>
                     </li>`;
+
             }).join('');
 
             segmentList.append(unspscs);
@@ -453,7 +452,8 @@
 
             $.each(data, function(index, item) {
                 let regionName = item.regadm;
-                if (searchQuery === "" || regex.test(regionName)) {
+                let doesListContainsThisRegion = filteredFournisseurs.find(f => f.régionAdministrative === regionName.split(' (')[0]);
+                if ((searchQuery === "" || regex.test(regionName)) && doesListContainsThisRegion) {
                     let isChecked = checkedRegions[regionName] ? 'checked' : '';
                     items.push(`
                         <li>
@@ -472,7 +472,7 @@
 
         $('#region-list').on('change', 'input[type="checkbox"]', function() {
             checkedRegions[this.id] = $(this).is(':checked');
-            filterCities();
+            loadFilterCities();
         });
 
         let cachedCities = {}; 
@@ -495,7 +495,7 @@
             }
         }
 
-        function filterCities() {
+        function loadFilterCities() {
             let selectedRegions = $('#region-list input:checked').map(function() {
                 return $(this).val();
             }).get();
@@ -514,7 +514,8 @@
                     loadCities(region, function(data) {
                         $.each(data.result.records, function(index, item) {
                             let cityName = item.munnom.toLowerCase();
-                            if (!loadedCities.has(cityName) && (searchQuery === "" || regex.test(cityName))) {
+                            let doesListContainsThisCity = filteredFournisseurs.find(f => f.ville === cityName);
+                            if (!loadedCities.has(cityName) && doesListContainsThisCity && (searchQuery === "" || regex.test(cityName))) {
                                 loadedCities.add(cityName);
                                 let isChecked = checkedCities[cityName] ? 'checked' : '';
                                 cityItems.push(`
@@ -558,7 +559,8 @@
             let cityItems = [];
             $.each(data.result.records, function(index, item) {
                 let cityName = item.munnom.toLowerCase();
-                if (searchQuery === "" || regex.test(cityName)) {
+                let doesListContainsThisCity = filteredFournisseurs.find(f => f.ville.toLowerCase() === cityName);
+                if ((searchQuery === "" || regex.test(cityName)) && doesListContainsThisCity) {
                     let isChecked = checkedCities[cityName] ? 'checked' : '';
                     cityItems.push(`
                         <li>
@@ -580,7 +582,7 @@
             checkedCities[this.id] = $(this).is(':checked');
         });
 
-        function filterLicences() {
+        function loadFilterLicences() {
             let searchValue = $('#searchCategorie').val().toLowerCase();
             let regex = new RegExp(searchValue, 'i');
             $("#categorie-list").empty();
@@ -593,38 +595,16 @@
                     
                     if (licences.length > 0) {
                         filteredLicences.forEach(licence => {
-                            licenceItem = $(`
+                            const neqList = filteredFournisseurs.map(f => f.neq);
+                            let filteredInfosRbq = infosRbq.filter(r => neqList.includes(r.neqFournisseur));
+                            let doesListContainsThisLicence = filteredInfosRbq.find(l => l.travauxPermis === licence.titre);
+                            
+                            if(doesListContainsThisLicence) {
+                                licenceItem = $(`
                                         <li>
                                             <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                                                 <input id="${ licence.Numéro }" type="checkbox" value="${ licence.titre }" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                                                 <label for="${ licence.Numéro }" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${ licence.titre }</label>
-                                            </div>
-                                        </li>
-                            `);
-
-                            if (checkedLicences[licence.id]) {
-                                licenceItem.find('input').prop('checked', true);
-                            }
-
-                            licenceItem.find('input').change(function() {
-                                checkedLicences[this.id] = $(this).is(':checked');
-                            });
-                                    
-                            $("#categorie-list").append(licenceItem);
-                        });
-                    }
-                });
-            } else {
-                categoriesLicences.forEach(category => {
-                        let filteredLicences = licences.filter(licence => licence.Categorie === category.id && regex.test(licence.titre));
-                        if (filteredLicences.length > 0) {
-                            $("#categorie-list").append(`<h2 class="mb-2 text-base">${category.titre}</h2>`);
-                            filteredLicences.forEach(licence => {
-                                licenceItem = $(`
-                                        <li>
-                                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                <input id="${licence.Numéro}" type="checkbox" value="${licence.titre}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                                <label for="${licence.Numéro}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${licence.titre}</label>
                                             </div>
                                         </li>
                                 `);
@@ -636,8 +616,43 @@
                                 licenceItem.find('input').change(function() {
                                     checkedLicences[this.id] = $(this).is(':checked');
                                 });
-
+                                        
                                 $("#categorie-list").append(licenceItem);
+                            }
+                        });
+                    }
+                });
+            } else {
+                categoriesLicences.forEach(category => {
+                        let filteredLicences = licences.filter(licence => licence.Categorie === category.id && regex.test(licence.titre));
+                        if (filteredLicences.length > 0) {
+                            $("#categorie-list").append(`<h2 class="mb-2 text-base">${category.titre}</h2>`);
+                            filteredLicences.forEach(licence => {
+
+                                const neqList = filteredFournisseurs.map(f => f.neq);
+                                let filteredInfosRbq = infosRbq.filter(r => neqList.includes(r.neqFournisseur));
+                                let doesListContainsThisLicence = filteredInfosRbq.find(l => l.travauxPermis === licence.titre);
+                                
+                                if(doesListContainsThisLicence) {
+                                    licenceItem = $(`
+                                            <li>
+                                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                    <input id="${licence.Numéro}" type="checkbox" value="${licence.titre}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                                    <label for="${licence.Numéro}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${licence.titre}</label>
+                                                </div>
+                                            </li>
+                                    `);
+
+                                    if (checkedLicences[licence.id]) {
+                                        licenceItem.find('input').prop('checked', true);
+                                    }
+
+                                    licenceItem.find('input').change(function() {
+                                        checkedLicences[this.id] = $(this).is(':checked');
+                                    });
+
+                                    $("#categorie-list").append(licenceItem);
+                                }
                             });
                         }
                 });
@@ -949,6 +964,9 @@
 
             renderPagination(totalPages);
             renderFournisseur(currentFournisseurs);
+            loadRegions();
+            loadFilterCities();
+            loadFilterLicences();
         }
 
         function renderFournisseur(currentFournisseurs) {
@@ -1025,7 +1043,7 @@
 
             if(ids.length > 0) {
                 const queryString = '?ids=' + ids.join(',');
-                window.location.href = '{{ route('liste-contact') }}' + queryString;
+                window.location.href = '{{ route('pageCommis.liste-contact') }}' + queryString;
             }
             else {
                 const toastHTML = `
@@ -1066,16 +1084,13 @@
 
         $('#Accepter').prop('checked', true);
         
-        loadRegions();
-        filterCities();
-        filterLicences();
         filterFournisseurs();
 
-        $('#searchCity').on('input', filterCities);
+        $('#searchCity').on('input', loadFilterCities);
         $('#searchRegion').on('input', loadRegions);
         $('#searchSegment').on('input', onInputCommodities);
         $('#segment-list').on('scroll', handleScroll);
-        $('#searchCategorie').on('input', filterLicences);
+        $('#searchCategorie').on('input', loadFilterLicences);
         $('#table-search').on('input', filterFournisseurs);
     });
 

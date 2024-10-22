@@ -23,7 +23,7 @@ class gestionController extends Controller
         $infosRbq = InfosRbq::all();
         $infosUnspsc = InfosUnspsc::all();
 
-        return View('listeFournisseurs', compact('fournisseurs', 'categoriesLicences', 'licences', 'demandes', 'infosRbq', 'infosUnspsc'));
+        return View('pageCommis.listeFournisseurs', compact('fournisseurs', 'categoriesLicences', 'licences', 'demandes', 'infosRbq', 'infosUnspsc'));
     }
 
     public function zoom(Fournisseur $fournisseur) {
@@ -32,7 +32,7 @@ class gestionController extends Controller
         $infosRbq = InfosRbq::where('neqFournisseur', $fournisseur->neq)->get();
         $infosUnspsc = InfosUnspsc::where('neqFournisseur', $fournisseur->neq)->get();
 
-        return view('fiche', compact('fournisseur', 'contacts', 'demandes', 'infosRbq', 'infosUnspsc'));
+        return view('pageCommis.fiche', compact('fournisseur', 'contacts', 'demandes', 'infosRbq', 'infosUnspsc'));
     }
 
     public function listeContact(Request $request) {
@@ -43,7 +43,7 @@ class gestionController extends Controller
         $fournisseurs = Fournisseur::whereIn('neq', $neqs)->get();
         $contacts = Contact::whereIn('neqFournisseur', $neqs)->get();
     
-        return View('liste-contact', compact('fournisseurs', 'contacts'));
+        return View('pageCommis.liste-contact', compact('fournisseurs', 'contacts'));
     }
 
     public function exportFournisseurs(Request $request) {
