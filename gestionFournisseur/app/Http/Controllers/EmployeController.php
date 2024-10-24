@@ -12,7 +12,7 @@ use App\Http\Requests\EmployeRequest;
 use App\Http\Requests\CourrielRequest;
 use App\Http\Requests\ParametreRequest;
 
-
+use App\Notifications\NouvelleEmploye;
 
 use App\Models\CategoriesLicence;
 use App\Models\Licence;
@@ -63,7 +63,6 @@ class EmployeController extends Controller
         } elseif ($user->role == "Responsable" || $user->role == "Commis") {
             return redirect()->route('liste');
         }
-
         return redirect()->back()->withErrors(['role' => 'Accès refusé']);
     }
 
@@ -84,8 +83,9 @@ class EmployeController extends Controller
     //UPDATE EMPLOYE
     public function store(EmployeRequest $request){
         try{
-            $employe = new Employe($request->all());
+            $employe = Employe::create($request->all());
             $employe->save();
+            $employe->notify(new NouvelleEmploye($employe));
         }
         catch(\Throwable $e){
             Log::debug($e);

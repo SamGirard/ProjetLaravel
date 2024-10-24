@@ -8,7 +8,7 @@ use App\Http\Controllers\EmployeController;
 use App\Http\Middleware\CheckRole;
 
 //Route de Sam pour menu test
-Route::get('/MenuTest', 
+Route::get('/loginEmploye', 
 [FournisseurController::class, 'index'])->name('index');
 
 
