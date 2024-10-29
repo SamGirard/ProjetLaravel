@@ -23,12 +23,12 @@
                 <tr class="bg-white border-b dark:bg-gray-800" x-data="{ currentContactIndex: 0 }">
                     <td class="px-6 py-4">
                         <div class="font-medium text-gray-900">{{ $fournisseur->nomEntreprise }}</div>
-                        <div class="text-sm">{{ $fournisseur->courriel }}</div>
-                        <div class="text-sm">{{ $fournisseur->numéroTelephone }}</div>
+                        <div class="text-sm">{{ $fournisseur->email }}</div>
+                        <div class="text-sm">{{ $fournisseur->numeroTelephone }}</div>
                     </td>
 
                     <td class="px-6 py-4">
-                        @php $fournisseurContacts = $contacts->where('neqFournisseur', $fournisseur->neq); @endphp
+                        @php $fournisseurContacts = $contacts->where('fournisseur_id', $fournisseur->id); @endphp
                         <div class="flex">
                             <div class="flex flex-col justify-center items-center space-y-2 mr-2">
                                 <button 

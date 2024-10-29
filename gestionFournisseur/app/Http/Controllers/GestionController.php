@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Fournisseur;
+use App\Models\User;
 use App\Models\CategoriesLicence;
 use App\Models\Licence;
-use App\Models\Demande;
-use App\Models\InfosRbq;
-use App\Models\InfosUnspsc;
 use App\Models\Contact;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -16,32 +13,26 @@ class gestionController extends Controller
 {
     public function listeFournisseur() 
     {
-        $fournisseurs = Fournisseur::all();
+        $fournisseurs = User::all();
         $categoriesLicences = CategoriesLicence::all();
         $licences = Licence::all();
-        $demandes = Demande::all();
-        $infosRbq = InfosRbq::all();
-        $infosUnspsc = InfosUnspsc::all();
 
-        return View('pageCommis.listeFournisseurs', compact('fournisseurs', 'categoriesLicences', 'licences', 'demandes', 'infosRbq', 'infosUnspsc'));
+        return View('pageCommis.listeFournisseurs', compact('fournisseurs', 'categoriesLicences', 'licences'));
     }
 
-    public function zoom(Fournisseur $fournisseur) {
-        $contacts = Contact::where('neqFournisseur',  $fournisseur->neq)->get();
-        $demandes = Demande::where('neqFournisseur',  $fournisseur->neq)->get();
-        $infosRbq = InfosRbq::where('neqFournisseur', $fournisseur->neq)->get();
-        $infosUnspsc = InfosUnspsc::where('neqFournisseur', $fournisseur->neq)->get();
+    public function zoom(User $fournisseur) {
+        $contacts = Contact::where('fournisseur_id',  $fournisseur->iq)->get();
 
-        return view('pageCommis.fiche', compact('fournisseur', 'contacts', 'demandes', 'infosRbq', 'infosUnspsc'));
+        return view('pageCommis.fiche', compact('fournisseur', 'contacts'));
     }
 
     public function listeContact(Request $request) {
         $ids = $request->query('ids');
         $request->session()->put('ids', $ids);
     
-        $neqs = explode(',', $request->session()->get('ids'));
-        $fournisseurs = Fournisseur::whereIn('neq', $neqs)->get();
-        $contacts = Contact::whereIn('neqFournisseur', $neqs)->get();
+        $id = explode(',', $request->session()->get('ids'));
+        $fournisseurs = User::whereIn('id', $id)->get();
+        $contacts = Contact::whereIn('fournisseur_id', $id)->get();
     
         return View('pageCommis.liste-contact', compact('fournisseurs', 'contacts'));
     }

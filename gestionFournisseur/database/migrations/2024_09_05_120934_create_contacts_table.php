@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('contacts', function (Blueprint $table) {
-            $table->id(); // Ajoute automatiquement une clé primaire nommée "id"
+            $table->id();
             $table->string('prenom', 64);
             $table->string('nom', 64);
             $table->string('fonction', 64);
@@ -20,10 +20,8 @@ return new class extends Migration
             $table->enum('typeNumTelephone', ['Bureau', 'Télécopieur', 'Cellulaire']);
             $table->string('numTelephone', 10);
             $table->string('poste', 6)->nullable();
-            $table->integer('neqFournisseur');
-            $table->foreign('neqFournisseur')->references('neq')->on('fournisseurs');
-            $table->string('courrielFournisseur', 64);
-            $table->foreign('courrielFournisseur')->references('courriel')->on('fournisseurs');
+            $table->unsignedBigInteger('fournisseur_id');
+            $table->foreign('fournisseur_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
