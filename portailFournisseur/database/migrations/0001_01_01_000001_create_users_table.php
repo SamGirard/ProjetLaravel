@@ -13,10 +13,20 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->integer('neq')->unique()->nullable();
+            $table->string('nomEntreprise', 64);
+            $table->json('typeNumTelephone');
+            $table->json('numeroTelephone');
+            $table->json('poste', 64)->nullable();
             $table->string('email')->unique();
+            $table->integer('statut')->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            /*$table->integer('numTPS')->nullable();
+            $table->integer('numTVQ')->nullable();
+            $table->string('conditionPaiement', 128)->nullable();
+            $table->string('devise', 64)->nullable();
+            $table->string('modeCommunication', 64)->nullable();*/
             $table->rememberToken();
             $table->timestamps();
         });

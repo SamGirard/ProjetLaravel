@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    @vite('resources/css/app.css')
-</head>
-    <body>
+@extends('layouts.app')
+    @section('title', "Ajouter un employés")
+    
+    @section('contenu')
         <div class="items-center h-screen flex justify-center">
             <form method="post" action="{{ route('employes.store') }}" class="px-8 pt-6 pb-8 mb-4">
                 <h1 class="font-bold text-2xl mb-5">Ajouter un employé</h1>
-            @csrf
+                @csrf
 
                 <label for="courriel" class="text-grey text-sm font-bold mb-2">Courriel</label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100" name="courriel" id="courriel" type="email" placeholder="Courriel">
@@ -35,5 +30,4 @@
             
             </form>
         </div>
-    </body>
-</html>
+    @endsection

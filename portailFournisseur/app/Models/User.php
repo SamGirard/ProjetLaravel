@@ -16,12 +16,12 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
+    protected $guarded=[];
+    protected $casts = [
+        'typeNumTelephone' => 'array',
+        'numeroTelephone' => 'array',
+        'poste' => 'array'
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -43,5 +43,23 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function brochures()
+    {
+        return $this->hasMany(Brochure::class);
+    }
+
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
+    public function service()
+    {
+        return $this->hasOne(Service::class);
+    }
+    public function coordonnee()
+    {
+        return $this->hasOne(Coordonnee::class);
     }
 }
