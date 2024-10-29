@@ -19,6 +19,7 @@ return new class extends Migration
             $table->json('numeroTelephone');
             $table->json('poste', 64)->nullable();
             $table->string('email')->unique();
+            $table->integer('statut')->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             /*$table->integer('numTPS')->nullable();

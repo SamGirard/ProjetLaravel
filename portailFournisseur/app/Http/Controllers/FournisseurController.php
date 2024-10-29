@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DemandeFournisseur;
 use App\Models\Brochure;
 use App\Models\CategorieService;
 use App\Models\Contact;
@@ -13,6 +14,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -285,10 +287,13 @@ class FournisseurController extends Controller
                     $brochure->user_id = $user->id;
                     $brochure->save();
                 }
-
                 Auth::login($user);
-                session()->forget(['form_identification','form_identification','form_service','form_contact']);
-                return redirect()->route('dashboard')->with('enregistrement', 'Compte créé avec succès !');
+
+                $form_identification['message']= "message de reception de fiche fournisseur";
+                Mail::to($form_identification['email'])->send(new DemandeFournisseur($form_identification));
+
+                session()->forget(['form_identification', 'form_identification', 'form_service', 'form_contact']);
+                return redirect()->route('dashboard')->with('enregistrement_compte', 'Votre compte a bien été créé!');
             } else
                 dd('aucune donnees');
         } else
