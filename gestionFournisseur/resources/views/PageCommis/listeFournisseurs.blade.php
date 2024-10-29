@@ -301,23 +301,6 @@
         var filteredFournisseurs = [];
         var checkedFournisseurs = [];
 
-        $.ajax({
-            url: '/ville',
-            method: 'GET',
-            success: function(data) {
-                $.each(data.result.records, function(index, item) {
-                    allCities.push({
-                        key: item.munnom,
-                        value: item.regadm
-                    });
-                });
-
-            },
-            error: function() {
-                alert('Failed to fetch city.');
-            }
-        });
-
         function filterFournisseursOnUpdate(obj) {
             return new Proxy(obj, {
                 set(target, property, value) {
@@ -472,7 +455,7 @@
             loadFilterCities();
         });
 
-        let cachedCities = {}; 
+        let cachedCities = fournisseurs.ville.toList(); 
 
         function loadCities(region, callback) {
             if (cachedCities[region]) {
