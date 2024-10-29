@@ -290,9 +290,6 @@
         var categoriesLicences = @json($categoriesLicences);
         var licences = @json($licences);
         var fournisseurs = @json($fournisseurs);
-        var demandes = @json($demandes);
-        var infosRbq = @json($infosRbq);
-        var infosUnspsc = @json($infosUnspsc);
         var checkedStatus = {};
         checkedStatus['Accepter'] = true;
         var allCities = [];
@@ -452,7 +449,7 @@
 
             $.each(data, function(index, item) {
                 let regionName = item.regadm;
-                let doesListContainsThisRegion = filteredFournisseurs.find(f => f.régionAdministrative === regionName.split(' (')[0]);
+                let doesListContainsThisRegion = filteredFournisseurs.find(f => f.regionAdministrative === regionName.split(' (')[0]);
                 if ((searchQuery === "" || regex.test(regionName)) && doesListContainsThisRegion) {
                     let isChecked = checkedRegions[regionName] ? 'checked' : '';
                     items.push(`
@@ -595,10 +592,11 @@
                     
                     if (licences.length > 0) {
                         filteredLicences.forEach(licence => {
-                            const neqList = filteredFournisseurs.map(f => f.neq);
-                            let filteredInfosRbq = infosRbq.filter(r => neqList.includes(r.neqFournisseur));
-                            let doesListContainsThisLicence = filteredInfosRbq.find(l => l.travauxPermis === licence.titre);
-                            
+                            const idList = filteredFournisseurs.map(f => f.id);
+                            //let filteredInfosRbq = infosRbq.filter(r => neqList.includes(r.neqFournisseur));
+                            //let doesListContainsThisLicence = filteredInfosRbq.find(l => l.travauxPermis === licence.titre);
+                            let doesListContainsThisLicence = true;
+
                             if(doesListContainsThisLicence) {
                                 licenceItem = $(`
                                         <li>
@@ -629,10 +627,11 @@
                             $("#categorie-list").append(`<h2 class="mb-2 text-base">${category.titre}</h2>`);
                             filteredLicences.forEach(licence => {
 
-                                const neqList = filteredFournisseurs.map(f => f.neq);
-                                let filteredInfosRbq = infosRbq.filter(r => neqList.includes(r.neqFournisseur));
-                                let doesListContainsThisLicence = filteredInfosRbq.find(l => l.travauxPermis === licence.titre);
-                                
+                                const idList = filteredFournisseurs.map(f => f.id);
+                                //let filteredInfosRbq = infosRbq.filter(r => neqList.includes(r.neqFournisseur));
+                                //let doesListContainsThisLicence = filteredInfosRbq.find(l => l.travauxPermis === licence.titre);
+                                let doesListContainsThisLicence = true;
+
                                 if(doesListContainsThisLicence) {
                                     licenceItem = $(`
                                             <li>
@@ -683,7 +682,7 @@
 
             if ($(this).is(':checked')) {
                 filteredFournisseurs.forEach(fournisseur => {
-                    checkedFournisseurs[fournisseur.neq] = true; 
+                    checkedFournisseurs[fournisseur.id] = true; 
                 });
             }
 
@@ -715,19 +714,18 @@
                 filteredFournisseurs.sort(comparator);
             };
 
-            const getRequestState = (supplier) => {
-                const request = demandes.find(d => d.neqFournisseur === supplier.neq);
-                return request ? request.etatDemande : '';
+            const getEtatDemande = (fournisseur) => {
+                return fournisseur.etatDemande;
             };
 
             switch (header) {
                 case 'État-asc':
-                    fournisseurs.sort((a, b) => getRequestState(a).localeCompare(getRequestState(b)));
-                    filteredFournisseurs.sort((a, b) => getRequestState(a).localeCompare(getRequestState(b)));
+                    fournisseurs.sort((a, b) => getEtatDemande(a).localeCompare(getEtatDemande(b)));
+                    filteredFournisseurs.sort((a, b) => getEtatDemande(a).localeCompare(getEtatDemande(b)));
                     break;
                 case 'État-desc':
-                    fournisseurs.sort((a, b) => getRequestState(b).localeCompare(getRequestState(a)));
-                    filteredFournisseurs.sort((a, b) => getRequestState(b).localeCompare(getRequestState(a)));
+                    fournisseurs.sort((a, b) => getEtatDemande(b).localeCompare(getEtatDemande(a)));
+                    filteredFournisseurs.sort((a, b) => getEtatDemande(b).localeCompare(getEtatDemande(a)));
                     break;
                 case 'Fournisseurs-asc':
                     sortSuppliers('nomEntreprise', 'asc');
@@ -743,8 +741,8 @@
                     break;
                 case 'Catégories de travaux-asc':
                     const ascLicencesComparator = (a, b) => {
-                        const categoryA = compteurLicences[a.neq] || 0;
-                        const categoryB = compteurLicences[b.neq] || 0;
+                        const categoryA = compteurLicences[a.id] || 0;
+                        const categoryB = compteurLicences[b.id] || 0;
                         return categoryA - categoryB;
                     };
                     fournisseurs.sort(ascLicencesComparator);
@@ -752,8 +750,8 @@
                     break;
                 case 'Catégories de travaux-desc':
                     const descLicencesComparator = (a, b) => {
-                        const categoryA = compteurLicences[a.neq] || 0;
-                        const categoryB = compteurLicences[b.neq] || 0; 
+                        const categoryA = compteurLicences[a.id] || 0;
+                        const categoryB = compteurLicences[b.id] || 0; 
                         return categoryB - categoryA; 
                     };
                     fournisseurs.sort(descLicencesComparator);
@@ -761,8 +759,8 @@
                     break;
                 case 'Produits et services-asc':
                     const ascCommodityComparator = (a, b) => {
-                        const categoryA = compteurCommodities[a.neq] || 0;
-                        const categoryB = compteurCommodities[b.neq] || 0;
+                        const categoryA = compteurCommodities[a.id] || 0;
+                        const categoryB = compteurCommodities[b.id] || 0;
                         return categoryA - categoryB;
                     };
                     fournisseurs.sort(ascCommodityComparator);
@@ -770,8 +768,8 @@
                     break;
                 case 'Produits et services-desc':
                     const descCommodityComparator = (a, b) => {
-                        const categoryA = compteurCommodities[a.neq] || 0;
-                        const categoryB = compteurCommodities[b.neq] || 0; 
+                        const categoryA = compteurCommodities[a.id] || 0;
+                        const categoryB = compteurCommodities[b.id] || 0; 
                         return categoryB - categoryA; 
                     };
                     fournisseurs.sort(descCommodityComparator);
@@ -781,7 +779,6 @@
 
             changePage(currentPage);
         }
-
 
         function renderPagination(totalPages) {
             const maxPagesToShow = 3;
@@ -891,11 +888,11 @@
                 return searchValue === "" || regex.test(name);
             }
 
-            function statusVerification(status) {
-                compteurLicences[status.neqFournisseur] = 0;
-                compteurCommodities[status.neqFournisseur] = 0;
+            function statusVerification(etat, id) {
+                compteurLicences[id] = 0;
+                compteurCommodities[id] = 0;
 
-                return checkedStatus[status.etatDemande] === true
+                return checkedStatus[etat] === true
             }
 
             function commoditiesVerification(commodities) {
@@ -903,7 +900,7 @@
 
                 commodities.forEach(commodity => {
                     console.log(commodity);
-                    compteurLicences[commodity.neqFournisseur]++;
+                    compteurLicences[commodity.id]++;
                 })
 
                 return !Object.values(checkedCommodities).includes(true) || isChecked;
@@ -915,7 +912,7 @@
                 infosRbq.forEach(infoRbq => {
                     if(checkedLicences[infoRbq.codeSousCategorie] === true) {
                         isChecked = true;
-                        compteurLicences[infoRbq.neqFournisseur]++;
+                        compteurLicences[infoRbq.id]++;
                     }
                 })
 
@@ -938,7 +935,7 @@
                 infosUnspsc.forEach(unspsc => {
                     if(checkedCommodities[unspsc.code] === true) {
                         isChecked = true;
-                        compteurCommodities[unspsc.neqFournisseur]++;
+                        compteurCommodities[unspsc.id]++;
                     }
                 })
 
@@ -947,11 +944,11 @@
             
             filteredFournisseurs = fournisseurs.filter(f => 
                 nameVerification(f.nomEntreprise) &&
-                statusVerification(demandes.find(d => d.neqFournisseur === f.neq)) &&
-                licencesVerification(infosRbq.filter(r => r.neqFournisseur === f.neq)) && 
+                statusVerification(f.etatDemande, f.id) &&
+                //licencesVerification(infosRbq.filter(r => r.neqFournisseur === f.neq)) && 
                 citiesVerification(f.ville) &&
-                regionsVerification(f.ville) &&
-                unspscVerification(infosUnspsc.filter(u => u.neqFournisseur === f.neq))
+                regionsVerification(f.ville)
+                //unspscVerification(infosUnspsc.filter(u => u.neqFournisseur === f.neq))
             );
 
             const totalPages = Math.ceil(filteredFournisseurs.length / itemsPerPage);
@@ -973,7 +970,7 @@
             $('#fournisseurs-list').empty();
 
             currentFournisseurs.forEach(fournisseur => {
-                var etat = demandes.find(d => d.neqFournisseur === fournisseur.neq).etatDemande;
+                var etat = fournisseur.etatDemande;
 
                 switch (etat) {
                     case "Accepter":
@@ -994,8 +991,8 @@
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td class="w-4 p-4">
                         <div class="flex items-center">
-                            <input id="${fournisseur.neq}" type="checkbox" ${checkedFournisseurs[fournisseur.neq] === true ? 'checked' : ''} class="fournisseur-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="${fournisseur.neq}" class="sr-only">checkbox</label>
+                            <input id="${fournisseur.id}" type="checkbox" ${checkedFournisseurs[fournisseur.id] === true ? 'checked' : ''} class="fournisseur-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="${fournisseur.id}" class="sr-only">checkbox</label>
                         </div>
                     </td>
                     <td class="px-6 py-4">
@@ -1008,13 +1005,13 @@
                         ${fournisseur.ville}
                     </td>
                     <td class="px-6 py-4">
-                        ${compteurCommodities[fournisseur.neq]}/${Object.values(checkedCommodities).filter(value => value === true).length}
+                        ${compteurCommodities[fournisseur.id]}/${Object.values(checkedCommodities).filter(value => value === true).length}
                     </td>
                     <td class="px-6 py-4">
-                        ${compteurLicences[fournisseur.neq]}/${Object.values(checkedLicences).filter(value => value === true).length}
+                        ${compteurLicences[fournisseur.id]}/${Object.values(checkedLicences).filter(value => value === true).length}
                     </td>
                     <td class="flex items-center cursor-pointer w-min px-6 py-4 font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                        <a href="/fournisseur/${fournisseur.neq}" class="flex items-center">
+                        <a href="/fournisseur/${fournisseur.id}" class="flex items-center">
                             <svg class="w-5 h-5 mr-1 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"/>
                             </svg>

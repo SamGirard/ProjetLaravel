@@ -11,17 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('infos_unspsc', function (Blueprint $table) {
+        Schema::create('brochures', function (Blueprint $table) {
             $table->id();
+            $table->string('type');
+            $table->string('nom');
+            $table->unsignedBigInteger('fournisseur_id');
+            $table->foreign('fournisseur_id')->references('id')->on('users');
             $table->timestamps();
-            $table->integer('neqFournisseur');
-            $table->integer('code');
-            $table->string('name');
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('infos_unspsc');
+        Schema::dropIfExists('brochures');
     }
 };
