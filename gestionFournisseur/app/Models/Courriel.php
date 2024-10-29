@@ -5,21 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RoleCourriel extends Model
+class Courriel extends Model
 {
     use HasFactory;
 
-    // Define which attributes are mass assignable
-    protected $fillable = [
-        'role', 
-    ];
-
-    protected $primaryKey = 'role';
+    protected $primaryKey = 'objet';
     public $incrementing = false;
     protected $keyType = 'string';
+    //use HasFactory;
+    protected $fillable = ['objet', 'message', 'role', 'raison'];
 
-    protected $table = 'role_courriel';
+    protected $table = 'modele_courriel';
 
     public $timestamps = false;
 
 }
+
+

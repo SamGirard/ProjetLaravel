@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('objet', 64)->primary(); // Clé primaire personnalisée
             $table->text('message');
             $table->string('role')->references('role')->on('roleCourriel');
+            $table->text('raison')->nullable();
         });
     }
 

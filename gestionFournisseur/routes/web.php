@@ -8,7 +8,7 @@ use App\Http\Controllers\EmployeController;
 use App\Http\Middleware\CheckRole;
 
 //Route de Sam pour menu test
-Route::get('/MenuTest', 
+Route::get('/loginEmploye', 
 [FournisseurController::class, 'index'])->name('index');
 
 
@@ -19,37 +19,26 @@ Route::get('/fournisseurs/{fournisseur}/',
 
 //Route de Sam pour les role
 Route::get('/Gestion_des_roles', 
-[EmployeController::class, 'index'])->name('role')
-->middleware('auth');
+[EmployeController::class, 'afficherRole'])->name('role')
+->middleware('CheckRole:Administrateur');
 
 Route::get('/employes/creation',
-[EmployeController::class, 'create'])->name('employes.create');
+[EmployeController::class, 'create'])->name('employes.create')
+->middleware('CheckRole:Administrateur');
 
 Route::post('/employes',
-[EmployeController::class, 'store'])->name('employes.store');
-
-
-Route::get('/employes/creation',
-[EmployeController::class, 'create'])->name('employes.create');
-
-Route::post('/employes',
-[EmployeController::class, 'store'])->name('employes.store');
-
-
-//Route pour créer les employé
-Route::get('/employes/creation',
-[EmployeController::class, 'create']) -> name('employes.create');
-
-Route::post('/employes',
-[EmployeController::class, 'store'])->name('employes.store');
+[EmployeController::class, 'store'])->name('employes.store')
+->middleware('CheckRole:Administrateur');
 
 //Route pour le delete d'employé
 Route::delete('/supprimerEmploye',
-[EmployeController::class, 'destroy'])->name('supprimerEmploye');
+[EmployeController::class, 'destroy'])->name('supprimerEmploye')
+->middleware('CheckRole:Administrateur');
 
 //Route pour modifier le role des employé
 Route::patch('/modifierEmploye',
-[EmployeController::class, 'update'])->name('modifierEmploye');
+[EmployeController::class, 'update'])->name('modifierEmploye')
+->middleware('CheckRole:Administrateur');
 
 
 //Route pour le login d'employe
@@ -62,19 +51,35 @@ Route::post('/loginEmploye',
 Route::post('/logout', 
 [EmployeController::class, 'logout'])->name('logout');
 
-Route::get('/liste', 
-[EmployeController::class, 'index'])->name('menuListe')
-->middleware('auth');
-
-//route pour la gestion des courriels
-Route::get('/modeleCourriel',
-[EmployeController::class, 'afficherModeleCourriel'])->name('modeleCourriel');
+//route pour parametre
 Route::get('/parametre',
-[EmployeController::class, 'afficherParametre'])->name('parametre');
+[EmployeController::class, 'afficherParametre'])->name('parametre')
+->middleware('CheckRole:Administrateur');
+
+Route::patch('modifierParametre', 
+[EmployeController::class ,'updateParam'])->name('modifierParam');
 
 //route pour ajouter les role de courriel
+//route pour la gestion des courriels
+Route::get('/modeleCourriel',
+[EmployeController::class, 'afficherModeleCourriel'])->name('modeleCourriel')
+->middleware('CheckRole:Administrateur');
+
 Route::post('/employes/courrielRoleEnregistre',
-[EmployeController::class, 'store'])->name('employes.storeCourrielRole');
+[EmployeController::class, 'storeCourrielRole'])->name('employes.storeCourrielRole')
+->middleware('CheckRole:Administrateur');
+
+//Route pour modifier les modele de courriel et les parametre
+Route::patch('/modifierCourriel',
+[EmployeController::class, 'updateCourriel'])->name('modifierCourriel')
+->middleware('CheckRole:Administrateur');
+
+//Route pour le delete d'employé
+Route::delete('/supprimerRoleCourriel',
+[EmployeController::class, 'destroyRoleCourriel'])->name('supprimerRoleCourriel')
+->middleware('CheckRole:Administrateur');
+
+//route pour les parametre
 
 //route welcome
 Route::get('/', function () {

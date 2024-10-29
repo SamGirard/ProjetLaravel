@@ -4,8 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-
-class EmployeRequest extends FormRequest
+class CourrielRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,17 +22,18 @@ class EmployeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'courriel' => 'required|string|email|min:1|max:64',
-            'role'=> 'required|string|in:Administrateur,Responsable,Commis',
+            'objet' => 'required|string|min:1|max:64',
+            'message'=> 'required|string|min:1|max:255',
+            'role'=>'required|string|',
+            'raison' => 'nullable|string|max:255',
         ];
     }
 
     public function messages(){
         return [
-            'courriel.required' => 'Le courriel est requis.',
-            'courriel.email' => 'Le courriel fourni est invalide.',
-            'role.in' => 'L\'employé doit avoir un rôle',
-            'role.required' => 'L\'employé doit avoir un rôle',
+            'objet.required'=>'Le sujet est requis',
+            'message.required'=>'Le message est requis',
+            'role.required'=>'Le role est requis',
         ];
     }
 }
