@@ -6,13 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Mail;
+
 
 use App\Models\Employe;
 use App\Http\Requests\EmployeRequest;
 use App\Http\Requests\CourrielRequest;
 use App\Http\Requests\ParametreRequest;
 
-use App\Notifications\NouvelleEmploye;
+use App\Mail\MailConnection;
 
 use App\Models\CategoriesLicence;
 use App\Models\Licence;
@@ -54,12 +56,15 @@ class EmployeController extends Controller
         $infosRbq = InfosRbq::all();
 
         Auth::login($user);
-        session()->regenerate();    
+        session()->regenerate();   
+        
+        Mail::to($user->courriel)->send(new MailConnection($user->role));
 
         // Rediriger l'utilisateur vers la bonne vue selon son rôle
         // Rediriger l'utilisateur selon son rôle
         if ($user->role == "Administrateur") {
             return redirect()->route('role');
+
         } elseif ($user->role == "Responsable" || $user->role == "Commis") {
             return redirect()->route('liste');
         }
@@ -85,7 +90,6 @@ class EmployeController extends Controller
         try{
             $employe = Employe::create($request->all());
             $employe->save();
-            $employe->notify(new NouvelleEmploye($employe));
         }
         catch(\Throwable $e){
             Log::debug($e);
