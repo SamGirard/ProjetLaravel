@@ -16,12 +16,6 @@ use App\Http\Requests\ParametreRequest;
 
 use App\Mail\MailConnection;
 
-use App\Models\CategoriesLicence;
-use App\Models\Licence;
-
-use App\Models\Fournisseur;
-use App\Models\Demande;
-use App\Models\InfosRbq;
 use App\Models\Parametre;
 use App\Models\Courriel;
 use App\Models\RoleCourriel;
@@ -48,13 +42,6 @@ class EmployeController extends Controller
             return redirect()->back()->withErrors(['courriel' => 'Employé introuvable']);
         }
 
-        $employes = Employe::all();
-        $categoriesLicences = CategoriesLicence::all();
-        $licences = Licence::all();
-        $fournisseurs = Fournisseur::all();
-        $demandes = Demande::all();
-        $infosRbq = InfosRbq::all();
-
         Auth::login($user);
         session()->regenerate();   
         
@@ -66,7 +53,7 @@ class EmployeController extends Controller
             return redirect()->route('role');
 
         } elseif ($user->role == "Responsable" || $user->role == "Commis") {
-            return redirect()->route('liste');
+            return redirect()->route('pageCommis.liste');
         }
         return redirect()->back()->withErrors(['role' => 'Accès refusé']);
     }
