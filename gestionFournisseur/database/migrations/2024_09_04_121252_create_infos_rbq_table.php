@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('typeLicense', ['Entrepreneur', 'Contracteur-Propriétaire']);
             $table->enum('Catégorie', ['Général', 'Spécialisé']);
             $table->string('codeSousCategorie', 64);
-            $table->string('travauxPermis', 64);
+            $table->string('travauxPermis', 249);
             $table->timestamps();
         });
     }

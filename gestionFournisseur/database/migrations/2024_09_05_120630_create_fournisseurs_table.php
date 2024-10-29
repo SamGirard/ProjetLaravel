@@ -16,9 +16,6 @@ return new class extends Migration
             $table->string('courriel', 64)->unique(); //clef primaire secondaire
             $table->string('password', 64);
             $table->string('nomEntreprise', 64);
-            $table->string('num_rbq', 10);
-            $table->foreign('num_rbq')->references('numLicense')->on('infos_rbq');
-
             $table->string('numCivique', 8);
             $table->string('rue', 64);
             $table->string('bureau', 64)->nullable();
@@ -28,7 +25,7 @@ return new class extends Migration
             $table->string('siteInternet', 64)->nullable();
             $table->string('régionAdministrative', 64)->nullable();
             $table->enum('TypeNumTelephone', ['Bureau', 'Télécopieur', 'Cellulaire']);
-            $table->integer('numéroTelephone');
+            $table->string('numéroTelephone', 64);
             $table->string('poste', 64)->nullable();
             $table->string('courrielContact', 64);
             $table->integer('numTPS')->nullable();

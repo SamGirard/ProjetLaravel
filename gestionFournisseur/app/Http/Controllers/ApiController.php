@@ -13,13 +13,42 @@ class ApiController extends Controller
             'verify' => false,
         ]);
       
-        $sql = 'https://donneesquebec.ca/recherche/api/action/datastore_search_sql?sql=SELECT "munnom", "regadm" FROM "19385b4e-5503-4330-9e59-f998f5918363"';
+        $sql = 'https://donneesquebec.ca/recherche/api/action/datastore_search_sql?sql=SELECT DISTINCT "regadm" FROM "19385b4e-5503-4330-9e59-f998f5918363"';
 
         $response = $client->request('GET', $sql);
         $data = json_decode($response->getBody()->getContents());
 
         return $data;
    }
+
+   public function fetchVille(string $region)
+   {   
+       $client = new Client([
+           'verify' => false,
+       ]);
+     
+       $sql = 'https://donneesquebec.ca/recherche/api/action/datastore_search_sql?sql=SELECT "munnom", "regadm" FROM "19385b4e-5503-4330-9e59-f998f5918363" WHERE "regadm" = \'' . $region . '\'';
+
+       $response = $client->request('GET', $sql);
+       $data = json_decode($response->getBody()->getContents());
+
+       return $data;
+  }
+
+  public function fetchAllVille()
+  {   
+      $client = new Client([
+          'verify' => false,
+      ]);
+    
+      $sql = 'https://donneesquebec.ca/recherche/api/action/datastore_search_sql?sql=SELECT DISTINCT "munnom", "regadm" FROM "19385b4e-5503-4330-9e59-f998f5918363"';
+
+      $response = $client->request('GET', $sql);
+      $data = json_decode($response->getBody()->getContents());
+
+      return $data;
+ }
+
 
    public function fetchFromNeq(string $neq) 
    {
@@ -99,4 +128,26 @@ class ApiController extends Controller
        });
    }
 
+   public function fetchUNSPSCComodityFromName(int $start, int $number, Request $request)
+   {
+       $commodity = $request->query('comodity', '');
+   
+       $jsonResponse = $this->readUNSPSCFile(function ($row) use ($commodity) {
+           if (is_null($commodity) || $commodity === '') {
+               return isset($row[9], $row[11]) ? $row[9] . " - " . $row[11] : null;
+           }
+   
+           return (isset($row[9], $row[11]) && strpos(strtolower($row[9]) . " - " . strtolower($row[11]), strtolower($commodity)) !== false)
+               ? $row[9] . " - " . $row[11]
+               : null;
+       });
+   
+       $results = json_decode($jsonResponse->getContent(), true);
+   
+       $filteredResults = array_filter($results, fn($value) => $value !== null);
+   
+       return array_slice($filteredResults, $start, $number);
+   }
+   
+   
 }
