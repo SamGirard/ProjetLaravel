@@ -224,7 +224,7 @@ class FournisseurController extends Controller
     public function store_brochure(Request $request)
     {
         $request->validate([
-            'files_brochure.*' => 'required|file|mimes:pdf,jpg,png,docx|max:2048'
+            'files_brochure.*' => 'required|file|mimes:pdf,jpg,png,docx|max:' . Parametre::first()->tailleMaxFichiers
         ]);
 
         if ($request->hasFile('files_brochure')) {
@@ -302,7 +302,7 @@ class FournisseurController extends Controller
             } else
                 dd('aucune donnees');
         } else
-            dd('aucun fichiere');
+            dd('aucun fichier');
 
     }
 
