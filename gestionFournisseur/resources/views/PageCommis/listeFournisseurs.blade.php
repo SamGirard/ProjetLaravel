@@ -385,13 +385,16 @@
                 )];
 
                 cachedUnspsc.forEach(unspsc => {
-                    if (!searchQuery || regex.test(unspsc)) {
-                        const isChecked = checkedCommodities[unspsc] ? 'checked' : '';
+                    const name = unspsc.split('/')[3];
+
+                    if (!searchQuery || regex.test(name)) {
+                        const id = unspsc.split('/')[2];
+                        const isChecked = checkedCommodities[id] ? 'checked' : '';
                         unspscItems.push(`
                             <li>
                                 <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="${unspsc}" type="checkbox" value="${unspsc}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
-                                    <label for="${unspsc}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${unspsc}</label>
+                                    <input id="${id}" type="checkbox" value="${id}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
+                                    <label for="${id}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${name}</label>
                                 </div>
                             </li>
                         `);
@@ -810,10 +813,10 @@
 
                 function unspscVerification(service, fournisseurId) {
                     const unspscs = [...new Set(JSON.parse(service[0].produit_services))];
-
                     unspscs.forEach(unspsc => {
-                        if (checkedCommodities[unspsc] === true) {
-                            isChecked = true;
+                        const id = unspsc.split('/')[2];
+                        
+                        if (checkedCommodities[id] === true) {
                             compteurCommodities[fournisseurId]++;
                         }
                     })
