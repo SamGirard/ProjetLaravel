@@ -8,10 +8,13 @@ use App\Models\CategorieService;
 use App\Models\Contact;
 use App\Models\Coordonnee;
 use App\Models\DonneesServices;
+use App\Models\Licence;
+use App\Models\Parametre;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -63,7 +66,7 @@ class FournisseurController extends Controller
     public function create_service(Request $request)
     {
         if ($request->session()->has('form_identification')) {
-            $categorie_services = CategorieService::all();
+            $categorie_services = Licence::all();
 
             return view('fournisseur/form_produit_service', compact('categorie_services'));
         } else
@@ -240,23 +243,22 @@ class FournisseurController extends Controller
                 $user->poste = $form_coordonne['poste'];
                 $user->typeNumTelephone = $form_coordonne['type_telephone'];
                 $user->password = Hash::make($form_identification['password']);
-                $user->save();
 
+
+                $user->numCivique = $form_coordonne['numero_civique'];
+                $user->rue = $form_coordonne['rue'];
+                $user->bureau = $form_coordonne['bureau'];
+                $user->codePostal = $form_coordonne['code_postal'];
+                $user->ville = $form_coordonne['ville'];
+                $user->regionAdministrative = $form_coordonne['region_administrative'];
+                $user->code_administratif = $form_coordonne['code_administratif'];
+                $user->siteInternet = $form_coordonne['site_internet'];
+
+                $user->save();
                 event(new Registered($user));
 
-                $coordonne = new Coordonnee();
-                $coordonne->numCivique = $form_coordonne['numero_civique'];
-                $coordonne->rue = $form_coordonne['rue'];
-                $coordonne->bureau = $form_coordonne['bureau'];
-                $coordonne->codePostal = $form_coordonne['code_postal'];
-                $coordonne->ville = $form_coordonne['ville'];
-                $coordonne->regionAdministrative = $form_coordonne['region_administrative'];
-                $coordonne->code_administratif = $form_coordonne['code_administratif'];
-                $coordonne->siteInternet = $form_coordonne['site_internet'];
-                $coordonne->user_id = $user->id;
-                $coordonne->save();
-
                 $contact = new Contact();
+
                 $contact->nom = $form_contact['nom_contact'];
                 $contact->prenom = $form_contact['prenom_contact'];
                 $contact->courriel = $form_contact['email_contact'];
@@ -265,7 +267,7 @@ class FournisseurController extends Controller
                 $contact->typeNumTelephone = $form_contact['type_telephone_contact'];
                 $contact->numTelephone = $form_contact['telephone_contact'];
                 $contact->poste = $form_contact['poste_contact'];
-                $contact->user_id = $user->id;
+                $contact->fournisseur_id = $user->id;
                 $contact->save();
 
                 $service = new Service();
@@ -276,21 +278,24 @@ class FournisseurController extends Controller
                 $service->categorie_specialise = $form_service['categorie_specialise'];
                 $service->produit_services = $form_service['services'];
                 $service->details = $form_service['details'];
-                $service->user_id = $user->id;
+                $service->fournisseur_id = $user->id;
                 $service->save();
 
                 foreach ($request->file('files_brochure') as $file) {
                     $path = $file->store('public/brochures');
                     $filename = basename($path);
                     $brochure = new Brochure();
-                    $brochure->fichier = $filename;
-                    $brochure->user_id = $user->id;
+                    $brochure->nom = $filename;
+                    $brochure->type = $file->getClientOriginalName();
+                    $brochure->fournisseur_id = $user->id;
                     $brochure->save();
                 }
                 Auth::login($user);
 
-                $form_identification['message']= "message de reception de fiche fournisseur";
-                Mail::to($form_identification['email'])->send(new DemandeFournisseur($form_identification));
+                $form_identification['message'] = "message de reception de fiche fournisseur";
+                Mail::to([$form_identification['email'], Parametre::first()->courrielAppro])->send(
+                    new DemandeFournisseur(['nom' => $form_identification['nom'], 'email' => $form_identification['email'], 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'reception')->first()->message])
+                );
 
                 session()->forget(['form_identification', 'form_identification', 'form_service', 'form_contact']);
                 return redirect()->route('dashboard')->with('enregistrement_compte', 'Votre compte a bien été créé!');

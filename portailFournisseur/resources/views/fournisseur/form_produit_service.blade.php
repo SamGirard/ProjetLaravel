@@ -73,9 +73,9 @@
                     <select multiple id="categorie_generale" name="categorie_generale[]"
                             class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                         @foreach($categorie_services as $categorie_service)
-                            @if($categorie_service['type'] == 'Général')
+                            @if($categorie_service['Categorie'] == 1)
                                 <option
-                                    value="{{ $categorie_service['id'] }}">{{ $categorie_service['code'] }} {{ $categorie_service['nom'] }}</option>
+                                    value="{{ $categorie_service['id'] }}">{{ $categorie_service['Numéro'] }} {{ $categorie_service['titre'] }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -87,9 +87,9 @@
                     <select multiple id="categorie_specialise" name="categorie_specialise[]"
                             class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                         @foreach($categorie_services as $categorie_service)
-                            @if($categorie_service['type'] == 'Spécialisé')
+                            @if($categorie_service['Categorie'] == 2 or $categorie_service['Categorie'] == 3)
                                 <option
-                                    value="{{ $categorie_service['id'] }}">{{ $categorie_service['code'] }} {{ $categorie_service['nom'] }}</option>
+                                    value="{{ $categorie_service['id'] }}">{{ $categorie_service['Numéro'] }} {{ $categorie_service['titre'] }}</option>
                             @endif
                         @endforeach
                     </select>

@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('brochures', function (Blueprint $table) {
-            $table->id();
-            $table->string('fichier');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->timestamps();
+        Schema::create('role_courriel', function (Blueprint $table) {
+            $table->string('role')->primary();
         });
     }
 
@@ -25,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('brochures');
+        Schema::dropIfExists('role_courriel');
     }
 };

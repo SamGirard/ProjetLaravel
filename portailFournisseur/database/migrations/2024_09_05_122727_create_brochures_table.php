@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contacts', function (Blueprint $table) {
+        Schema::create('brochures', function (Blueprint $table) {
             $table->id();
-            $table->string('prenom', 64);
-            $table->string('nom', 64);
-            $table->string('fonction', 64);
-            $table->string('courriel', 64)->unique();
-            $table->enum('typeNumTelephone', ['Bureau', 'Télécopieur', 'Cellulaire']);
-            $table->string('numTelephone', 10);
-            $table->string('poste', 6)->nullable();
+            $table->string('type');
+            $table->string('nom');
             $table->unsignedBigInteger('fournisseur_id');
             $table->foreign('fournisseur_id')->references('id')->on('users');
             $table->timestamps();
@@ -31,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contacts');
+        Schema::dropIfExists('brochures');
     }
 };
