@@ -101,3 +101,7 @@ Route::get('/liste', [GestionController::class, 'listeFournisseur'])->name('page
 Route::get('/liste-contact', [GestionController::class, 'listeContact'])->name('pageCommis.liste-contact');
 Route::get('/export-fournisseurs', [GestionController::class, 'exportFournisseurs'])->name('export.fournisseurs');
 Route::get('/fournisseur/{fournisseur}', [GestionController::class, 'zoom'])->name('pageCommis.fiche');
+
+Route::patch('/fournisseur/{fournisseur}/modifier',
+[GestionController::class, 'updateFiche'])->name('updateFiche')
+->middleware('CheckRole:Administrateur, Responsable');
