@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RoleCourrielSeeder::class,
             ModeleCourrielSeeder::class,
             ParametreSeeder::class,
+            ServicesTableSeeder::class,
         ]);
     }
 
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
             RoleCourrielSeeder::class,
             ModeleCourrielSeeder::class,
             ParametreSeeder::class,
+            ServicesTableSeeder::class,
         ]);
     }
 }
