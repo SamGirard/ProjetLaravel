@@ -8,6 +8,7 @@ use App\Models\CategoriesLicence;
 use App\Models\Licence;
 use App\Models\Contact;
 use App\Models\Service;
+use App\Models\Brochure;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class gestionController extends Controller
@@ -23,10 +24,11 @@ class gestionController extends Controller
     }
 
     public function zoom(User $fournisseur) {
-        $contacts = Contact::where('fournisseur_id',  $fournisseur->iq)->get();
-        $services = Service::all();
+        $contacts = Contact::where('fournisseur_id',  $fournisseur->id)->get();
+        $services = Service::where('fournisseur_id',  $fournisseur->id)->get();
+        $brochures = Brochure::where('fournisseur_id',  $fournisseur->id)->get();
 
-        return view('pageCommis.fiche', compact('fournisseur', 'contacts', 'services'));
+        return view('pageCommis.fiche', compact('fournisseur', 'contacts', 'services', 'brochures'));
     }
 
     public function listeContact(Request $request) {
