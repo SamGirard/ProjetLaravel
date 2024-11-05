@@ -47,19 +47,27 @@
 
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Contacts</legend>
-                        <div class="text-right">
-                            <a href="#" class="text-blue-600 hover:text-blue-900"><i
-                                    class="text-xl fa-regular fa-pen-to-square"></i></a>
-                        </div>
+                        <i class="text-right fa-solid fa-plus bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"></i>
                         @foreach(auth::user()->contacts as $contact)
-                            <div class="flex justify-between">
-                                <div>
+                            <div class="flex justify-around">
+                                <div class="flex items-center justify-center">
                                     <i class="fa-solid fa-address-book text-2xl"></i>
                                 </div>
                                 <div>
-                                    <p class="text-gray-800">{{ auth::user()->neq }}</p>
-                                    <p class="text-gray-800">{{ auth::user()->nomEntreprise }}</p>
-                                    <p class="text-gray-800">{{ auth::user()->email }}</p>
+                                    <p class="text-gray-800">{{ $contact->nom }}, {{ $contact->prenom }}</p>
+                                    <p class="text-gray-800">{{ $contact->fonction }}</p>
+                                    <p class="text-gray-800">{{ $contact->courriel }}</p>
+                                    <p class="text-gray-800">{{ $contact->numTelephone }}  #{{ $contact->poste }}</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <span  class="flex items-center justify-center"><a class="px-2 py-2 bg-blue-300 rounded-lg fa-regular fa-pen-to-square text-blue-500 hover:text-blue-800 text-xl" href="#"></a></span>
+                                    <span data-modal-target="supprimer-contact" data-modal-toggle="supprimer-contact" class="flex items-center justify-center">
+                                        <a class="px-2 py-2 bg-red-300 rounded-lg fa-regular fa-trash-can text-red-500 hover:text-red-800 text-xl" href="#"></a>
+                                        <form action="{{ route('supprimer-contact',$contact->id) }}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </span>
                                 </div>
                             </div>
                             <hr class="border-0 h-1 bg-blue-600 my-2">
@@ -102,32 +110,48 @@
                             <a href="#" class="text-blue-600 hover:text-blue-900"><i
                                     class="text-xl fa-regular fa-pen-to-square"></i></a>
                         </div>
-                        @foreach(auth()->user()->service->produit_services as $service)
-                            @php
-                                // Séparer la chaîne par les "/"
+                        @php
+                            $categories = [];
+                            // Organiser les produits par catégorie et sous-catégorie
+                            foreach (auth()->user()->service->produit_services as $service) {
                                 $valeurs = explode('/', $service);
-                            @endphp
 
+                                // Structurer les catégories et sous-catégories sans répétition
+                                $categorie = $valeurs[0] ?? '';
+                                $sousCategorie = $valeurs[1] ?? '';
+                                $element = $valeurs[2] ?? '';
+                                $sousElement = $valeurs[3] ?? '';
+
+                                if (!isset($categories[$categorie])) {
+                                    $categories[$categorie] = [];
+                                }
+                                if (!isset($categories[$categorie][$sousCategorie])) {
+                                    $categories[$categorie][$sousCategorie] = [];
+                                }
+                                $categories[$categorie][$sousCategorie][] = [$element, $sousElement];
+                            }
+                        @endphp
+
+                        {{-- Affichage structuré en Blade --}}
+                        @foreach($categories as $categorie => $sousCategories)
                             <ul>
-                                <li class="">{{ $valeurs[0] ?? '' }}
-                                    @if(isset($valeurs[1]))
-                                        <ul>
-                                            <li class="ml-3">{{ $valeurs[1] }}
-                                                @if(isset($valeurs[2]))
-                                                    <ul>
-                                                        <li class="ml-3">{{ $valeurs[2] }}
-                                                            - {{ $valeurs[3] ?? '' }}</li>
-                                                    </ul>
-                                                @endif
-                                            </li>
-                                        </ul>
-                                    @endif
-                                </li>
+                                <li>{{ $categorie }}</li>
+                                @foreach($sousCategories as $sousCategorie => $elements)
+                                    <ul class="ml-3">
+                                        <li>{{ $sousCategorie }}</li>
+                                        @foreach($elements as [$element, $sousElement])
+                                            <ul class="ml-6">
+                                                <li>{{ $element }} - {{ $sousElement }}</li>
+                                            </ul>
+                                        @endforeach
+                                    </ul>
+                                @endforeach
                             </ul>
                         @endforeach
 
+
                         <hr class="border-0 h-1 bg-blue-600 my-2">
-                        <h2>Détails</h2>
+                        <h2><strong>Détails</strong></h2>
                         <p>
                             {{ auth()->user()->service->details }}
                         </p>
@@ -184,4 +208,34 @@
             </div>
         </div>
     </div>
+
+    <!--  section des modals de la pages  -->
+
+    <!-- modal de suppression de contact  -->
+
+    <div id="supprimer-contact" tabindex="-1" data-modal-backdrop="static" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+                <div class="p-4 md:p-5 text-center">
+                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Voulez-vous vraimer supprimer ce contact?</h3>
+                    <button data-modal-hide="supprimer-contact" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                        Supprimer
+                    </button>
+                    <button data-modal-hide="supprimer-contact" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
+
+

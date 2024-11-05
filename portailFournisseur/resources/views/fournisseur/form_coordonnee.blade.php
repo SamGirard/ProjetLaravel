@@ -168,7 +168,7 @@
 
                         <!-- bouton pour ajouter un nouveau telephone -->
                         <div class="w-full my-2 flex justify-end" id="ajouter_telephone">
-                            <i class="text-right fa-solid fa-plus bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"></i>
+                            <i class="text-right fa-solid fa-plus bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"></i>
                         </div>
 
                         <legend class="text-lg font-semibold text-gray-800 mb-4">Téléphones</legend>
