@@ -292,9 +292,8 @@ class FournisseurController extends Controller
                 }
                 Auth::login($user);
 
-                $form_identification['message'] = "message de reception de fiche fournisseur";
                 Mail::to([$form_identification['email'], Parametre::first()->courrielAppro])->send(
-                    new DemandeFournisseur(['nom' => $form_identification['nom'], 'email' => $form_identification['email'], 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'reception')->first()->message])
+                    new DemandeFournisseur(['nom' => $form_identification['nom'], 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'reception')->first()->message])
                 );
 
                 session()->forget(['form_identification', 'form_identification', 'form_service', 'form_contact']);

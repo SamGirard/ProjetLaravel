@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="35486ead-830c-4d91-914f-9d2f530e1fa0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/FournisseurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/FournisseurController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/emails/demande_fournisseur.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/emails/demande_fournisseur.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -282,7 +284,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;landry&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/projets/projet d'integration 1/portailFournisseur/storage/app/public&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/projets/projet d'integration 1/portailFournisseur/database/migrations&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -294,6 +296,8 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\projets\projet d'integration 1\portailFournisseur\database\migrations" />
+      <recent name="D:\projets\projet d'integration 1\portailFournisseur\database" />
       <recent name="D:\projets\projet d'integration 1\portailFournisseur\storage\app\public" />
     </key>
   </component>
@@ -336,7 +340,8 @@
       <workItem from="1729190519790" duration="12817000" />
       <workItem from="1729377384803" duration="1027000" />
       <workItem from="1729612933026" duration="8578000" />
-      <workItem from="1730217696389" duration="5862000" />
+      <workItem from="1730217696389" duration="21774000" />
+      <workItem from="1730825795775" duration="580000" />
     </task>
     <servers />
   </component>
