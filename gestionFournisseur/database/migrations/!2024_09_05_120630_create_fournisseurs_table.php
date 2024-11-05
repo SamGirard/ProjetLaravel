@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('nomEntreprise', 64);
             $table->json('typeNumTelephone');
             $table->json('numeroTelephone');
-            $table->json('poste', 64)->nullable();
+            $table->json('poste')->nullable();
             $table->string('email')->unique();
             $table->enum('etatDemande', ['Accepter', 'Refusé', 'En attente', 'Réviser']);
             $table->string('raisonRefus')->nullable();

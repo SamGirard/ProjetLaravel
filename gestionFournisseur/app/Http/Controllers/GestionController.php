@@ -8,6 +8,9 @@ use App\Models\CategoriesLicence;
 use App\Models\Licence;
 use App\Models\Contact;
 use App\Http\Requests\UserRequest;
+use App\Models\Service;
+use App\Models\Brochure;
+
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 use App\Mail\mailChangementEtat;
@@ -21,15 +24,18 @@ class gestionController extends Controller
         $fournisseurs = User::all();
         $categoriesLicences = CategoriesLicence::all();
         $licences = Licence::all();
+        $services = Service::all();
 
-        return View('pageCommis.listeFournisseurs', compact('fournisseurs', 'categoriesLicences', 'licences'));
+        return View('pageCommis.listeFournisseurs', compact('fournisseurs', 'categoriesLicences', 'licences', 'services'));
     }
 
     public function zoom(User $fournisseur) {
         $contacts = Contact::where('fournisseur_id',  $fournisseur->id)->get();
         $etatDemande = User::where('id', $fournisseur->id)->get();
+        $services = Service::where('fournisseur_id',  $fournisseur->id)->get();
+        $brochures = Brochure::where('fournisseur_id',  $fournisseur->id)->get();
 
-        return view('pageCommis.fiche', compact('fournisseur', 'contacts', 'etatDemande'));
+        return view('pageCommis.fiche', compact('fournisseur', 'contacts', 'services', 'brochures'));
     }
 
     public function updateFiche(UserRequest $request, User $fournisseur){
@@ -45,6 +51,7 @@ class gestionController extends Controller
             return redirect()->route('pageCommis.liste')->withErrors('Erreur lors de la modification');
         }
         return redirect()->route('pageCommis.liste');
+
     }
 
     public function listeContact(Request $request) {

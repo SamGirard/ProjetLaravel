@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('employes', function (Blueprint $table) {
-            $table->string('courriel', 64)->primary(); // Clé primaire personnalisée
+            $table->string('courriel', 64)->primary();
             $table->enum('role', ['Administrateur', 'Responsable', 'Commis']);
             $table->timestamps();
         });
