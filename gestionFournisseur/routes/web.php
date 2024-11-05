@@ -7,6 +7,9 @@ use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\EmployeController;
 use App\Http\Middleware\CheckRole;
 
+Route::get('/presentation',
+[FournisseurController::class, 'presentation'])->name('presentation');
+
 //Route de Sam pour menu test
 Route::get('/loginEmploye', 
 [FournisseurController::class, 'index'])->name('index');
@@ -80,6 +83,13 @@ Route::delete('/supprimerRoleCourriel',
 ->middleware('CheckRole:Administrateur');
 
 //route pour les parametre
+Route::delete('/supprimerFournisseur',
+[FournisseurController::class, 'destroyFournisseur'])->name('supprimerFournisseur')
+->middleware('CheckRole:Administrateur, Ressponsable');
+
+Route::patch('/modifierFournisseurs',
+[FournisseurController::class, 'updateFournisseur'])->name('modifierFournisseur')
+->middleware('CheckRole:Administrateur, Ressponsable');
 
 //route welcome
 Route::get('/', function () {
@@ -101,3 +111,7 @@ Route::get('/liste', [GestionController::class, 'listeFournisseur'])->name('page
 Route::get('/liste-contact', [GestionController::class, 'listeContact'])->name('pageCommis.liste-contact');
 Route::get('/export-fournisseurs', [GestionController::class, 'exportFournisseurs'])->name('export.fournisseurs');
 Route::get('/fournisseur/{fournisseur}', [GestionController::class, 'zoom'])->name('pageCommis.fiche');
+
+Route::patch('/fournisseur/{fournisseur}/modifier',
+[GestionController::class, 'updateFiche'])->name('updateFiche')
+->middleware('CheckRole:Administrateur, Responsable');
