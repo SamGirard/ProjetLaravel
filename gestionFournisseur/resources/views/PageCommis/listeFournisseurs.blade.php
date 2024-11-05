@@ -5,6 +5,7 @@
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 <script src="https://unpkg.com/alpinejs" defer></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="module" src="{{ asset('js/ListeFournisseurs/main.js') }}" defer></script>
 
 <div class="flex min-h-screen">
     <aside id="sidebar" class="top-0 left-0 z-40 w-64 h-screen mr-5" aria-label="Sidebar">
@@ -343,23 +344,23 @@
     </div>
 
     <script>
+        var fournisseurs = @json($fournisseurs);
+        var cachedRegions = [...new Set(fournisseurs.map(f => f.regionAdministrative))];
+        var cachedCities = [...new Set(fournisseurs.map(f => f.ville))];
+        var compteurCommodities = {};
+        var compteurLicences = {};
+        var filteredFournisseurs = [];
+        var checkedFournisseurs = [];
+        var services = @json($services);
+        var checkedStatus = { Accepter: true };
+        var currentPage = 1;
+        var itemsPerPage = $('#itemsPerPage').val();
+
         $(document).ready(function () {
             let checkedRegions = filterFournisseursOnUpdate({});
             let checkedCities = filterFournisseursOnUpdate({});
             let checkedLicences = filterFournisseursOnUpdate({});
             let checkedCommodities = filterFournisseursOnUpdate({});
-            var categoriesLicences = @json($categoriesLicences);
-            var licences = @json($licences);
-            var fournisseurs = @json($fournisseurs);
-            var services = @json($services);
-            var checkedStatus = {};
-            checkedStatus['Accepter'] = true;
-            var currentPage = 1;
-            var itemsPerPage = $('#itemsPerPage').val();
-            let compteurCommodities = {};
-            let compteurLicences = {};
-            var filteredFournisseurs = [];
-            var checkedFournisseurs = [];
 
             function filterFournisseursOnUpdate(obj) {
                 return new Proxy(obj, {
@@ -371,171 +372,18 @@
                 });
             }
 
-            function loadUnspsc() {
-                const segmentList = $('#segment-list');
-                const searchQuery = $('#searchSegment').val().toLowerCase();
-                const regex = new RegExp(searchQuery, 'i');
-                let unspscItems = [];
-                segmentList.empty();
-
-                const cachedUnspsc = [...new Set(
-                    services
-                        .filter(service => filteredFournisseurs.some(f => f.id === service.fournisseur_id))
-                        .flatMap(service => JSON.parse(service.produit_services))
-                )];
-
-                cachedUnspsc.forEach(unspsc => {
-                    const name = unspsc.split('/')[3];
-
-                    if (!searchQuery || regex.test(name)) {
-                        const id = unspsc.split('/')[2];
-                        const isChecked = checkedCommodities[id] ? 'checked' : '';
-                        unspscItems.push(`
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="${id}" type="checkbox" value="${id}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
-                                    <label for="${id}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${name}</label>
-                                </div>
-                            </li>
-                        `);
-                    }
-                });
-
-                segmentList.append(unspscItems.join(''));
-            }
-
-
             $('#segment-list').on('change', 'input[type="checkbox"]', function () {
                 checkedCommodities[this.id] = $(this).is(':checked');
             });
 
-            let cachedRegions = [...new Set(fournisseurs.map(f => f.regionAdministrative))];
-
-            function loadRegions() {
-                let searchQuery = $('#searchRegion').val().trim().toLowerCase();
-                let regex = new RegExp(searchQuery, 'i');
-
-                let regionList = $('#region-list');
-                regionList.empty();
-                let items = [];
-
-                $.each(cachedRegions, function (index, region) {
-                    if (searchQuery === "" || regex.test(region)) {
-                        let isChecked = checkedRegions[region] ? 'checked' : '';
-
-                        items.push(`
-                        <li>
-                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                <input id="${region}" type="checkbox" value="${region}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
-                                <label for="${region}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${region}</label>
-                            </div>
-                        </li>
-                    `);
-                    }
-                });
-
-                regionList.append(items.join(''));
-            }
-
             $('#region-list').on('change', 'input[type="checkbox"]', function () {
                 checkedRegions[this.id] = $(this).is(':checked');
-                filterCities();
+                filterCities(checkedCities)
             });
-
-            let cachedCities = [...new Set(fournisseurs.map(f => f.ville))];
-
-            function filterCities() {
-                let cityItems = [];
-                let searchQuery = $('#searchCity').val().trim().toLowerCase();
-                let regex = new RegExp(searchQuery, 'i');
-                let cityList = $('#city-list');
-
-                $.each(cachedCities, function (index, city) {
-                    if (searchQuery === "" || regex.test(city)) {
-                        let isChecked = checkedCities["city-" + city] ? 'checked' : '';
-                        cityItems.push(`
-                        <li>
-                            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                <input id="city-${city}" type="checkbox" value="${city}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" ${isChecked}>
-                                <label for="city-${city}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${city}</label>
-                            </div>
-                        </li>
-                    `);
-                    }
-                });
-
-                cityList.empty();
-                cityList.append(cityItems.join(''));
-            }
-
 
             $('#city-list').on('change', 'input[type="checkbox"]', function () {
                 checkedCities[this.id] = $(this).is(':checked');
             });
-
-            function loadCategorie() {
-                const categorieList = $('#categorie-list');
-                const searchQuery = $('#searchCategorie').val().toLowerCase();
-                const regex = new RegExp(searchQuery, 'i');
-                $("#categorie-list").empty();
-
-                let generalItems = [];
-                const cachedGeneral = [...new Set(
-                    services
-                        .filter(service => filteredFournisseurs.some(f => f.id === service.fournisseur_id))
-                        .flatMap(service => JSON.parse(service.categorie_generale))
-                )];
-
-                cachedGeneral.forEach(general => {
-                    if (!searchQuery || regex.test(general)) {
-                        const isChecked = checkedLicences[general] ? 'checked' : '';
-
-                        generalItems.push(`
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="${general}" type="checkbox" value="${general}" ${isChecked} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for="${general}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${general}</label>
-                                </div>
-                            </li>
-                        `);
-                    }
-                });
-
-                if(generalItems.length > 0) {
-                    $("#categorie-list").append(`<h2 class="mb-2 text-base">Entrepreneur général</h2>`);
-                }
-
-                categorieList.append(generalItems.join(''));
-
-                let specializeItems = [];
-                const cachedSpecialize = [...new Set(
-                    services
-                        .filter(service => filteredFournisseurs.some(f => f.id === service.fournisseur_id))
-                        .flatMap(service => JSON.parse(service.categorie_specialise))
-                )];
-
-                cachedSpecialize.forEach(specialize => {
-                    if (!searchQuery || regex.test(specialize)) {
-                        const isChecked = checkedLicences[specialize] ? 'checked' : '';
-
-                        specializeItems.push(`
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="${specialize}" type="checkbox" value="${specialize}" ${isChecked} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for="${specialize}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${specialize}</label>
-                                </div>
-                            </li>
-                        `);
-                    }
-                });
-
-                if(specializeItems.length > 0) {
-                    $("#categorie-list").append(`<h2 class="mb-2 text-base">Entrepreneur spécialisé</h2>`);
-                }
-
-                categorieList.append(specializeItems.join(''));
-            }
-
 
             $('#categorie-list').on('change', 'input[type="checkbox"]', function () {
                 checkedLicences[this.id] = $(this).is(':checked');
@@ -779,7 +627,7 @@
                 }
 
                 function commoditiesVerification(commodities) {
-                    var isChecked = false;
+                    let isChecked = false;
 
                     commodities.forEach(commodity => {
                         console.log(commodity);
@@ -815,7 +663,7 @@
                     const unspscs = [...new Set(JSON.parse(service[0].produit_services))];
                     unspscs.forEach(unspsc => {
                         const id = unspsc.split('/')[2];
-                        
+
                         if (checkedCommodities[id] === true) {
                             compteurCommodities[fournisseurId]++;
                         }
@@ -827,7 +675,7 @@
                 filteredFournisseurs = fournisseurs.filter(f =>
                     nameVerification(f.nomEntreprise) &&
                     statusVerification(f.etatDemande, f.id) &&
-                    licencesVerification(services.filter(s => s.fournisseur_id === f.id), f.id) && 
+                    licencesVerification(services.filter(s => s.fournisseur_id === f.id), f.id) &&
                     citiesVerification(f.ville) &&
                     regionsVerification(f.regionAdministrative) &&
                     unspscVerification(services.filter(s => s.fournisseur_id === f.id), f.id)
@@ -843,17 +691,17 @@
 
                 renderPagination(totalPages);
                 renderFournisseur(currentFournisseurs);
-                loadRegions();
-                filterCities();
-                loadCategorie();
-                loadUnspsc();
+                loadRegions(checkedRegions);
+                filterCities(checkedCities);
+                loadCategorie(checkedLicences);
+                loadUnspsc(checkedCommodities);
             }
 
             function renderFournisseur(currentFournisseurs) {
                 $('#fournisseurs-list').empty();
 
                 currentFournisseurs.forEach(fournisseur => {
-                    var etat = fournisseur.etatDemande;
+                    let etat = fournisseur.etatDemande;
 
                     switch (etat) {
                         case "Accepter":
@@ -966,10 +814,10 @@
 
             filterFournisseurs();
 
-            $('#searchCity').on('input', filterCities);
-            $('#searchRegion').on('input', loadRegions);
-            $('#searchSegment').on('input', loadUnspsc);
-            $('#searchCategorie').on('input', loadCategorie);
+            $('#searchCity').on('input', filterCities(checkedCities));
+            $('#searchRegion').on('input', loadRegions(checkedRegions));
+            $('#searchSegment').on('input', loadUnspsc(checkedCommodities));
+            $('#searchCategorie').on('input', loadCategorie(checkedLicences));
             $('#table-search').on('input', filterFournisseurs);
         });
 
