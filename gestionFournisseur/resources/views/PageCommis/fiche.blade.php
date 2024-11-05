@@ -8,6 +8,7 @@
 <script src="https://kit.fontawesome.com/f25f0490b7.js" crossorigin="anonymous"></script>
 
 @if($fournisseur)
+<form method="POST" action="{{route('updateFiche', [$fournisseur->id]) }}">
 <div class="container mx-auto mt-6 flex">
         <div class="flex-1 p-6 ml-6">
             <div class="flex justify-evenly">
@@ -24,7 +25,7 @@
                     class="text-center inline-flex items-center 
                     {{ $fournisseur->etatDemande == 'En attente' ? 'bg-blue-100 text-blue-800' : ($fournisseur->etatDemande == 'Accepter' ? 'bg-green-100 text-green-800' : ($fournisseur->etatDemande == 'Réviser' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800')) }}
                     text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300" 
-                    type="button"> 
+                    type="button" value="{{$fournisseur->etatDemande}}"> 
                 {{ $fournisseur->etatDemande }} 
                 <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -74,7 +75,7 @@
             <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
             </svg>
-        `).removeClass().addClass(`text-center inline-flex items-center text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 ${statusClasses[newStatus]}`);
+        `).removeClass().addClass(`text-center inline-flex items-center text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 ${statusClasses[newStatus]}`).attr('value', newStatus);
 
         if ($(this).hasClass('refusedButton')) {
             $('#inputRefusedText').removeClass('hidden');
@@ -255,7 +256,6 @@
     </div>
 @endif
 <div class="flex">
-    <form method="POST" action="{{route('updateFiche', [$fournisseur->id]) }}">
         @csrf
         @method('PATCH')
 
@@ -266,7 +266,6 @@
                 <option value="Refusé">Refusé</option>
                 <option value="En attente">En attente</option>
                 <option value="À réviser">À réviser</option>
-
             </select>
         @endif
         <br>

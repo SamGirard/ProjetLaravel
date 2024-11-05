@@ -43,7 +43,7 @@ class FournisseurController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updateFournisseur(FournisseurRequest $request)
+    public function updateFiche(FournisseurRequest $request)
     {
         try{
             $fournisseur = User::first();
@@ -69,10 +69,18 @@ class FournisseurController extends Controller
             $fournisseur->siteInternet = $request->siteInternet;
             $fournisseur->regionAdministrative = $request->regionAdministrative;
             $fournisseur->code_administratif = $request->code_administratif;
+                
+            Mail::to($fournisseurs->email)->send(new MailModificationFournisseur($request->role, $request->etatDemande));
+
+            if($fournisseur->etatDemande != $request->etatDemande){
+                Mail::to($request->email)->send(new MailChangementEtat($request->email, $request->etatDemande));
+            }
+
+            if($request->etatDemande != "Refusé"){
+                $fournisseur->raisonRefus = "";
+            } //else
             
             $fournisseur->save();
-                
-            Mail::to($fournisseurs->email)->send(new MailModificationFournisseur($fournisseur->role, $fournisseur->etatDemande));
 
             return redirect()->route('pageCommis.liste')->with('success', 'Le fournisseurs est modifier!');
         }
@@ -97,10 +105,5 @@ class FournisseurController extends Controller
             Mail::to($fournisseurs->email)->send(new MailSuppressionFournisseur($fournisseur->email));
             return redirect()->route('pageCommis.liste')->with('success', 'Le fournisseurs est supprimer!');
         }
-    }
-
-
-    public function presentation(){
-        return view('pagePresentation');
     }
 }
