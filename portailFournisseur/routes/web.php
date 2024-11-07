@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::delete('/supprimer-contact/{id-contact}',[ProfileController::class,'destroyContact'])->name('supprimer-contact');
+    Route::delete('/supprimer-contact/{id}',[ProfileController::class,'destroyContact'])->name('supprimer-contact');
 });
 
 

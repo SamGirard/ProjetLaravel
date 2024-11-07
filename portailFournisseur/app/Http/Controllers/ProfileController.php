@@ -62,8 +62,9 @@ class ProfileController extends Controller
     public function destroyContact($id)
     {
         $contact = Contact::find($id);
-        if($contact){
+        if ($contact) {
             $contact->delete();
+            return redirect()->route('dashboard')->with(['supprimer_contact' => 'ce contact a été supprimé']);
         }
     }
 }

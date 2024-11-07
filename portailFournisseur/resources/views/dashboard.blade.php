@@ -16,6 +16,14 @@
                     <span class="font-medium">{{ session()->get('enregistrement_compte') }}</span>
                 </div>
             @endif
+
+            @if(session()->has('supprimer_contact'))
+                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                     role="alert">
+                    <span class="font-medium">{{ session()->get('supprimer_contact') }}</span>
+                </div>
+            @endif
+
             <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Ma fiche fournisseur</h1>
             <div class="flex justify-evenly">
                 <div class="mx-1">
@@ -57,17 +65,71 @@
                                     <p class="text-gray-800">{{ $contact->nom }}, {{ $contact->prenom }}</p>
                                     <p class="text-gray-800">{{ $contact->fonction }}</p>
                                     <p class="text-gray-800">{{ $contact->courriel }}</p>
-                                    <p class="text-gray-800">{{ $contact->numTelephone }}  #{{ $contact->poste }}</p>
+                                    <p class="text-gray-800">{{ $contact->numTelephone }} #{{ $contact->poste }}</p>
                                 </div>
                                 <div class="flex space-x-2">
-                                    <span  class="flex items-center justify-center"><a class="px-2 py-2 bg-blue-300 rounded-lg fa-regular fa-pen-to-square text-blue-500 hover:text-blue-800 text-xl" href="#"></a></span>
-                                    <span data-modal-target="supprimer-contact" data-modal-toggle="supprimer-contact" class="flex items-center justify-center">
-                                        <a class="px-2 py-2 bg-red-300 rounded-lg fa-regular fa-trash-can text-red-500 hover:text-red-800 text-xl" href="#"></a>
-                                        <form action="{{ route('supprimer-contact',$contact->id) }}" method="post">
+                                    <span class="flex items-center justify-center"><a
+                                            class="px-2 py-2 bg-blue-300 rounded-lg fa-regular fa-pen-to-square text-blue-500 hover:text-blue-800 text-xl"
+                                            href="#"></a></span>
+                                    <span data-modal-target="supprimer-contact{{$contact->id}}"
+                                          data-modal-toggle="supprimer-contact{{$contact->id}}"
+                                          class="flex items-center justify-center">
+                                        <a onclick="event.preventDefault();"
+                                           class="px-2 py-2 bg-red-300 rounded-lg fa-regular fa-trash-can text-red-500 hover:text-red-800 text-xl"
+                                           href="#"></a>
+                                        <form action="{{ route('supprimer-contact',$contact->id) }}" method="post"
+                                              id="form_supprimer_contact{{$contact->id}}">
                                             @csrf
                                             @method('DELETE')
                                         </form>
                                     </span>
+
+                                    <!-- modal de suppresssion de contact -->
+                                    <div id="supprimer-contact{{$contact->id}}" tabindex="-1"
+                                         data-modal-backdrop="static"
+                                         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                        <div class="relative p-4 w-full max-w-md max-h-full">
+                                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                                <button type="button"
+                                                        class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                        data-modal-hide="popup-modal">
+                                                    <svg class="w-3 h-3" aria-hidden="true"
+                                                         xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                         viewBox="0 0 14 14">
+                                                        <path stroke="currentColor" stroke-linecap="round"
+                                                              stroke-linejoin="round" stroke-width="2"
+                                                              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                                    </svg>
+                                                    <span class="sr-only">Close modal</span>
+                                                </button>
+                                                <div class="p-4 md:p-5 text-center">
+                                                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
+                                                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                         fill="none" viewBox="0 0 20 20">
+                                                        <path stroke="currentColor" stroke-linecap="round"
+                                                              stroke-linejoin="round" stroke-width="2"
+                                                              d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                                    </svg>
+                                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                                                        Voulez-vous vraimer supprimer ce contact?</h3>
+                                                    <button
+                                                        onclick="event.preventDefault(); document.getElementById('form_supprimer_contact{{$contact->id}}').submit();"
+                                                        data-modal-hide="supprimer-contact" type="button"
+                                                        class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                                        Supprimer
+                                                    </button>
+                                                    <button
+                                                        data-modal-hide="supprimer-contact{{$contact->id}}"
+                                                        type="button"
+                                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                                        Annuler
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
                             <hr class="border-0 h-1 bg-blue-600 my-2">
@@ -205,33 +267,6 @@
 
                 </div>
 
-            </div>
-        </div>
-    </div>
-
-    <!--  section des modals de la pages  -->
-
-    <!-- modal de suppression de contact  -->
-
-    <div id="supprimer-contact" tabindex="-1" data-modal-backdrop="static" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative p-4 w-full max-w-md max-h-full">
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-                <div class="p-4 md:p-5 text-center">
-                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                    </svg>
-                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Voulez-vous vraimer supprimer ce contact?</h3>
-                    <button data-modal-hide="supprimer-contact" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                        Supprimer
-                    </button>
-                    <button data-modal-hide="supprimer-contact" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Annuler</button>
-                </div>
             </div>
         </div>
     </div>
