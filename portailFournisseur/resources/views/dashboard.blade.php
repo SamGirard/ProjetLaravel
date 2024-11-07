@@ -31,6 +31,12 @@
                 </div>
             @endif
 
+                @if(session()->has('ajouter_finance'))
+                    <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                         role="alert">
+                        <span class="font-medium">{{ session()->get('ajouter_finance') }}</span>
+                    </div>
+                @endif
             <!-- Message de mise a jour des finances -->
 
             @if(auth()->user()->numTPS==null and auth()->user()->numTVQ==null)
@@ -43,7 +49,7 @@
                             d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                     </svg>
                     <div class="ms-3 text-sm font-medium">
-                        Ajouter les données de finances <a href="#" class="font-semibold underline hover:no-underline">ici</a>
+                        Ajouter les données de finances <a href="{{ route('profil.create_finance') }}" class="font-semibold underline hover:no-underline">ici</a>
                     </div>
                 </div>
             @endif

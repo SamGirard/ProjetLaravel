@@ -32,16 +32,10 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/supprimer-contact/{id}',[ProfileController::class,'destroyContact'])->name('supprimer-contact');
     Route::get('ajouter_contact',[ProfileController::class,'create_contact'])->name('profil.create_contact');
+
+    Route::get('ajouter_finance',[ProfileController::class,'create_finance'])->name('profil.create_finance');
+    Route::post('ajouter_finance',[ProfileController::class,'store_finance'])->name('profil.store_finance');
 });
-
-
-Route::get('/neq/{neq}', [ApiController::class, 'fetchFromNeq']);
-Route::get('/regions', [ApiController::class, 'fetchRegions']);
-Route::get('/segment', [ApiController::class, 'fetchUNSPSCSegment']);
-Route::get('/family/{segment}', [ApiController::class, 'fetchUNSPSCFamily']);
-Route::get('/class/{family}', [ApiController::class, 'fetchUNSPSCClass']);
-Route::get('/comodity/{class}', [ApiController::class, 'fetchUNSPSCComodity']);
-Route::get('/liste', [GestionController::class, 'listeFournisseur']);
 
 
 require __DIR__.'/auth.php';

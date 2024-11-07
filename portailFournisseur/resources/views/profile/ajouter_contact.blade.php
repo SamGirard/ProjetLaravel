@@ -10,22 +10,7 @@
 
         <!-- Contenu principal -->
         <div class="flex-1 bg-white shadow-lg rounded-lg p-6 ml-6">
-            @if(session()->has('enregistrement_compte'))
-                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-                     role="alert">
-                    <span class="font-medium">{{ session()->get('enregistrement_compte') }}</span>
-                </div>
-            @endif
-
-            @if(session()->has('supprimer_contact'))
-                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-                     role="alert">
-                    <span class="font-medium">{{ session()->get('supprimer_contact') }}</span>
-                </div>
-            @endif
-
-            <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Ajouter un contact</h1>
-
+            <h1 class="text-3xl font-bold text-gray-900 mb-1 border-b-2 border-gray-300 pb-4">Ajouter un contact</h1>
             <div class="container mx-auto mt-6">
                 <form action="{{ route('store_contact') }}" method="post"
                       class="bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4">

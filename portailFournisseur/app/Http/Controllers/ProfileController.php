@@ -66,6 +66,32 @@ class ProfileController extends Controller
     public function create_contact(){
         return view('profile.ajouter_contact');
     }
+
+    public function create_finance(){
+        return view('profile.ajouter_finances');
+    }
+
+    public function store_finance(Request $request){
+        $validated = $request->validate([
+            'num_tps'=>'required',
+            'num_tvq'=>'required',
+            'condition_paiement'=>'required',
+            'devise'=>'required',
+            'mode_communication'=>'required'
+        ]);
+
+        auth()->user()->numTPS = $request->input('num_tps');
+        auth()->user()->numTVQ = $request->input('num_tvq');
+        auth()->user()->conditionPaiement = $request->input('num_tvq');
+        auth()->user()->modeCommunication = $request->input('mode_communication');
+        auth()->user()->devise = $request->input('devise');
+        auth()->user()->save();
+
+        Mail::to(Parametre::first()->courrielAppro)->send(
+            new ModificationFournisseur(['nom'=>auth()->user()->nomEntreprise,'message'=>DB::table('modele_courriel')->select('message')->where('objet', 'Bonjour')->first()->message])
+        );
+        return redirect()->route('dashboard')->with(['ajouter_finance' => 'données de finances ajoutées!']);
+    }
     public function destroyContact($id)
     {
         $contact = Contact::find($id);
