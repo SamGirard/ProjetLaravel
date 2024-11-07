@@ -113,5 +113,4 @@ Route::get('/export-fournisseurs', [GestionController::class, 'exportFournisseur
 Route::get('/fournisseur/{fournisseur}', [GestionController::class, 'zoom'])->name('pageCommis.fiche');
 
 Route::patch('/fournisseur/{fournisseur}/modifier',
-[GestionController::class, 'updateFiche'])->name('updateFiche')
-->middleware('CheckRole:Administrateur, Responsable');
+[GestionController::class, 'updateFiche'])->name('updateFiche');

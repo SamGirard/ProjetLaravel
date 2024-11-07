@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 use App\Mail\mailChangementEtat;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 
 class gestionController extends Controller
@@ -39,6 +40,7 @@ class gestionController extends Controller
     }
 
     public function updateFiche(UserRequest $request, User $fournisseur){
+        Log::info('Received update request for fournisseur:', ['request_data' => $request->all()]);
         try{
             $fournisseur->etatDemande = $request->etatDemande;
             $fournisseur->save();
@@ -48,9 +50,9 @@ class gestionController extends Controller
 
         }
         catch(\Throwable $e){
+            Log::error('Error during fournisseur update:', ['error' => $e->getMessage(), 'stack' => $e->getTraceAsString()]);
             return redirect()->route('pageCommis.liste')->withErrors('Erreur lors de la modification');
         }
-        return redirect()->route('pageCommis.liste');
 
     }
 
