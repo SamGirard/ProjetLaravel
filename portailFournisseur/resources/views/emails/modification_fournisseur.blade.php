@@ -9,7 +9,7 @@
 <h2></h2>
 <p>Modification d'une fiche fournisseur :</p>
 <ul>
-    <li><strong>Message</strong> : {{ $_data['nom'] }} a supprimé un contact </li>
+    <li><strong>Message</strong> : {{ $_data['nom'] }} a modifié sa fiche </li>
     <li><strong>Message</strong> : {{ $_data['message'] }} </li>
 </ul>
 </body>
