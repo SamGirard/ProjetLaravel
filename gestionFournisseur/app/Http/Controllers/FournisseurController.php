@@ -55,6 +55,7 @@ class FournisseurController extends Controller
     {
         $etatInitial = $fournisseur->etatDemande;
 
+            $fournisseur->neq = $request->neq;
             $fournisseur->nomEntreprise = $request->nomEntreprise;
             $fournisseur->typeNumTelephone = $request->typeNumTelephone;
             $fournisseur->numeroTelephone = $request->numeroTelephone;

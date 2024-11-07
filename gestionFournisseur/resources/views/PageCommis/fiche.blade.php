@@ -268,6 +268,7 @@
         @csrf
         @method('PATCH')
         <h1>Test de formulaire</h1>
+        <input type="text" name="neq" placeholder="NEQ" value="{{$fournisseur->neq}}">
         <br>
         <input type="text" name="nomEntreprise" id="" value="{{$fournisseur->nomEntreprise}}" placeholder="Nom de l'entreprise">
         <br>
