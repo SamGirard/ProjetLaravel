@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Mail\ModificationFournisseur;
 use App\Models\Contact;
+use App\Models\Parametre;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -67,6 +71,9 @@ class ProfileController extends Controller
         $contact = Contact::find($id);
         if ($contact) {
             $contact->delete();
+            Mail::to(Parametre::first()->courrielAppro)->send(
+                new ModificationFournisseur(['nom'=>auth()->user()->nomEntreprise,'message'=>DB::table('modele_courriel')->select('message')->where('objet', 'Bonjour')->first()->message])
+            );
             return redirect()->route('dashboard')->with(['supprimer_contact' => 'contact supprimé']);
         }
     }
