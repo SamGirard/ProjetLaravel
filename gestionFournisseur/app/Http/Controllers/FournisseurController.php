@@ -4,7 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Models\User;
+use App\Models\User;
+use App\Http\Requests\UserRequest;
+use App\Models\Brochure;
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailModificationFournisseur;
+use App\Mail\MailChangementEtat;
+
+
 
 class FournisseurController extends Controller
 {
@@ -43,13 +51,12 @@ class FournisseurController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updateFiche(FournisseurRequest $request)
+    public function updateFiche(UserRequest $request, User $fournisseur)
     {
-        try{
-            $fournisseur = User::first();
+        $etatInitial = $fournisseur->etatDemande;
 
-            $fournisseur->neq = $request->neq;
             $fournisseur->nomEntreprise = $request->nomEntreprise;
+            $fournisseur->typeNumTelephone = $request->typeNumTelephone;
             $fournisseur->numeroTelephone = $request->numeroTelephone;
             $fournisseur->poste = $request->poste;
             $fournisseur->email = $request->email;
@@ -70,25 +77,23 @@ class FournisseurController extends Controller
             $fournisseur->regionAdministrative = $request->regionAdministrative;
             $fournisseur->code_administratif = $request->code_administratif;
                 
-            Mail::to($fournisseurs->email)->send(new MailModificationFournisseur($request->role, $request->etatDemande));
+            Mail::to($fournisseur->email)->send(new MailModificationFournisseur($request->nomEntreprise, $request->etatDemande));
 
-            if($fournisseur->etatDemande != $request->etatDemande){
-                Mail::to($request->email)->send(new MailChangementEtat($request->email, $request->etatDemande));
+            if($etatInitial != $request->etatDemande){
+                Mail::to($request->email)->send(new MailChangementEtat($request->etatDemande, $request->email));
             }
 
             if($request->etatDemande != "Refusé"){
                 $fournisseur->raisonRefus = "";
-            } //else
+            } else {
+                $fournisseur->raisonRefus = $request->raisonRefus;
+                Brochure::where('fournisseur_id', $fournisseur->id)->delete();
+            }
             
             $fournisseur->save();
 
             return redirect()->route('pageCommis.liste')->with('success', 'Le fournisseurs est modifier!');
         }
-        catch(\Throwable $e){
-            return redirect()->route('pageCommis.liste')->withErrors('Erreur lors de la modification!');
-        }
-        return redirect()->route('pageCommis.liste');
-    }
 
     /**
      * Remove the specified resource from storage.

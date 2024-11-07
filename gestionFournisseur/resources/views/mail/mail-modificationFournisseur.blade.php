@@ -8,7 +8,7 @@
 <body>
     <div class="container">
         <h1>Bonjour,</h1>
-        <h4>La fiche de fournisseur de {{nomEntreprise}} à été modifier</h4>
+        <h4>La fiche de fournisseur de {{$nomEntreprise}} à été modifier</h4>
         <div class="status">
             État de la demande : {{$etatDemande}}
         </div>

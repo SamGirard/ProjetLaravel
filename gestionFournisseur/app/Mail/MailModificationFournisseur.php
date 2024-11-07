@@ -16,7 +16,7 @@ class MailModificationFournisseur extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(private $nomEntreprise, $etatDemande)
+    public function __construct(private $nomEntreprise, private $etatDemande)
     {
         //
     }
@@ -37,7 +37,7 @@ class MailModificationFournisseur extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.mail-modificationFournisseurs',
+            view: 'mail.mail-modificationFournisseur',
             with: ['nomEntreprise' => $this->nomEntreprise,
                     'etatDemande' => $this->etatDemande,
             ]

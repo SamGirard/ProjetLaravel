@@ -45,7 +45,7 @@ Route::patch('/modifierEmploye',
 
 
 //Route pour le login d'employe
-Route::get('/loginEmploye', 
+Route::get('/', 
 [EmployeController::class, 'showLoginForm'])->name('loginEmploye');
 
 Route::post('/loginEmploye', 
@@ -91,10 +91,6 @@ Route::patch('/fournisseur/{fournisseur}/modifier',
 [FournisseurController::class, 'updateFiche'])->name('updateFiche')
 ->middleware('CheckRole:Administrateur, Responsable');
 
-//route welcome
-Route::get('/', function () {
-    return view('welcome');
-});
 
 //Route des endpoints
 Route::get('/neq/{neq}', [ApiController::class, 'fetchFromNeq']);

@@ -8,7 +8,9 @@
 <script src="https://kit.fontawesome.com/f25f0490b7.js" crossorigin="anonymous"></script>
 
 @if($fournisseur)
-<form method="POST" action="{{route('updateFiche', [$fournisseur->id]) }}">
+<!--<form method="POST" action="{{route('updateFiche', [$fournisseur->id]) }}">-->
+@csrf
+@method('PATCH')
 <div class="container mx-auto mt-6 flex">
         <div class="flex-1 p-6 ml-6">
             <div class="flex justify-evenly">
@@ -255,10 +257,37 @@
         </div>
     </div>
 @endif
-<div class="flex">
+
+</div>
+
+
+<!--/////////////////////////////////////////////-->
+
+<div>
+    <form method="POST" action="{{route('updateFiche', [$fournisseur]) }}">
         @csrf
         @method('PATCH')
+        <h1>Test de formulaire</h1>
+        <br>
+        <input type="text" name="nomEntreprise" id="" value="{{$fournisseur->nomEntreprise}}" placeholder="Nom de l'entreprise">
+        <br>
+     
+        @if($fournisseur)
+            <select name="typeNumTelephone">
+                <option value="">Type de téléphone</option>
+                <option value='["Bureau"]'>Bureau</option>
+                <option value='["Télécopieur"]'>Télécopieur</option>
+                <option value='["Cellulaire"]'>Cellulaire</option>
+            </select>
+        @endif
+        <br>
 
+        <input type="text" name="numeroTelephone" value="{{$fournisseur->numeroTelephone}}" placeholder="Num de tel format ###-###-####">
+        <br>
+        <input type="text" name="poste" placeholder="poste" value="{{$fournisseur->poste}}">
+        <br>
+        <input type="email" name="email" placeholder="email" value="{{$fournisseur->email}}">
+        <br>
         @if($fournisseur)
             <select name="etatDemande">
                 <option value="">État de la demande</option>
@@ -269,14 +298,108 @@
             </select>
         @endif
         <br>
-        <button type="submit" class="mt-5">Enregistrer</button>
-    </form>
+        <textarea name="raisonRefus" id="" placeholder="raison de refus"></textarea>
+        <br>
+        <input type="text" name="numTPS" placeholder="numero TPS" value="{{$fournisseur->numTPS}}">
+        <br>
+        <input type="text" name="numTVQ" placeholder="numero Tvq" value="{{$fournisseur->numTVQ}}">
+        <br>
 
-    <div class="ml-4">
         @if($fournisseur)
-            <p>État en cours : {{$fournisseur->etatDemande}}</p>
+            <select name="conditionPaiement">
+                <option value="">Condition de paiement</option>
+                <option value="30 jours net">30 jours net</option>
+                <option value="45 jours net">45 jours net</option>
+                <option value="60 jours net">60 jours net</option>
+            </select>
         @endif
-    </div>
+        <br>
+
+        @if($fournisseur)
+            <select name="devise">
+                <option value="">Devise</option>
+                <option value="CAD">CAD</option>
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+            </select>
+        @endif
+        <br>
+
+        @if($fournisseur)
+            <select name="modeCommunication">
+                <option value="">Mode de communication</option>
+                <option value="Téléphone">Téléphone</option>
+                <option value="Courriel">Courriel</option>
+            </select>
+        @endif
+        <br>
+
+        <input type="text" name="numCivique" placeholder="numeroCivique" value="{{$fournisseur->numCivique}}">
+        <br>
+
+        <input type="text" name="rue" placeholder="rue" value="{{$fournisseur->rue}}">
+        <br>
+
+        <input type="text" name="bureau" placeholder="bureau" value="{{$fournisseur->bureau}}">
+        <br>
+
+        @if($fournisseur)
+            <select name="ville">
+                <option value="">Ville</option>
+                <option value="Montréal">Montréal</option>
+                <option value="Ville de Québec">Ville de Québec</option>
+                <option value="Trois-Rivières">Trois-Rivières</option>
+                <option value="Shawinigan">Shawinigan</option>
+            </select>
+        @endif
+        <br>
+
+        @if($fournisseur)
+            <select name="province">
+                <option value="">Province</option>
+                <option value="Québec">Québec</option>
+                <option value="Ontario">Ontario</option>
+                <option value="Alberta">Alberta</option>
+                <option value="Manitoba">Manitoba</option>
+            </select>
+        @endif
+        <br>
+
+        <input type="text" name="codePostal" placeholder="Code postal" value="{{$fournisseur->codePostal}}">
+        <br>
+
+        <input type="text" name="siteInternet" placeholder="Site internet" value="{{$fournisseur->siteInternet}}">
+        <br>
+
+        @if($fournisseur)
+            <select name="regionAdministrative">
+                <option value="">Region Admin</option>
+                <option value="Montréal">Montréal</option>
+                <option value="Centre-du-Québec">Centre-du-Québec</option>
+                <option value="Mauricie">Mauricie</option>
+            </select>
+        @endif
+        <br>
+
+        @if($fournisseur)
+            <select name="code_administratif">
+                <option value="">Code Administratif</option>
+                <option value="ADM001">ADM001</option>
+                <option value="ADM002">ADM001</option>
+                <option value="ADM003">ADM003</option>
+            </select>
+        @endif
+        <br>
+
+        <button type="submit" class="mt-5">Enregistrer</button>
+
+    </form>
+    <br>
+    <form method="POST" action="{{route('supprimerFournisseur', [$fournisseur] )}}">
+        @csrf
+        @method('DELETE')
+        <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?');">Supprimer le fournisseur</button>
+    </form>
 </div>
 
 @endsection
