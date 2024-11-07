@@ -59,12 +59,15 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
+    public function create_contact(){
+        return view('profile.ajouter_contact');
+    }
     public function destroyContact($id)
     {
         $contact = Contact::find($id);
         if ($contact) {
             $contact->delete();
-            return redirect()->route('dashboard')->with(['supprimer_contact' => 'ce contact a été supprimé']);
+            return redirect()->route('dashboard')->with(['supprimer_contact' => 'contact supprimé']);
         }
     }
 }

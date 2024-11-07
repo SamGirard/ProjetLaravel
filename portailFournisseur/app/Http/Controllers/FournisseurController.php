@@ -199,9 +199,24 @@ class FournisseurController extends Controller
             'telephone_contact' => ['required', 'numeric', 'regex:/^(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/'],
             'poste_contact' => ['nullable', 'max_digits:6', 'numeric'],
         ]);
-        $request->session()->put('form_contact', $request->all());
+        if (auth()->user()){
+            $contact = new Contact();
+            $contact->nom = $request->input('nom_contact');
+            $contact->prenom = $request->input('prenom_contact');
+            $contact->courriel = $request->input('email_contact');
+            $contact->fonction = $request->input('fonction_contact');
+            $contact->nom = $request->input('nom_contact');
+            $contact->typeNumTelephone = $request->input('type_telephone_contact');
+            $contact->numTelephone = $request->input('telephone_contact');
+            $contact->poste = $request->input('poste_contact');
+            $contact->fournisseur_id = auth()->user()->id;
+            $contact->save();
+            return redirect()->route('dashboard')->with(['ajouter_contact' => 'contact enregistré']);
+        }else{
 
-        return redirect()->route('create_brochure');
+            $request->session()->put('form_contact', $request->all());
+            return redirect()->route('create_brochure');
+        }
     }
 
     public function create_contact(Request $request)

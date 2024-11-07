@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::delete('/supprimer-contact/{id}',[ProfileController::class,'destroyContact'])->name('supprimer-contact');
+    Route::get('ajouter_contact',[ProfileController::class,'create_contact'])->name('profil.create_contact');
 });
 
 

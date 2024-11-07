@@ -24,6 +24,13 @@
                 </div>
             @endif
 
+            @if(session()->has('ajouter_contact'))
+                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                     role="alert">
+                    <span class="font-medium">{{ session()->get('ajouter_contact') }}</span>
+                </div>
+            @endif
+
             <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Ma fiche fournisseur</h1>
             <div class="flex justify-evenly">
                 <div class="mx-1">
@@ -55,7 +62,9 @@
 
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Contacts</legend>
-                        <i class="text-right fa-solid fa-plus bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"></i>
+                        <a href="{{ route('profil.create_contact') }}">
+                            <i class="text-right fa-solid fa-plus bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"></i>
+                        </a>
                         @foreach(auth::user()->contacts as $contact)
                             <div class="flex justify-around">
                                 <div class="flex items-center justify-center">
