@@ -2,25 +2,75 @@ import './bootstrap';
 import 'flowbite';
 
 /////////// script pour verifier si les checkbox sont cocher pour supprimer. page -> role.blade.php ///////////
-function verifCheckSupprimer(){
-    const checkboxes = document.querySelectorAll(".checkbox-emp") //recuperer les checkboxs
+document.addEventListener('DOMContentLoaded', function () {
+    verifCheckSupprimer(); 
+});
+
+function verifCheckSupprimer() {
+    let employeSelect = document.querySelectorAll('input[id="employeSelect"]');
+
+    let nbrAdmin = 0;
+    let nbrResponsable = 0;
+
+    const checkboxes = document.querySelectorAll(".checkbox-emp"); // Récupérer les checkbox
     const deleteBtn = document.getElementById("supprimerBtn");
 
-    const estCocher = Array.from(checkboxes).some(checkbox => checkbox.checked); //vérifier si les checkbox sont cocher
+    const estCocher = Array.from(checkboxes).some(checkbox => checkbox.checked); // Vérifier si les checkbox sont cochées
 
-    //désactive le bouton si rien est cocher
+    // Désactiver le bouton si rien n'est coché
     if (!estCocher) {
-        deleteBtn.disabled = true; // Désactiver le bouton
-        deleteBtn.classList.add("text-gray-300"); // Changer la couleur en gris
-        deleteBtn.classList.remove("text-red-600"); // Enlever la classe qui colorise en rouge
-        deleteBtn.classList.remove("hover:underline")
+        deleteBtn.disabled = true;
+        deleteBtn.classList.add("text-gray-300");
+        deleteBtn.classList.remove("text-red-600");
+        deleteBtn.classList.remove("hover:underline");
     } else {
-        deleteBtn.disabled = false; // Activer le bouton
-        deleteBtn.classList.remove("text-gray-300"); // Retirer la couleur gris si activé
-        deleteBtn.classList.add("text-red-600"); // Ajouter la classe rouge quand actif
-        deleteBtn.classList.add("hover:underline")
+        deleteBtn.disabled = false;
+        deleteBtn.classList.remove("text-gray-300");
+        deleteBtn.classList.add("text-red-600");
+        deleteBtn.classList.add("hover:underline");
     }
+
+    // Compter le nombre d'admins et de responsables
+    employeSelect.forEach(select => {
+        let roleChoisi = select.getAttribute('data-role');
+        if (roleChoisi === "Administrateur") {
+            nbrAdmin++;
+        } else if (roleChoisi === "Responsable") {
+            nbrResponsable++;
+        }
+    });
+
+    // Désactiver les cases "Administrateur" ou "Responsable" si nécessaire
+    checkboxes.forEach(checkbox => {
+        let role = checkbox.getAttribute('data-role');
+        let label = checkbox.nextElementSibling; // Sélectionner l'élément <label> qui suit la checkbox
+
+        // Désactiver la case Administrateur si nous avons déjà 2 admins
+        if (role === "Administrateur") {
+            if (nbrAdmin <= 2) {
+                checkbox.disabled = true;
+                label.classList.add("text-disabled"); // Appliquer le style de texte désactivé
+            } else {
+                checkbox.disabled = false;
+                label.classList.remove("text-disabled"); // Retirer le style désactivé
+            }
+        }
+
+        // Désactiver la case Responsable si nous avons déjà 1 responsable ou plus
+        if (role === "Responsable") {
+            if (nbrResponsable >= 1) {
+                checkbox.disabled = true;
+                label.classList.add("text-disabled"); // Appliquer le style de texte désactivé
+            } else {
+                checkbox.disabled = false;
+                label.classList.remove("text-disabled"); // Retirer le style désactivé
+            }
+        }
+    });
 }
+
+// Appel initial pour vérifier l'état au chargement de la page
+verifCheckSupprimer();
 
 //ajoute un event listener sur toutes les check box
 const checkboxes = document.querySelectorAll(".checkbox-emp") 
@@ -47,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
 
         roleSelect.forEach(select => {
-            if (nbrAdmin <= 2 && select.value == "Administrateur") {
+            if (nbrAdmin == 2 && select.value == "Administrateur") {
                 select.disabled = true; // Désactive les rôles qui ne sont pas Administrateur si le nombre d'admins est <= 2
             } else if (nbrResponsable <= 1 && select.value == "Responsable") {
                 select.disabled = true; // Désactive les rôles qui ne sont pas Responsable si le nombre de responsables est <= 1

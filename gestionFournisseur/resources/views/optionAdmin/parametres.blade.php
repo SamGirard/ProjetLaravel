@@ -2,7 +2,7 @@
     @section('title', "Paramètres")
     
     @section('contenu')
-        <div class="bg-white py-10 sm:py-10">
+        <div class="bg-white py:10 sm:py-10">
             <div class="flex justify-center">
                 <div class="mb-8">
                     <ul class="hidden text-sm font-medium text-center text-gray-500 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-400">
@@ -15,8 +15,8 @@
                     </ul>
                 </div>
             </div>
-            <div class="items-center flex justify-center grid grid-cols-3">
-                <form method="POST" action="{{ route('modifierParam') }}" class="px-8 mb-4 col-start-2">
+            <div class="items-center flex justify-center grid grid-cols-4">
+                <form method="POST" action="{{ route('modifierParam') }}" class="px-8 mb-4 col-start-2 col-span-2">
                         @method('PATCH')
                         @csrf
                         <h1 class="font-bold text-2xl mb-5">Gestion des paramètres</h1>
