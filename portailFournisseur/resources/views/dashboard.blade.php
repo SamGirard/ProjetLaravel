@@ -56,7 +56,7 @@
             <!--  Fin de mise a jour des finances -->
             <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Ma fiche fournisseur</h1>
             <div class="flex justify-evenly">
-                <div class="mx-1">
+                <div class="mx-1 w-1/3">
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Statut de la demande</legend>
                         <p class="text-gray-800">
@@ -195,7 +195,7 @@
                     </fieldset>
                 </div>
 
-                <div class="mx-1">
+                <div class="mx-1 w-1/3">
 
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Produits et services offerts
@@ -250,7 +250,6 @@
                             {{ auth()->user()->service->details }}
                         </p>
                     </fieldset>
-
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Brochures et cartes
                             d'affaire
@@ -258,7 +257,7 @@
                         <p class="text-gray-800">
                         <ul>
                             @foreach(auth()->user()->brochures as $brochure)
-                                <li class="flex items-center mb-2">
+                                <li class="flex items-center justify-around mb-2">
                                     <a href="{{ asset('storage/brochures/'.$brochure->nom) }}"
                                        download="{{ $brochure->nom }}">
                                         @php
@@ -287,16 +286,42 @@
                                         @endphp
 
                                         <i class="{{ $iconClass }} mr-2"></i>
-                                        {{ $brochure->nom }}
+                                        {{ $brochure->type }}
                                     </a>
                                     <span class="ml-2">{{ number_format(Storage::size('public/brochures/' . $brochure->nom) / 1024, 2) }} Ko</span>
+                                    <span>{{ $brochure->created_at->format('d-m-y') }}</span>
                                 </li>
                             @endforeach
 
                         </ul>
                         </p>
                     </fieldset>
+                </div>
 
+                <div class="mx-1 w-1/3">
+                    <fieldset class="border-2 border-blue-600 rounded-lg p-4">
+                        <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Finances</legend>
+                        <p class="text-gray-800 tems-center justify-center">
+                        <p>
+                            <span class="font-medium">TPS </span>  {{ auth::user()->numTPS }}
+                        </p>
+                        <p class="my-1">
+                            <span class="font-medium">TVQ </span>  {{ auth::user()->numTVQ }}
+                        </p>
+                        <p class="my-1">
+                            <span class="font-medium">condition de paiement</span><br>
+                            {{ auth::user()->conditionPaiement }}
+                        </p>
+                        <p class="my-1">
+                            <span class="font-medium">Devise</span><br>
+                            {{ auth::user()->devise }}
+                        </p>
+                        <p class="my-1">
+                            <span class="font-medium">Mode de communication</span><br>
+                            {{ auth::user()->modeCommunication}}
+                        </p>
+                        </p>
+                    </fieldset>
                 </div>
 
             </div>

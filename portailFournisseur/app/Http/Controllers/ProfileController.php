@@ -82,7 +82,7 @@ class ProfileController extends Controller
 
         auth()->user()->numTPS = $request->input('num_tps');
         auth()->user()->numTVQ = $request->input('num_tvq');
-        auth()->user()->conditionPaiement = $request->input('num_tvq');
+        auth()->user()->conditionPaiement = $request->input('condition_paiement');
         auth()->user()->modeCommunication = $request->input('mode_communication');
         auth()->user()->devise = $request->input('devise');
         auth()->user()->save();

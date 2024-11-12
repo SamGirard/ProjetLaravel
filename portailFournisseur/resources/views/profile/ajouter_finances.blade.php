@@ -21,8 +21,14 @@
                             <label for="num_tps" class="block text-gray-600 text-sm font-bold mb-2">Numéro de
                                 TPS</label>
                             <input required id="num_tps" name="num_tps" type="text"
-                                   class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
+                                   class="@error('num_tps') border-red-500 @else border-gray-300 @enderror shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            @error('num_tps')
+                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                            @enderror
                         </div>
+                        @error('num_tps')
+                        <span class="text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="mb-4 flex space-x-4">
@@ -30,8 +36,14 @@
                             <label for="num_tvq" class="block text-gray-600 text-sm font-bold mb-2">Numéro de
                                 TVQ</label>
                             <input required id="num_tvq" name="num_tvq" type="text"
-                                   class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
+                                   class="@error('num_vq') border-red-500 @else border-gray-300 @enderror shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            @error('num_tvq')
+                            <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
+                            @enderror
                         </div>
+                        @error('num_tvq')
+                        <span class="text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="mb-4">
@@ -55,13 +67,13 @@
                     <fieldset class="border border-gray-200 rounded-lg p-6">
                         <legend class="font-semibold text-gray-800 mb-4">Devise</legend>
                         <div class="flex items-center mb-4">
-                            <input id="cad" type="radio" value="cad" name="devise"
-                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <input id="cad" type="radio" value="CAD-Dollar canadien" name="devise"
+                                   class=" w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="cad" class="ms-2 block text-gray-600 text-sm font-bold">CAD-Dollar
-                                canaadien</label>
+                                canadien</label>
                         </div>
                         <div class="flex items-center">
-                            <input checked id="usd" type="radio" value="usd" name="devise"
+                            <input checked id="usd" type="radio" value="USD-Dollar des États-unis" name="devise"
                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="usd" class="ms-2 block text-gray-600 text-sm font-bold">USD-Dollar des
                                 États-unis</label>

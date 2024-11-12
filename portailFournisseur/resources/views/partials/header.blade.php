@@ -17,6 +17,11 @@
                        onclick="event.preventDefault(); document.getElementById('formDeconnexion').submit();"></i>
                 </form>
             </div>
+        @else
+           <div>
+               <a href="{{ route('login') }}" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md">Connexion</a>
+               <a href="{{ route('create_identification') }}" class="bg-green-700 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-md">Inscription</a>
+           </div>
         @endif
     </div>
 </header>

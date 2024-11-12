@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="35486ead-830c-4d91-914f-9d2f530e1fa0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/profile/ajouter_contact.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/FournisseurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/FournisseurController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/ProfileController.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/ProfileController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/app.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/dashboard.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/dashboard.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/partials/header.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/partials/header.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/profile/ajouter_finances.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/profile/ajouter_finances.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -313,9 +313,6 @@
       <option name="pestRunnerSettings">
         <PestRunner configuration_file="$PROJECT_DIR$/gestionFournisseur/phpunit.xml" scope="ConfigurationFile" use_alternative_configuration_file="true" />
       </option>
-      <option name="runnerSettings">
-        <PhpTestRunnerSettings configuration_file="$PROJECT_DIR$/gestionFournisseur/phpunit.xml" scope="ConfigurationFile" use_alternative_configuration_file="true" />
-      </option>
       <method v="2" />
     </configuration>
   </component>
@@ -349,7 +346,8 @@
       <workItem from="1730217696389" duration="21774000" />
       <workItem from="1730825795775" duration="13355000" />
       <workItem from="1730940833153" duration="539000" />
-      <workItem from="1730984554743" duration="2693000" />
+      <workItem from="1730984554743" duration="11197000" />
+      <workItem from="1731430910979" duration="7795000" />
     </task>
     <servers />
   </component>
