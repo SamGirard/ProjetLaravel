@@ -83,11 +83,11 @@
                             };
 
                             $('#dropdownEtatButton').html(`
-            ${newStatus}
-            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-            </svg>
-        `).removeClass().addClass(`text-center inline-flex items-center text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 ${statusClasses[newStatus]}`);
+                                ${newStatus}
+                                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                </svg>
+                            `).removeClass().addClass(`text-center inline-flex items-center text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 ${statusClasses[newStatus]}`);
 
                             $('#etatDemande').attr('value', newStatus);
 
@@ -105,13 +105,13 @@
 
                             updatedStatuses.forEach(status => {
                                 dropdownContent += `
-                <li>
-                    <span class="changeStatusButton ${statusClasses[status]} 
-                            text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 hover:cursor-pointer">
-                        ${status}
-                    </span>
-                </li>
-            `;
+                                <li>
+                                    <span class="changeStatusButton ${statusClasses[status]} 
+                                            text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 hover:cursor-pointer">
+                                        ${status}
+                                    </span>
+                                </li>
+                            `;
                             });
 
                             $('#dropdownEtat ul').html(dropdownContent);
@@ -164,8 +164,8 @@
                                 </div> 
                             </div>
                             <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                                <button id="save-identification" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Continuer les modifications</button>
-                                <button data-modal-hide="identification-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Annuler</button>
+                                <button data-modal-hide="identification-modal" id="save-identification" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Continuer les modifications</button>
+                                <button data-modal-hide="identification-modal" id="cancel-identification" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Annuler</button>
                             </div>
                         </div>
                     </div>
@@ -176,45 +176,50 @@
                     var isNameValid = true;
                     var isEmailValide = true;
 
-                    document.getElementById('neq').addEventListener('input', function() {
-                        const regexNeq = /^(11|22|33|88)[4-9]\d{6}$/;
-
-                        if(this.value !== "") {
-                            if(regexNeq.test(this.value)) {
-                                $('#neqErrorMessage').addClass('hidden');
-                                isNeqValid = true;
-                            }
-                            else {
-                                $('#neqErrorMessage').removeClass('hidden');
-                                isNeqValid = false;
-                            }
+                    function checkFormValidity() {
+                        const saveButton = document.getElementById('save-identification');
+                        if (isFormValid()) {
+                            saveButton.removeAttribute('disabled');
+                        } else {
+                            saveButton.setAttribute('disabled', true);
                         }
+                    }
+
+                    document.getElementById('neq').addEventListener('input', function() {
+                        const regexNeq = /^(11|22|33|88)[4-9]\d{6}$|^$/;
+                        if (regexNeq.test(this.value)) {
+                            $('#neqErrorMessage').addClass('hidden');
+                            isNeqValid = true;
+                        } else {
+                            $('#neqErrorMessage').removeClass('hidden');
+                            isNeqValid = false;
+                        }
+                        checkFormValidity();
                     });
 
                     document.getElementById('nomEntreprise').addEventListener('input', function() {
-                        if(this.value !== "") {
+                        if (this.value !== "") {
                             $('#nomErrorMessage').addClass('hidden');
                             isNameValid = true;
-                        }
-                        else {
+                        } else {
                             $('#nomErrorMessage').removeClass('hidden');
                             isNameValid = false;
                         }
+                        checkFormValidity();
                     });
 
                     document.getElementById('email').addEventListener('input', function() {
                         const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                        
-                        if(regexEmail.test(this.value)) {
+                        if (regexEmail.test(this.value)) {
                             $('#emailErrorMessage').addClass('hidden');
                             isEmailValide = true;
-                        }
-                        else {
+                        } else {
                             $('#emailErrorMessage').removeClass('hidden');
                             isEmailValide = false;
                         }
+                        checkFormValidity();
                     });
-                
+
                     const modal = document.getElementById('identification-modal');
                     const neqDisplay = document.getElementById('neq-display');
                     const nomEntrepriseDisplay = document.getElementById('nomEntreprise-display');
@@ -225,21 +230,28 @@
                             neqDisplay.textContent = document.getElementById('neq').value;
                             nomEntrepriseDisplay.textContent = document.getElementById('nomEntreprise').value;
                             emailDisplay.textContent = document.getElementById('email').value;
-
-                            modal.classList.add('hidden');
                         }
+                    });
+                    
+                    document.getElementById('cancel-identification').addEventListener('click', function(event) {
+                        document.getElementById('neq').value = neqDisplay.textContent;
+                        document.getElementById('nomEntreprise').value = nomEntrepriseDisplay.textContent;
+                        document.getElementById('email').value = emailDisplay.textContent;
                     });
 
                     function isFormValid() {
                         return isEmailValide && isNeqValid && isNameValid;
                     }
+
+                    checkFormValidity();
                 </script>
 
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Contacts</legend>
                         <div class="text-right">
-                            <a href="#" class="text-blue-600 hover:text-blue-900"><i
-                                    class="text-xl fa-regular fa-pen-to-square"></i></a>
+                        <button data-modal-target="contact-modal" data-modal-toggle="contact-modal" class="text-blue-600 hover:text-blue-900" type="button">
+                            <i class="text-xl fa-regular fa-pen-to-square"></i>
+                        </button>
                         </div>
                         @foreach($contacts as $contact)
                             <div class="flex justify-around">
@@ -256,6 +268,201 @@
                             <hr class="border-0 h-1 bg-blue-600 my-2">
                         @endforeach
                     </fieldset>
+
+                    <div id="contact-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative p-4 w-full max-w-2xl max-h-full">
+                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                        Contacts
+                                    </h3>
+                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="contact-modal">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                <div class="p-4 md:p-5 space-y-4">
+                                    <div id="accordion-contact" data-accordion="collapse" data-active-classes="bg-white dark:bg-gray-900 text-gray-900 dark:text-white" data-inactive-classes="text-gray-500 dark:text-gray-400">
+                                        @foreach($contacts as $contact)
+                                            <h2 id="accordion-contact-heading-{{ $contact->id }}">
+                                                <button type="button" class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#accordion-contact-body-{{ $contact->id }}" aria-expanded="false" aria-controls="accordion-contact-body-{{ $contact->id }}">
+                                                <span>{{ $contact->nom }}, {{ $contact->prenom }}</span>
+                                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                                                </svg>
+                                                </button>
+                                            </h2>
+                                            <div id="accordion-contact-body-{{ $contact->id }}" class="hidden" aria-labelledby="accordion-contact-heading-1">
+                                                <div class="py-5 border-b border-gray-200 dark:border-gray-700">
+                                                    <div class="grid gap-6 mb-6 md:grid-cols-2">
+                                                        <div>
+                                                            <label for="nom" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom</label>
+                                                            <input type="text" id="nom" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->nom }}" value="{{ $contact->nom }}" required />
+                                                        </div>
+                                                        <div>
+                                                            <label for="prenom" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Prénom</label>
+                                                            <input type="text" id="prenom" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->prenom }}" value="{{ $contact->prenom }}" required />
+                                                        </div>
+                                                        <div>
+                                                            <label for="fonction" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fonction</label>
+                                                            <input type="text" id="fonction" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->fonction }}" value="{{ $contact->fonction }}" required />
+                                                        </div>  
+                                                        <div>
+                                                            <label for="numTelephone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro de téléphone</label>
+                                                            <input type="text" id="numTelephone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->numTelephone }}" value="{{ $contact->numTelephone }}" required />
+                                                        </div>
+                                                        <div>
+                                                            <label for="typeNumTelephone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type de numéro</label>
+                                                            <select id="typeNumTelephone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                                <option value="Bureau" <?= $contact->typeNumTelephone == 'Bureau' ? 'selected' : '' ?>>Bureau</option>
+                                                                <option value="Télécopieur" <?= $contact->typeNumTelephone == 'Télécopieur' ? 'selected' : '' ?>>Télécopieur</option>
+                                                                <option value="Cellulaire" <?= $contact->typeNumTelephone == 'Cellulaire' ? 'selected' : '' ?>>Cellulaire</option>
+                                                            </select>
+                                                        </div>
+                                                        <div>
+                                                            <label for="poste" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Poste</label>
+                                                            <input type="text" id="poste" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->poste }}" value="{{ $contact->poste }}"  required />
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-6">
+                                                        <label for="courriel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Courriel</label>
+                                                        <input type="email" id="courriel" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->courriel }}" value="{{ $contact->courriel }}" required />
+                                                    </div> 
+                                                    <button id="delete-contact-{{ $contact->id }}" type="button" class="delete-contact-btn text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-contact-id="{{ $contact->id }}">
+                                                        Supprimer
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <button id="add-contact" type="button">
+                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                                <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                    <button data-modal-hide="contact-modal" id="save-contact" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Continuer les modifications</button>
+                                    <button data-modal-hide="contact-modal" id="cancel-contact" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Annuler</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        var contacts = @json($contacts);
+                        var fournisseur = @json($fournisseur);
+                        document.querySelectorAll('.delete-contact-btn').forEach(button => {
+                            button.addEventListener('click', async function (event) {
+                                const contactId = event.target.getAttribute('data-contact-id');
+                                const accordionElement = document.getElementById(`accordion-contact-body-${contactId}`);
+                                const accordionHeading = document.getElementById(`accordion-contact-heading-${contactId}`);
+                                
+                                accordionElement.remove();
+                                accordionHeading.remove();
+                                contacts = contacts.filter(contact => contact.id !== contactId);
+                            });
+                        });
+
+                        document.getElementById('add-contact').addEventListener('click', function (event) {
+                            const newContact = {
+                                id: contacts.length > 0 ? contacts[contacts.length - 1].id + 1 : 1,
+                                nom: "",
+                                prenom: "",
+                                courriel: "",
+                                fonction: "",
+                                typeNumTelephone: "",
+                                numTelephone: 0,
+                                poste: "",
+                                fournisseur_id: fournisseur.id,
+                            };
+
+                            contacts.push(newContact);
+
+                            const contact = contacts[contacts.length - 1];
+
+                            console.log(contacts);
+
+                            const newAccordion = `
+                                <h2 id="accordion-contact-heading-${contact.id}">
+                                    <button type="button" class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#accordion-contact-body-${contact.id}" aria-expanded="true" aria-controls="accordion-contact-body-${contact.id}">
+                                        <span>Nouveau contact</span>
+                                        <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                                        </svg>
+                                    </button>
+                                </h2>
+                                <div id="accordion-contact-body-${contact.id}" class="hidden" aria-labelledby="accordion-contact-heading-${contact.id}">
+                                    <div class="py-5 border-b border-gray-200 dark:border-gray-700">
+                                        <div class="grid gap-6 mb-6 md:grid-cols-2">
+                                            <div>
+                                                <label for="nom" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom</label>
+                                                <input type="text" id="nom" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un nom..." required />
+                                            </div>
+                                            <div>
+                                                <label for="prenom" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Prénom</label>
+                                                <input type="text" id="prenom" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un prénom..." required />
+                                            </div>
+                                            <div>
+                                                <label for="fonction" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fonction</label>
+                                                <input type="text" id="fonction" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer une fonction..." required />
+                                            </div>  
+                                            <div>
+                                                <label for="numTelephone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro de téléphone</label>
+                                                <input type="text" id="numTelephone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un numéro de téléphone..." required />
+                                            </div>
+                                            <div>
+                                                <label for="typeNumTelephone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type de numéro</label>
+                                                <select id="typeNumTelephone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                    <option value="Bureau" selected}>Bureau</option>
+                                                    <option value="Télécopieur">Télécopieur</option>
+                                                    <option value="Cellulaire">Cellulaire</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label for="poste" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Poste</label>
+                                                <input type="text" id="poste" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer le poste du numéro..." required />
+                                            </div>
+                                        </div>
+                                        <div class="mb-6">
+                                            <label for="courriel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Courriel</label>
+                                            <input type="email" id="courriel" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un courriel..." required />
+                                        </div> 
+                                        <button id="delete-contact-${contact.id}" type="button" class="delete-contact-btn text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-contact-id="${contact.id}">
+                                            Supprimer
+                                        </button>
+                                    </div>
+                                </div>`;
+
+                            $('#accordion-contact').append(newAccordion);
+
+                            document.getElementById('accordion-contact-heading-' + contact.id).addEventListener('click', function() {
+                                const button = this.querySelector('button');
+                                const body = document.getElementById(button.getAttribute('aria-controls'));
+                                const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+                                body.classList.toggle('hidden', !isExpanded);
+                                
+                                button.setAttribute('aria-expanded', !isExpanded);
+
+                                const icon = button.querySelector('svg');
+                                icon.classList.toggle('rotate-180', !isExpanded);
+                            });
+
+                            document.getElementById('delete-contact-' + contact.id).addEventListener('click', async function (event) {
+                                const contactId = contact.id;
+                                const accordionElement = document.getElementById(`accordion-contact-body-${contactId}`);
+                                const accordionHeading = document.getElementById(`accordion-contact-heading-${contactId}`);
+                                
+                                accordionElement.remove();
+                                accordionHeading.remove();
+                                contacts = contacts.filter(contact => contact.id !== contactId);
+                            });
+                        });
+                    </script>
 
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Adresse</legend>
