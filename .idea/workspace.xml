@@ -5,12 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="35486ead-830c-4d91-914f-9d2f530e1fa0" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/profile/parametres.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/Auth/PasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/Auth/PasswordController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/ProfileController.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/ProfileController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/app.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/dashboard.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/dashboard.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/partials/header.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/partials/header.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/profile/ajouter_finances.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/profile/ajouter_finances.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/partials/aside.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/partials/aside.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/profile/ajouter_contact.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/profile/ajouter_contact.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -283,20 +285,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;landry&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/projets/projet d'integration 1/portailFournisseur/database/migrations&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\PhpStorm 2024.2.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "landry",
+    "last_opened_file_path": "D:/projets/projet d'integration 1/portailFournisseur/database/migrations",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\PhpStorm 2024.2.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\projets\projet d'integration 1\portailFournisseur\database\migrations" />
@@ -347,7 +350,10 @@
       <workItem from="1730825795775" duration="13355000" />
       <workItem from="1730940833153" duration="539000" />
       <workItem from="1730984554743" duration="11197000" />
-      <workItem from="1731430910979" duration="7795000" />
+      <workItem from="1731430910979" duration="8893000" />
+      <workItem from="1731589660772" duration="1131000" />
+      <workItem from="1731590852244" duration="931000" />
+      <workItem from="1731591841910" duration="6009000" />
     </task>
     <servers />
   </component>

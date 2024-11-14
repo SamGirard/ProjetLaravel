@@ -103,4 +103,8 @@ class ProfileController extends Controller
             return redirect()->route('dashboard')->with(['supprimer_contact' => 'contact supprimé']);
         }
     }
+
+    public function create_parametre(){
+        return view('profile.parametres');
+    }
 }

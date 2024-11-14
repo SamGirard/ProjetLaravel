@@ -35,6 +35,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('ajouter_finance',[ProfileController::class,'create_finance'])->name('profil.create_finance');
     Route::post('ajouter_finance',[ProfileController::class,'store_finance'])->name('profil.store_finance');
+
+    Route::get('/parametres',[ProfileController::class,'create_parametre'])->name('profil.create_parametre');
 });
 
 

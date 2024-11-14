@@ -12,7 +12,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-800 rounded-lg transition duration-300 ease-in-out">
+                <a href="{{ route('profil.create_parametre') }}" class="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-800 rounded-lg transition duration-300 ease-in-out">
                     <i class="fa-solid fa-cog mr-3"></i> Paramètres
                 </a>
             </li>

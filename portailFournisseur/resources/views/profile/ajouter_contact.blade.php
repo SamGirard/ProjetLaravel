@@ -130,7 +130,7 @@
                         </div>
                     </div>
 
-                    <div class="text-right">
+                    <div class="text-right mt-2">
                         <button
                             class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
                             type="submit">
