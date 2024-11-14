@@ -29,6 +29,9 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
+           /* 'email' => ['required_without:neq', 'string', 'email','exists:users,email'],
+            'neq' => ['required_without:email', 'string','exists:users,neq'],
+            'password' => ['required', 'string'],*/
         ];
     }
 
@@ -82,4 +85,5 @@ class LoginRequest extends FormRequest
     {
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
     }
+
 }

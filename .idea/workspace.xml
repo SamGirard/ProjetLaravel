@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="35486ead-830c-4d91-914f-9d2f530e1fa0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/profile/parametres.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/Auth/PasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/Auth/PasswordController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/ProfileController.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/ProfileController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/dashboard.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/dashboard.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/partials/aside.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/partials/aside.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/profile/ajouter_contact.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/profile/ajouter_contact.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/app/Http/Requests/Auth/LoginRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/app/Http/Requests/Auth/LoginRequest.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -353,7 +347,7 @@
       <workItem from="1731430910979" duration="8893000" />
       <workItem from="1731589660772" duration="1131000" />
       <workItem from="1731590852244" duration="931000" />
-      <workItem from="1731591841910" duration="6009000" />
+      <workItem from="1731591841910" duration="8558000" />
     </task>
     <servers />
   </component>
