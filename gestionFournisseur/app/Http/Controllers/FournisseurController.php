@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Contact;
+use App\Models\Service;
 use App\Http\Requests\UserRequest;
 use App\Models\Brochure;
+use Illuminate\Support\Facades\Log;
+
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailModificationFournisseur;
@@ -53,7 +57,7 @@ class FournisseurController extends Controller
      */
     public function updateFiche(UserRequest $request, User $fournisseur)
     {
-        $etatInitial = $fournisseur->etatDemande;
+            $etatInitial = $fournisseur->etatDemande;
 
             $fournisseur->neq = $request->neq;
             $fournisseur->nomEntreprise = $request->nomEntreprise;
@@ -78,7 +82,7 @@ class FournisseurController extends Controller
             $fournisseur->regionAdministrative = $request->regionAdministrative;
             $fournisseur->code_administratif = $request->code_administratif;
                 
-            Mail::to($fournisseur->email)->send(new MailModificationFournisseur($request->nomEntreprise, $request->etatDemande));
+            Mail::to($fournisseur->email)->send(new MailModificationFournisseur($request->nomEntreprise, $request->etatDemande, $etatInitial));
 
             if($etatInitial != $request->etatDemande){
                 Mail::to($request->email)->send(new MailChangementEtat($request->etatDemande, $request->email));
@@ -99,17 +103,22 @@ class FournisseurController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroyFournisseur(Request $request)
+    public function destroyFournisseur($id)
     {
-        $fournisseur = new User($request->all());
-
-        if ($request->has('fournisseurs')) {
-
-            $user_details = User::where('neq', $neq)->first();
-            $user_details->delete();
+        try{
+            $fournisseur = User::findOrFail($id);
+            Contact::where('fournisseur_id', $id)->delete();
+            Service::where('fournisseur_id', $id)->delete();
+            
+            $fournisseur->delete();
 
             Mail::to($fournisseurs->email)->send(new MailSuppressionFournisseur($fournisseur->email));
             return redirect()->route('pageCommis.liste')->with('success', 'Le fournisseurs est supprimer!');
         }
+        catch(\Throwable $e){
+            Log::debug($e);
+            return redirect()->route('pageCommis.liste')->withErrors('Le fournisseurs est pas supprimer!');
+        }
+        return redirect()->route('pageCommis.liste');
     }
 }

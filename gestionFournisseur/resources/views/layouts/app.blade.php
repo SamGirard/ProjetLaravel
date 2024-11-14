@@ -8,7 +8,7 @@
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>
-    <body>
+    <body class="flex flex-col min-h-screen">
         <nav class="bg-white border-b border-gray-200 dark:bg-gray-900">
             <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <div class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -52,9 +52,12 @@
             @endauth
             </div>
         </nav>
+        <div class="flex-grow">
+            @yield('contenu')
+        </div>
 
-        @yield('contenu')
-
-        <footer></footer>
+        <footer class="mt-56">
+            @include('layouts.bottom')
+        </footer>
     </body>
 </html>

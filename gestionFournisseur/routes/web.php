@@ -83,9 +83,9 @@ Route::delete('/supprimerRoleCourriel',
 ->middleware('CheckRole:Administrateur');
 
 //route pour les fournisseurs
-Route::delete('/supprimerFournisseur',
+Route::delete('/supprimerFournisseur/{fournisseur}',
 [FournisseurController::class, 'destroyFournisseur'])->name('supprimerFournisseur')
-->middleware('CheckRole:Administrateur, Ressponsable');
+->middleware('CheckRole:Administrateur, Responsable');
 
 Route::patch('/fournisseur/{fournisseur}/modifier',
 [FournisseurController::class, 'updateFiche'])->name('updateFiche')

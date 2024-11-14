@@ -396,7 +396,7 @@
 
     </form>
     <br>
-    <form method="POST" action="{{route('supprimerFournisseur', [$fournisseur] )}}">
+    <form method="POST" action="{{route('supprimerFournisseur', [$fournisseur->id] )}}">
         @csrf
         @method('DELETE')
         <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?');">Supprimer le fournisseur</button>

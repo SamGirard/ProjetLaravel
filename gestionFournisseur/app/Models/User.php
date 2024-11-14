@@ -10,6 +10,7 @@ class User extends Model
     use HasFactory;
 
     protected $fillable = [
+        'neq',
         'nomEntreprise', 
         'etatDemande',
         'typeNumTelephone',
@@ -36,7 +37,7 @@ class User extends Model
     public $timestamps = true;
 
     public function brochures()
-{
-    return $this->hasMany(Brochure::class);
-}
+    {
+        return $this->hasMany(Brochure::class);
+    }
 }
