@@ -39,7 +39,7 @@ class gestionController extends Controller
         return view('pageCommis.fiche', compact('fournisseur', 'contacts', 'services', 'brochures'));
     }
 
-    public function updateFiche(UserRequest $request, User $fournisseur){
+    public function updateEtat(UserRequest $request, User $fournisseur){
         Log::info('Received update request for fournisseur:', ['request_data' => $request->all()]);
         try{
             $fournisseur->etatDemande = $request->etatDemande;

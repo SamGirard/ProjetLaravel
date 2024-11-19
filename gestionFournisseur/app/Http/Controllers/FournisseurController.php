@@ -57,6 +57,7 @@ class FournisseurController extends Controller
      */
     public function updateFiche(UserRequest $request, User $fournisseur)
     {
+        try{
             $etatInitial = $fournisseur->etatDemande;
 
             $fournisseur->neq = $request->neq;
@@ -64,7 +65,7 @@ class FournisseurController extends Controller
             $fournisseur->typeNumTelephone = $request->typeNumTelephone;
             $fournisseur->numeroTelephone = $request->numeroTelephone;
             $fournisseur->poste = $request->poste;
-            $fournisseur->email = $request->email;
+            $fournisseur->email = $request->email; 
             $fournisseur->etatDemande = $request->etatDemande;
             $fournisseur->raisonRefus = $request->raisonRefus;
             $fournisseur->numTPS = $request->numTPS;
@@ -94,8 +95,12 @@ class FournisseurController extends Controller
                 $fournisseur->raisonRefus = $request->raisonRefus;
                 Brochure::where('fournisseur_id', $fournisseur->id)->delete();
             }
-            
             $fournisseur->save();
+
+        } catch(\Throwable $e){
+            Log::debug($e);
+            return redirect()->route('pageCommis.liste');
+        }
 
             return redirect()->route('pageCommis.liste')->with('success', 'Le fournisseurs est modifier!');
         }
