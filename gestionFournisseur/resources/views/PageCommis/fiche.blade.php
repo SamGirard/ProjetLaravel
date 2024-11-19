@@ -7,9 +7,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://kit.fontawesome.com/f25f0490b7.js" crossorigin="anonymous"></script>
 
-<form method="POST" action="{{route('updateFiche', [$fournisseur->id]) }}">
-    @csrf
-    @method('PATCH')
+<form method="POST" action="{{route('updateFiche', [$fournisseur]) }}">
+@csrf
+@method('PATCH')
     <div class="container mx-auto mt-6 flex">
         <div class="flex-1 bg-white shadow-lg rounded-lg p-6 ml-6">
             <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Fiche fournisseur - {{ $fournisseur->nomEntreprise }}</h1>
@@ -19,9 +19,6 @@
                         $statuses = ['Accepter', 'Refusé', 'En attente', 'Réviser'];
                     @endphp
 @if($fournisseur)
-<!--<form method="POST" action="{{route('updateFiche', [$fournisseur->id]) }}">-->
-@csrf
-@method('PATCH')
 <div class="container mx-auto mt-6 flex">
         <div class="flex-1 p-6 ml-6">
             <div class="flex justify-evenly">
@@ -29,94 +26,6 @@
                 @php
     $statuses = ['Accepter', 'Refusé', 'En attente', 'Réviser'];
 @endphp
-
-<fieldset class="border-2 border-blue-600 rounded-lg p-4">
-    <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Statut de la demande</legend>
-    <p class="text-gray-800">
-        @if(in_array($fournisseur->etatDemande, $statuses))
-            <button id="dropdownEtatButton" data-dropdown-toggle="dropdownEtat" 
-                    class="text-center inline-flex items-center 
-                    {{ $fournisseur->etatDemande == 'En attente' ? 'bg-blue-100 text-blue-800' : ($fournisseur->etatDemande == 'Accepter' ? 'bg-green-100 text-green-800' : ($fournisseur->etatDemande == 'Réviser' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800')) }}
-                    text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300" 
-                    type="button" value="{{$fournisseur->etatDemande}}"> 
-                {{ $fournisseur->etatDemande }} 
-                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                </svg>
-            </button>
-            <div id="dropdownEtat" class="hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
-                <ul class="p-2" aria-labelledby="dropdownEtatButton">
-                    @foreach($statuses as $status)
-                        @if($status !== $fournisseur->etatDemande)
-                            <li>
-                                <span class="changeStatusButton {{ $status == 'Accepter' ? 'bg-green-100 text-green-800' : ($status == 'En attente' ? 'bg-blue-100 text-blue-800' : ($status == 'Refusé' ? 'refusedButton bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')) }} 
-                                             text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 hover:cursor-pointer">
-                                    {{ $status }}
-                                </span>
-                            </li>
-                        @endif
-                    @endforeach
-                </ul>
-            </div>
-            <div id="inputRefusedText" class="{{$fournisseur->etatDemande !== 'Refusé' ? 'hidden' : ''}}">
-                <label for="message" class="text-sm font-medium text-gray-900 dark:text-white mr-2">Raison du refus</label>
-                <textarea id="message" rows="4" class="p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Raison du refus...">{{ $fournisseur->raisonRefus }}</textarea>
-            
-                <div id="refusedCheckboxDiv" class="hidden">
-                    <input id="refusedCheckbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="refusedCheckbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ajouter au courriel de refus</label>
-                </div>
-            </div>
-        @endif
-    </p>
-</fieldset>
-
-<script>
-    $('#dropdownEtat').on('click', '.changeStatusButton', function () {
-        $('#dropdownEtat').addClass('hidden');
-
-        const newStatus = $(this).text().trim();
-        const statusClasses = {
-            'En attente': 'bg-blue-100 text-blue-800',
-            'Accepter': 'bg-green-100 text-green-800',
-            'Réviser': 'bg-yellow-100 text-yellow-800',
-            'Refusé': 'refusedButton bg-red-100 text-red-800'
-        };
-
-        $('#dropdownEtatButton').html(`
-            ${newStatus}
-            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-            </svg>
-        `).removeClass().addClass(`text-center inline-flex items-center text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 ${statusClasses[newStatus]}`).attr('value', newStatus);
-
-        if ($(this).hasClass('refusedButton')) {
-            $('#inputRefusedText').removeClass('hidden');
-            $('#refusedCheckboxDiv').removeClass('hidden');
-        } else {
-            $('#inputRefusedText').addClass('hidden');
-            $('#refusedCheckboxDiv').addClass('hidden');
-        }
-
-        const statuses = ['Accepter', 'En attente', 'Refusé', 'Réviser'];
-        const updatedStatuses = statuses.filter(status => status !== newStatus);
-        let dropdownContent = '';
-
-        updatedStatuses.forEach(status => {
-            dropdownContent += `
-                <li>
-                    <span class="changeStatusButton ${statusClasses[status]} 
-                            text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 hover:cursor-pointer">
-                        ${status}
-                    </span>
-                </li>
-            `;
-        });
-
-        $('#dropdownEtat ul').html(dropdownContent);
-    });
-</script>
-
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Statut de la demande</legend>
                         <p class="text-gray-800">
@@ -154,7 +63,7 @@
                                         du refus</label>
                                     <textarea id="message" rows="4"
                                         class="p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="Raison du refus...">{{ $fournisseur->raisonRefus }}</textarea>
+                                        placeholder="Raison du refus..." name="raisonRefus">{{ $fournisseur->raisonRefus }}</textarea>
 
                                     <div id="refusedCheckboxDiv" class="hidden">
                                         <input id="refusedCheckbox" type="checkbox" value=""
@@ -246,18 +155,18 @@
                                 <div class="grid gap-6 mb-6 md:grid-cols-2">
                                     <div>
                                         <label for="neq" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NEQ</label>
-                                        <input type="text" id="neq" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->neq }}" value="{{ $fournisseur->neq }}" />
+                                        <input type="text" id="neq" name="neq" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->neq }}" value="{{ $fournisseur->neq }}" />
                                         <p id="neqErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un neq valide.</p>
                                     </div>
                                     <div>
                                         <label for="nomEntreprise" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom de l'entreprise</label>
-                                        <input type="text" id="nomEntreprise" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->nomEntreprise }}" value="{{ $fournisseur->nomEntreprise }}" required />
+                                        <input type="text" name="nomEntreprise" id="nomEntreprise" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->nomEntreprise }}" value="{{ $fournisseur->nomEntreprise }}" required />
                                         <p id="nomErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un nom.</p>
                                     </div>
                                 </div>
                                 <div class="mb-6">
                                     <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Adresse courriel</label>
-                                    <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->email }}" value="{{ $fournisseur->email }}" required />
+                                    <input type="email" id="email" name="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->email }}" value="{{ $fournisseur->email }}" required />
                                     <p id="emailErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Le courriel est invalide.</p>
                                 </div> 
                             </div>
@@ -392,7 +301,7 @@
                                                 </svg>
                                                 </button>
                                             </h2>
-                                            <div id="accordion-contact-body-{{ $contact->id }}" class="hidden" aria-labelledby="accordion-contact-heading-1">
+                <!--CONTACT-->               <div id="accordion-contact-body-{{ $contact->id }}" class="hidden" aria-labelledby="accordion-contact-heading-1">
                                                 <div class="py-5 border-b border-gray-200 dark:border-gray-700">
                                                     <div class="contact-accordion-grid grid gap-6 mb-6 md:grid-cols-2">
                                                         <div>
@@ -440,7 +349,7 @@
                                                 </div>
                                             </div>
                                         @endforeach
-                                    </div>
+            <!--FIN CONTACT-->      </div>
                                     <button id="add-contact" type="button">
                                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
@@ -899,32 +808,32 @@
                                     <div class="grid gap-6 mb-6 md:grid-cols-2">
                                         <div>
                                             <label for="numCivique" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro civique</label>
-                                            <input type="text" id="numCivique" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numCivique }}" value="{{ $fournisseur->numCivique }}" />
+                                            <input type="text" name="numCivique" id="numCivique" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numCivique }}" value="{{ $fournisseur->numCivique }}" />
                                             <p id="numCiviqueErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro civique valide.</p>
                                         </div>
                                         <div>
                                             <label for="rue" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rue</label>
-                                            <input type="text" id="rue" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->rue }}" value="{{ $fournisseur->rue }}" required />
+                                            <input type="text" name="rue" id="rue" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->rue }}" value="{{ $fournisseur->rue }}" required />
                                             <p id="rueErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer une rue valide.</p>
                                         </div>
                                         <div>
                                             <label for="ville" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ville</label>
-                                            <input type="text" id="ville" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->ville }}" value="{{ $fournisseur->ville }}" required />
+                                            <input type="text" name="ville" id="ville" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->ville }}" value="{{ $fournisseur->ville }}" required />
                                             <p id="villeErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer une ville valide.</p>
                                         </div>
                                         <div>
                                             <label for="province" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Province</label>
-                                            <input type="text" id="province" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->province }}" value="{{ $fournisseur->province }}" required />
+                                            <input type="text" name="province" id="province" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->province }}" value="{{ $fournisseur->province }}" required />
                                             <p id="provinceErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer une province valide.</p>
                                         </div>
                                         <div>
                                             <label for="codePostal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code postal</label>
-                                            <input type="text" id="codePostal" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->codePostal }}" value="{{ $fournisseur->codePostal }}" required />
+                                            <input type="text" name="codePostal" id="codePostal" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->codePostal }}" value="{{ $fournisseur->codePostal }}" required />
                                             <p id="codePostalErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un code postal valide.</p>
                                         </div>
                                         <div>
                                             <label for="siteInternet" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Site internet</label>
-                                            <input type="url" id="siteInternet" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->siteInternet }}" value="{{ $fournisseur->siteInternet }}" required />
+                                            <input type="url" name="siteInternet" id="siteInternet" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->siteInternet }}" value="{{ $fournisseur->siteInternet }}" required />
                                             <p id="siteInternetErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un site internet valide.</p>
                                         </div>
                                     </div>
@@ -939,7 +848,8 @@
                                                     Type {{ $i+1 }}
                                                 </label> 
                                                 <select 
-                                                    id="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                    id="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}"
+                                                    name="TypeNumTelephone" 
                                                     class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 >
                                                     <option value="Bureau" {{ $typeNumTelephone[$i] == 'Bureau' ? 'selected' : '' }}>Bureau</option>
@@ -960,7 +870,8 @@
                                                     id="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                     placeholder="{{ $telephoneNumbers[$i] }}" 
-                                                    value="{{ $telephoneNumbers[$i] }}" 
+                                                    value="{{ $telephoneNumbers[$i] }}"
+                                                    name="numeroTelephone"
                                                     required 
                                                 />
                                             </div>
@@ -977,7 +888,8 @@
                                                     id="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
                                                     class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                     placeholder="{{ $poste[$i] }}" 
-                                                    value="#{{ $poste[$i] }}"  
+                                                    value="#{{ $poste[$i] }}"
+                                                    name="poste"  
                                                     required 
                                                 />
                                             </div>
@@ -1242,7 +1154,7 @@
 
 
 <!--/////////////////////////////////////////////-->
-
+<!--
 <div>
     <form method="POST" action="{{route('updateFiche', [$fournisseur]) }}">
         @csrf
@@ -1382,5 +1294,5 @@
         <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?');">Supprimer le fournisseur</button>
     </form>
 </div>
-
+ -->
 @endsection
