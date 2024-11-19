@@ -108,3 +108,5 @@ Route::get('/liste-contact', [GestionController::class, 'listeContact'])->name('
 Route::get('/export-fournisseurs', [GestionController::class, 'exportFournisseurs'])->name('export.fournisseurs');
 Route::get('/fournisseur/{fournisseur}', [GestionController::class, 'zoom'])->name('pageCommis.fiche');
 
+Route::patch('/fournisseur/{fournisseur}/modifier',
+[GestionController::class, 'updateFiche'])->name('updateFiche');

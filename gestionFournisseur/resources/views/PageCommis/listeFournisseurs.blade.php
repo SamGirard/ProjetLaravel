@@ -239,30 +239,34 @@
             </div>
         </div>
         <div class="border-t border-gray-200 dark:border-gray-700 pb-4"></div>
-        <div class="flex pb-4">
-            <div class="flex items-center me-4 ml-1">
-                <input id="En attente" type="checkbox" value=""
-                    class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                <label for="En attente" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">En
-                    attente</label>
-            </div>
-            <div class="flex items-center me-4">
-                <input checked id="Accepter" type="checkbox" value=""
-                    class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                <label for="Accepter"
-                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Acceptées</label>
-            </div>
-            <div class="flex items-center me-4">
-                <input id="Refusé" type="checkbox" value=""
-                    class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                <label for="Refusé" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Refusées</label>
-            </div>
-            <div class="flex items-center me-4">
-                <input id="Réviser" type="checkbox" value=""
-                    class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                <label for="Réviser" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">À réviser</label>
-            </div>
-        </div>
+        @auth
+            @if(Auth::check() && Auth::user()->role == 'Responsable')
+                <div class="flex pb-4">
+                    <div class="flex items-center me-4 ml-1">
+                        <input id="En attente" type="checkbox" value=""
+                            class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="En attente" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">En
+                            attente</label>
+                    </div>
+                    <div class="flex items-center me-4">
+                        <input checked id="Accepter" type="checkbox" value=""
+                            class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="Accepter"
+                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Acceptées</label>
+                    </div>
+                    <div class="flex items-center me-4">
+                        <input id="Refusé" type="checkbox" value=""
+                            class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="Refusé" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Refusées</label>
+                    </div>
+                    <div class="flex items-center me-4">
+                        <input id="Réviser" type="checkbox" value=""
+                            class="statusCheckbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="Réviser" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">À réviser</label>
+                    </div>
+                </div>
+            @endif
+        @endauth
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
