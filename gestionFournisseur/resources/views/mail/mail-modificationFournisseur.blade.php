@@ -94,7 +94,7 @@
                     </div>
                 </div>
                 <div class="row text-center mt-2">
-                    <div class="col-md-6 offset-md-3">
+                    <div class="col-md-6 offset-md-3 col-sm-4 offset-sm-4 col-6 offset-3">
                         <p class="etat">Vielle état de la demande: <span>{{$oldEtatDemande}}</span></p>
                     </div>
                 </div>
@@ -108,14 +108,14 @@
                 </div>
 
                 <div class="row text-center">
-                    <div class="col-md-6 offset-md-3">
+                    <div class="col-md-6 offset-md-3 col-sm-4 offset-sm-4 col-6 offset-3">
                         <p class="etat">Nouvelle état de la demande : <span>{{$etatDemande}}</span></p>
                     </div>
                 </div>
 
                 <div class="row text-center mt-5">
                     <div class="col-md-6 offset-md-3">
-                        <a class="boutonFiche" href="">Accèder au dossier</a>
+                        <a class="boutonFiche" href="{{ route('pageCommis.fiche', ['fournisseur' => $id]) }}">Accèder au dossier</a>
                     </div>
                 </div>
 

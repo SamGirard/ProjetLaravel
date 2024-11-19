@@ -82,10 +82,10 @@ class FournisseurController extends Controller
             $fournisseur->regionAdministrative = $request->regionAdministrative;
             $fournisseur->code_administratif = $request->code_administratif;
                 
-            Mail::to($fournisseur->email)->send(new MailModificationFournisseur($request->nomEntreprise, $request->etatDemande, $etatInitial));
+            Mail::to($fournisseur->email)->send(new MailModificationFournisseur($request->nomEntreprise, $request->etatDemande, $etatInitial, $fournisseur->id));
 
             if($etatInitial != $request->etatDemande){
-                Mail::to($request->email)->send(new MailChangementEtat($request->etatDemande, $request->email));
+                Mail::to($request->email)->send(new MailChangementEtat($request->etatDemande, $request->email, $fournisseur->id));
             }
 
             if($request->etatDemande != "Refusé"){
@@ -112,12 +112,12 @@ class FournisseurController extends Controller
             
             $fournisseur->delete();
 
-            Mail::to($fournisseurs->email)->send(new MailSuppressionFournisseur($fournisseur->email));
+            Mail::to($fournisseurs->email)->send(new MailSuppressionFournisseur($fournisseur->nomEntreprise));
             return redirect()->route('pageCommis.liste')->with('success', 'Le fournisseurs est supprimer!');
         }
         catch(\Throwable $e){
             Log::debug($e);
-            return redirect()->route('pageCommis.liste')->withErrors('Le fournisseurs est pas supprimer!');
+            return redirect()->route('pageCommis.liste')->withErrors('Le fournisseurs n\'est pas supprimer!');
         }
         return redirect()->route('pageCommis.liste');
     }

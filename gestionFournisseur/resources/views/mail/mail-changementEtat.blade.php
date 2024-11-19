@@ -110,7 +110,7 @@
             <div class="status">
                 <p class="message mb-5">Votre dossier à été mis à jour! Votre demande d'admission est maintenant <span class="etat">{{$etatDemande}}</span>. Vous pouvez consulter, modifier ou supprimer votre profil en cliquant sur le lien ci-dessous.</p>
             </div>
-            <a class="boutonFiche mt-5" href="">Accèder à votre fiche</a>
+            <a class="boutonFiche mt-5" href="{{ route('pageCommis.fiche', ['fournisseur' => $id]) }}">Accèder à votre fiche</a>
         </div>
         <div class="footer">
             &copy; {{ date('Y') }}, Ivan Landry Pombo Chedjou, Jérémy Thibault et Samuel Girard. Tous droits réservés.

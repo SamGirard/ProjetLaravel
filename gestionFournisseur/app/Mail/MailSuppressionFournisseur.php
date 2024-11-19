@@ -27,7 +27,7 @@ class MailSuppressionFournisseur extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Mail Modification Fournisseur',
+            subject: 'Suppression de fiche fournisseur',
         );
     }
 
