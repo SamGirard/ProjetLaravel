@@ -37,10 +37,10 @@
                                     <div class="mb-5 mt-2 text-red-500">{{ $message }}</div>
                                 @enderror
 
-                                <label for="modele" class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white">Rôle</label>
+                                <label for="modele" class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white">Type de courriel</label>
                                 <div class="grid grid-cols-8 flex space-around">
                                     <select name="role" id="choixRole" class="col-span-4 block appearance-none w-full bg-white px-4 py-2 border-solid border-2 border-blue-100 px-2 py-2 rounded-lg shadow-lg shadow-blue-100 bg-white focus:ring-blue-100">
-                                        <option value="">Choisissez un rôle</option>
+                                        <option value="">Choisissez un type</option>
                                         @if(count($roleCourriels))
                                             @foreach($roleCourriels as $roleCourriel)
                                                 <option value="{{ $roleCourriel->role }}" class="roleCourriel" >{{$roleCourriel->role}}</option>
@@ -66,9 +66,6 @@
                                 <button type="submit" class="mt-8 shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded my-4">
                                     Enregistrer les modifications 
                                 </button>
-                                <button class="ml-4">
-                                    Annuler
-                                </button> 
                                 @if (session('success'))
                                             <div id="toast-success" class="flex items-center text-gray-500" role="alert">
                                                 <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 dark:bg-green-800 dark:text-green-200">

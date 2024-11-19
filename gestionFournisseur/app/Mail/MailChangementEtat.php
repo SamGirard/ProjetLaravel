@@ -16,7 +16,7 @@ class MailChangementEtat extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(private $etatDemande, private $email)
+    public function __construct(private $etatDemande, private $email, private $id)
     {
 
     }
@@ -40,7 +40,8 @@ class MailChangementEtat extends Mailable
             view: 'mail.mail-changementEtat',
             with: [
                     'etatDemande' => $this->etatDemande, 
-                    'email' => $this->email
+                    'email' => $this->email,
+                    'id' => $this->id,
                 ]
         );
     }

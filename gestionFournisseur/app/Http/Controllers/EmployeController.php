@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
 
 
-use App\Models\Employe;
 use App\Http\Requests\EmployeRequest;
 use App\Http\Requests\CourrielRequest;
 use App\Http\Requests\ParametreRequest;
@@ -19,6 +18,8 @@ use App\Mail\MailConnection;
 use App\Models\Parametre;
 use App\Models\Courriel;
 use App\Models\RoleCourriel;
+use App\Models\Employe;
+
 
 
 class EmployeController extends Controller
@@ -84,14 +85,25 @@ class EmployeController extends Controller
         return redirect()->route('role')->with('success', 'Employé ajouté avec succès!');
     }
 
-    public function update(Request $request){
-        $employe = new Employe($request->all());
-
-        foreach($request->input('employes') as $employe){
-            \App\Models\Employe::where('courriel', $employe['courriel'])->update([
-                'role' => $employe['role'],
-            ]);
+    public function update(Request $request)
+    {
+        try {
+            // Pas besoin de créer un nouvel employé ici
+            foreach($request->input('employes') as $employeData) {
+                // Vérifier si le courriel et le rôle sont bien définis
+                if (isset($employeData['courriel'], $employeData['role'])) {
+                    \App\Models\Employe::where('courriel', $employeData['courriel'])->update([
+                        'role' => $employeData['role'],
+                    ]);
+                } else {
+                    Log::debug("Missing role or courriel for employee: ", $employeData);
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::debug($e);
+            Log::debug($request->input('employes'));  // Log all input for better debug info
         }
+
         return redirect()->back()->with('success', 'Les employés sont modifiés.');
     }
 
