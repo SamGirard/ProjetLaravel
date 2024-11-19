@@ -107,4 +107,28 @@ class ProfileController extends Controller
     public function create_parametre(){
         return view('profile.parametres');
     }
+
+    use Illuminate\Support\Facades\Storage;
+
+    public function supprimerBrochures(Request $request)
+    {
+
+            foreach (auth()->user()->brochures as $id) {
+                // Trouver la brochure par ID
+                $brochure = Brochure::find($id);
+
+                if ($brochure) {
+                    // Supprimer le fichier du stockage
+                    $filePath = 'public/brochures/' . $brochure->nom;
+                    if (Storage::exists($filePath)) {
+                        Storage::delete($filePath);
+                    }
+
+                    // Supprimer l'enregistrement de la base de données
+                    $brochure->delete();
+                }
+            }
+            return redirect()->back()->with('success', 'Les brochures ont été supprimées avec succès.');
+    }
+
 }

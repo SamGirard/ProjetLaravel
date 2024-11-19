@@ -469,8 +469,7 @@
                         if (option.value === villeUtilisateur) {
                             option.selected = true;  // Pré-sélectionner l'option
                         }
-
-                        selectElement.appendChild(option); // Ajouter l'option au select
+                        selectElement.appendChild(option);
                     }
                 }
 

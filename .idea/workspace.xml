@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="35486ead-830c-4d91-914f-9d2f530e1fa0" name="Changes" comment="">
+    <list default="true" id="35486ead-830c-4d91-914f-9d2f530e1fa0" name="Changes" comment="modification des coordonnees">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/dashboard.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/dashboard.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/FournisseurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/app/Http/Controllers/FournisseurController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portailFournisseur/resources/views/fournisseur/form_coordonnee.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/portailFournisseur/resources/views/fournisseur/form_coordonnee.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -348,12 +348,25 @@
       <workItem from="1731430910979" duration="8893000" />
       <workItem from="1731589660772" duration="1131000" />
       <workItem from="1731590852244" duration="931000" />
-      <workItem from="1731591841910" duration="19893000" />
+      <workItem from="1731591841910" duration="21087000" />
     </task>
+    <task id="LOCAL-00001" summary="modification des coordonnees">
+      <option name="closed" value="true" />
+      <created>1732044329683</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1732044329683</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="modification des coordonnees" />
+    <option name="LAST_COMMIT_MESSAGE" value="modification des coordonnees" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\DemandeFournisseur;
+use App\Mail\ModificationFournisseur;
 use App\Models\Brochure;
 use App\Models\CategorieService;
 use App\Models\Contact;
@@ -178,10 +179,15 @@ class FournisseurController extends Controller
             'poste.*' => ['nullable', 'max_digits:6', 'numeric']
 
         ]);
-
-        $request->session()->put('form_coordonnee', $request->all());
-
-        return redirect()->route('create_contact');
+        if (auth()->check()) {
+            Mail::to(Parametre::first()->courrielAppro)->send(
+                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()->message])
+            );
+            return redirect()->route('dashboard')->with(['status' => 'coordonnées modifiées']);
+        } else {
+            $request->session()->put('form_coordonnee', $request->all());
+            return redirect()->route('create_contact');
+        }
     }
 
     /**
@@ -199,7 +205,7 @@ class FournisseurController extends Controller
             'telephone_contact' => ['required', 'numeric', 'regex:/^(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/'],
             'poste_contact' => ['nullable', 'max_digits:6', 'numeric'],
         ]);
-        if (auth()->user()){
+        if (auth()->user()) {
             $contact = new Contact();
             $contact->nom = $request->input('nom_contact');
             $contact->prenom = $request->input('prenom_contact');
@@ -211,8 +217,11 @@ class FournisseurController extends Controller
             $contact->poste = $request->input('poste_contact');
             $contact->fournisseur_id = auth()->user()->id;
             $contact->save();
+            Mail::to(Parametre::first()->courrielAppro)->send(
+                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()->message])
+            );
             return redirect()->route('dashboard')->with(['ajouter_contact' => 'contact enregistré']);
-        }else{
+        } else {
 
             $request->session()->put('form_contact', $request->all());
             return redirect()->route('create_brochure');
