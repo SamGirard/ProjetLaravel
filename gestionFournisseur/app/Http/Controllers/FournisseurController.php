@@ -4,7 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Models\User;
+use App\Models\User;
+use App\Models\Contact;
+use App\Models\Service;
+use App\Http\Requests\UserRequest;
+use App\Models\Brochure;
+use Illuminate\Support\Facades\Log;
+
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailModificationFournisseur;
+use App\Mail\MailChangementEtat;
+
+
 
 class FournisseurController extends Controller
 {
@@ -43,13 +55,13 @@ class FournisseurController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updateFournisseur(FournisseurRequest $request)
+    public function updateFiche(UserRequest $request, User $fournisseur)
     {
-        try{
-            $fournisseur = User::first();
+            $etatInitial = $fournisseur->etatDemande;
 
             $fournisseur->neq = $request->neq;
             $fournisseur->nomEntreprise = $request->nomEntreprise;
+            $fournisseur->typeNumTelephone = $request->typeNumTelephone;
             $fournisseur->numeroTelephone = $request->numeroTelephone;
             $fournisseur->poste = $request->poste;
             $fournisseur->email = $request->email;
@@ -69,38 +81,44 @@ class FournisseurController extends Controller
             $fournisseur->siteInternet = $request->siteInternet;
             $fournisseur->regionAdministrative = $request->regionAdministrative;
             $fournisseur->code_administratif = $request->code_administratif;
+                
+            Mail::to($fournisseur->email)->send(new MailModificationFournisseur($request->nomEntreprise, $request->etatDemande, $etatInitial, $fournisseur->id));
+
+            if($etatInitial != $request->etatDemande){
+                Mail::to($request->email)->send(new MailChangementEtat($request->etatDemande, $request->email, $fournisseur->id));
+            }
+
+            if($request->etatDemande != "Refusé"){
+                $fournisseur->raisonRefus = "";
+            } else {
+                $fournisseur->raisonRefus = $request->raisonRefus;
+                Brochure::where('fournisseur_id', $fournisseur->id)->delete();
+            }
             
             $fournisseur->save();
-                
-            Mail::to($fournisseurs->email)->send(new MailModificationFournisseur($fournisseur->role, $fournisseur->etatDemande));
 
             return redirect()->route('pageCommis.liste')->with('success', 'Le fournisseurs est modifier!');
         }
-        catch(\Throwable $e){
-            return redirect()->route('pageCommis.liste')->withErrors('Erreur lors de la modification!');
-        }
-        return redirect()->route('pageCommis.liste');
-    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroyFournisseur(Request $request)
+    public function destroyFournisseur($id)
     {
-        $fournisseur = new User($request->all());
+        try{
+            $fournisseur = User::findOrFail($id);
+            Contact::where('fournisseur_id', $id)->delete();
+            Service::where('fournisseur_id', $id)->delete();
+            
+            $fournisseur->delete();
 
-        if ($request->has('fournisseurs')) {
-
-            $user_details = User::where('neq', $neq)->first();
-            $user_details->delete();
-
-            Mail::to($fournisseurs->email)->send(new MailSuppressionFournisseur($fournisseur->email));
+            Mail::to($fournisseurs->email)->send(new MailSuppressionFournisseur($fournisseur->nomEntreprise));
             return redirect()->route('pageCommis.liste')->with('success', 'Le fournisseurs est supprimer!');
         }
-    }
-
-
-    public function presentation(){
-        return view('pagePresentation');
+        catch(\Throwable $e){
+            Log::debug($e);
+            return redirect()->route('pageCommis.liste')->withErrors('Le fournisseurs n\'est pas supprimer!');
+        }
+        return redirect()->route('pageCommis.liste');
     }
 }

@@ -9,3 +9,8 @@
 .content:not(.hidden) {
     display: block;
 }
+
+.text-disabled {
+    color: gray; /* Changer la couleur du texte en gris quand désactivé */
+    opacity: 0.6; /* Réduire l'opacité pour renforcer l'effet désactivé */
+}

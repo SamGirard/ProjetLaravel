@@ -45,7 +45,7 @@ Route::patch('/modifierEmploye',
 
 
 //Route pour le login d'employe
-Route::get('/loginEmploye', 
+Route::get('/', 
 [EmployeController::class, 'showLoginForm'])->name('loginEmploye');
 
 Route::post('/loginEmploye', 
@@ -82,19 +82,15 @@ Route::delete('/supprimerRoleCourriel',
 [EmployeController::class, 'destroyRoleCourriel'])->name('supprimerRoleCourriel')
 ->middleware('CheckRole:Administrateur');
 
-//route pour les parametre
-Route::delete('/supprimerFournisseur',
+//route pour les fournisseurs
+Route::delete('/supprimerFournisseur/{fournisseur}',
 [FournisseurController::class, 'destroyFournisseur'])->name('supprimerFournisseur')
-->middleware('CheckRole:Administrateur, Ressponsable');
+->middleware('CheckRole:Administrateur, Responsable');
 
-Route::patch('/modifierFournisseurs',
-[FournisseurController::class, 'updateFournisseur'])->name('modifierFournisseur')
-->middleware('CheckRole:Administrateur, Ressponsable');
+Route::patch('/fournisseur/{fournisseur}/modifier',
+[FournisseurController::class, 'updateFiche'])->name('updateFiche')
+->middleware('CheckRole:Administrateur, Responsable');
 
-//route welcome
-Route::get('/', function () {
-    return view('welcome');
-});
 
 //Route des endpoints
 Route::get('/neq/{neq}', [ApiController::class, 'fetchFromNeq']);

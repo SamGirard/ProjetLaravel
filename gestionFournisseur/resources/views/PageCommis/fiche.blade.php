@@ -18,6 +18,104 @@
                     @php
                         $statuses = ['Accepter', 'Refusé', 'En attente', 'Réviser'];
                     @endphp
+@if($fournisseur)
+<!--<form method="POST" action="{{route('updateFiche', [$fournisseur->id]) }}">-->
+@csrf
+@method('PATCH')
+<div class="container mx-auto mt-6 flex">
+        <div class="flex-1 p-6 ml-6">
+            <div class="flex justify-evenly">
+                <div class="mx-1">
+                @php
+    $statuses = ['Accepter', 'Refusé', 'En attente', 'Réviser'];
+@endphp
+
+<fieldset class="border-2 border-blue-600 rounded-lg p-4">
+    <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Statut de la demande</legend>
+    <p class="text-gray-800">
+        @if(in_array($fournisseur->etatDemande, $statuses))
+            <button id="dropdownEtatButton" data-dropdown-toggle="dropdownEtat" 
+                    class="text-center inline-flex items-center 
+                    {{ $fournisseur->etatDemande == 'En attente' ? 'bg-blue-100 text-blue-800' : ($fournisseur->etatDemande == 'Accepter' ? 'bg-green-100 text-green-800' : ($fournisseur->etatDemande == 'Réviser' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800')) }}
+                    text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300" 
+                    type="button" value="{{$fournisseur->etatDemande}}"> 
+                {{ $fournisseur->etatDemande }} 
+                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                </svg>
+            </button>
+            <div id="dropdownEtat" class="hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
+                <ul class="p-2" aria-labelledby="dropdownEtatButton">
+                    @foreach($statuses as $status)
+                        @if($status !== $fournisseur->etatDemande)
+                            <li>
+                                <span class="changeStatusButton {{ $status == 'Accepter' ? 'bg-green-100 text-green-800' : ($status == 'En attente' ? 'bg-blue-100 text-blue-800' : ($status == 'Refusé' ? 'refusedButton bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')) }} 
+                                             text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 hover:cursor-pointer">
+                                    {{ $status }}
+                                </span>
+                            </li>
+                        @endif
+                    @endforeach
+                </ul>
+            </div>
+            <div id="inputRefusedText" class="{{$fournisseur->etatDemande !== 'Refusé' ? 'hidden' : ''}}">
+                <label for="message" class="text-sm font-medium text-gray-900 dark:text-white mr-2">Raison du refus</label>
+                <textarea id="message" rows="4" class="p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Raison du refus...">{{ $fournisseur->raisonRefus }}</textarea>
+            
+                <div id="refusedCheckboxDiv" class="hidden">
+                    <input id="refusedCheckbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="refusedCheckbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ajouter au courriel de refus</label>
+                </div>
+            </div>
+        @endif
+    </p>
+</fieldset>
+
+<script>
+    $('#dropdownEtat').on('click', '.changeStatusButton', function () {
+        $('#dropdownEtat').addClass('hidden');
+
+        const newStatus = $(this).text().trim();
+        const statusClasses = {
+            'En attente': 'bg-blue-100 text-blue-800',
+            'Accepter': 'bg-green-100 text-green-800',
+            'Réviser': 'bg-yellow-100 text-yellow-800',
+            'Refusé': 'refusedButton bg-red-100 text-red-800'
+        };
+
+        $('#dropdownEtatButton').html(`
+            ${newStatus}
+            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+            </svg>
+        `).removeClass().addClass(`text-center inline-flex items-center text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 ${statusClasses[newStatus]}`).attr('value', newStatus);
+
+        if ($(this).hasClass('refusedButton')) {
+            $('#inputRefusedText').removeClass('hidden');
+            $('#refusedCheckboxDiv').removeClass('hidden');
+        } else {
+            $('#inputRefusedText').addClass('hidden');
+            $('#refusedCheckboxDiv').addClass('hidden');
+        }
+
+        const statuses = ['Accepter', 'En attente', 'Refusé', 'Réviser'];
+        const updatedStatuses = statuses.filter(status => status !== newStatus);
+        let dropdownContent = '';
+
+        updatedStatuses.forEach(status => {
+            dropdownContent += `
+                <li>
+                    <span class="changeStatusButton ${statusClasses[status]} 
+                            text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 hover:cursor-pointer">
+                        ${status}
+                    </span>
+                </li>
+            `;
+        });
+
+        $('#dropdownEtat ul').html(dropdownContent);
+    });
+</script>
 
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Statut de la demande</legend>
@@ -1138,5 +1236,151 @@
         </div>
     </div>
 </form>
+@endif
+
+</div>
+
+
+<!--/////////////////////////////////////////////-->
+
+<div>
+    <form method="POST" action="{{route('updateFiche', [$fournisseur]) }}">
+        @csrf
+        @method('PATCH')
+        <h1>Test de formulaire</h1>
+        <input type="text" name="neq" placeholder="NEQ" value="{{$fournisseur->neq}}">
+        <br>
+        <input type="text" name="nomEntreprise" id="" value="{{$fournisseur->nomEntreprise}}" placeholder="Nom de l'entreprise">
+        <br>
+     
+        @if($fournisseur)
+            <select name="typeNumTelephone">
+                <option value="">Type de téléphone</option>
+                <option value='["Bureau"]'>Bureau</option>
+                <option value='["Télécopieur"]'>Télécopieur</option>
+                <option value='["Cellulaire"]'>Cellulaire</option>
+            </select>
+        @endif
+        <br>
+
+        <input type="text" name="numeroTelephone" value="{{$fournisseur->numeroTelephone}}" placeholder="Num de tel format ###-###-####">
+        <br>
+        <input type="text" name="poste" placeholder="poste" value="{{$fournisseur->poste}}">
+        <br>
+        <input type="email" name="email" placeholder="email" value="{{$fournisseur->email}}">
+        <br>
+        @if($fournisseur)
+            <select name="etatDemande">
+                <option value="">État de la demande</option>
+                <option value="Accepter">Accepter</option>
+                <option value="Refusé">Refusé</option>
+                <option value="En attente">En attente</option>
+                <option value="À réviser">À réviser</option>
+            </select>
+        @endif
+        <br>
+        <textarea name="raisonRefus" id="" placeholder="raison de refus"></textarea>
+        <br>
+        <input type="text" name="numTPS" placeholder="numero TPS" value="{{$fournisseur->numTPS}}">
+        <br>
+        <input type="text" name="numTVQ" placeholder="numero Tvq" value="{{$fournisseur->numTVQ}}">
+        <br>
+
+        @if($fournisseur)
+            <select name="conditionPaiement">
+                <option value="">Condition de paiement</option>
+                <option value="30 jours net">30 jours net</option>
+                <option value="45 jours net">45 jours net</option>
+                <option value="60 jours net">60 jours net</option>
+            </select>
+        @endif
+        <br>
+
+        @if($fournisseur)
+            <select name="devise">
+                <option value="">Devise</option>
+                <option value="CAD">CAD</option>
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+            </select>
+        @endif
+        <br>
+
+        @if($fournisseur)
+            <select name="modeCommunication">
+                <option value="">Mode de communication</option>
+                <option value="Téléphone">Téléphone</option>
+                <option value="Courriel">Courriel</option>
+            </select>
+        @endif
+        <br>
+
+        <input type="text" name="numCivique" placeholder="numeroCivique" value="{{$fournisseur->numCivique}}">
+        <br>
+
+        <input type="text" name="rue" placeholder="rue" value="{{$fournisseur->rue}}">
+        <br>
+
+        <input type="text" name="bureau" placeholder="bureau" value="{{$fournisseur->bureau}}">
+        <br>
+
+        @if($fournisseur)
+            <select name="ville">
+                <option value="">Ville</option>
+                <option value="Montréal">Montréal</option>
+                <option value="Ville de Québec">Ville de Québec</option>
+                <option value="Trois-Rivières">Trois-Rivières</option>
+                <option value="Shawinigan">Shawinigan</option>
+            </select>
+        @endif
+        <br>
+
+        @if($fournisseur)
+            <select name="province">
+                <option value="">Province</option>
+                <option value="Québec">Québec</option>
+                <option value="Ontario">Ontario</option>
+                <option value="Alberta">Alberta</option>
+                <option value="Manitoba">Manitoba</option>
+            </select>
+        @endif
+        <br>
+
+        <input type="text" name="codePostal" placeholder="Code postal" value="{{$fournisseur->codePostal}}">
+        <br>
+
+        <input type="text" name="siteInternet" placeholder="Site internet" value="{{$fournisseur->siteInternet}}">
+        <br>
+
+        @if($fournisseur)
+            <select name="regionAdministrative">
+                <option value="">Region Admin</option>
+                <option value="Montréal">Montréal</option>
+                <option value="Centre-du-Québec">Centre-du-Québec</option>
+                <option value="Mauricie">Mauricie</option>
+            </select>
+        @endif
+        <br>
+
+        @if($fournisseur)
+            <select name="code_administratif">
+                <option value="">Code Administratif</option>
+                <option value="ADM001">ADM001</option>
+                <option value="ADM002">ADM001</option>
+                <option value="ADM003">ADM003</option>
+            </select>
+        @endif
+        <br>
+
+        <button type="submit" class="mt-5">Enregistrer</button>
+
+    </form>
+    <br>
+    <form method="POST" action="{{route('supprimerFournisseur', [$fournisseur->id] )}}">
+        @csrf
+        @method('DELETE')
+        <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?');">Supprimer le fournisseur</button>
+    </form>
+</div>
 
 @endsection
