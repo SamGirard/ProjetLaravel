@@ -18,16 +18,17 @@
                     @php
                         $statuses = ['Accepter', 'Refusé', 'En attente', 'Réviser'];
                     @endphp
-@if($fournisseur)
-<div class="container mx-auto mt-6 flex">
-        <div class="flex-1 p-6 ml-6">
-            <div class="flex justify-evenly">
-                <div class="mx-1">
-                @php
-    $statuses = ['Accepter', 'Refusé', 'En attente', 'Réviser'];
-@endphp
+                    @if($fournisseur)
+                    <div class="container mx-auto mt-6 flex">
+                            <div class="flex-1 p-6 ml-6">
+                                <div class="flex justify-evenly">
+                                    <div class="mx-1">
+                                    @php
+                        $statuses = ['Accepter', 'Refusé', 'En attente', 'Réviser'];
+                    @endphp
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Statut de la demande</legend>
+                        @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                         <p class="text-gray-800">
                             @if(in_array($fournisseur->etatDemande, $statuses))
                                     <input type="hidden" name="etatDemande" id="etatDemande"
@@ -75,6 +76,9 @@
                                 </div>
                             @endif
                         </p>
+                        @else
+                        
+                        @endif
                     </fieldset>
 
                     <script>
@@ -128,15 +132,17 @@
                 <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
                     <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Identification</legend>
                     <div class="text-right">
+                    @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                         <button data-modal-target="identification-modal" data-modal-toggle="identification-modal" class="text-blue-600 hover:text-blue-900" type="button">
                             <i class="text-xl fa-regular fa-pen-to-square"></i>
                         </button>
+                    @endif
                     </div>
                     <p id="neq-display" class="text-gray-800">{{ $fournisseur->neq }}</p>
                     <p id="nomEntreprise-display" class="text-gray-800">{{ $fournisseur->nomEntreprise }}</p>
                     <p id="email-display" class="text-gray-800">{{ $fournisseur->email }}</p>
                 </fieldset>
-
+                @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                 <div id="identification-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 w-full max-w-2xl max-h-full">
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -252,13 +258,15 @@
 
                     checkFormValidity();
                 </script>
-
+                @endif
                     <fieldset id="contacts-fieldset" class="border-2 border-blue-600 rounded-lg p-4 mt-2">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Contacts</legend>
                         <div class="text-right">
+                        @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                         <button data-modal-target="contact-modal" data-modal-toggle="contact-modal" class="text-blue-600 hover:text-blue-900" type="button">
                             <i class="text-xl fa-regular fa-pen-to-square"></i>
                         </button>
+                        @endif
                         </div>
                         @foreach($contacts as $contact)
                             <div class="flex justify-around">
@@ -276,6 +284,7 @@
                         @endforeach
                     </fieldset>
 
+                    @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                     <div id="contact-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <div class="relative p-4 w-full max-w-2xl max-h-full">
                             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -283,12 +292,14 @@
                                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                                         Contacts
                                     </h3>
+                                    @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="contact-modal">
                                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                         </svg>
                                         <span class="sr-only">Close modal</span>
                                     </button>
+                                    @endif
                                 </div>
                                 <div class="p-4 md:p-5 space-y-4">
                                     <div id="accordion-contact" data-accordion="collapse" data-active-classes="bg-white dark:bg-gray-900 text-gray-900 dark:text-white" data-inactive-classes="text-gray-500 dark:text-gray-400">
@@ -753,13 +764,16 @@
                                 });
                         });
                     </script>
+                    @endif
 
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Adresse</legend>
                         <div class="text-right">
+                        @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                             <button data-modal-target="adresse-modal" data-modal-toggle="adresse-modal" class="text-blue-600 hover:text-blue-900" type="button">
                                 <i class="text-xl fa-regular fa-pen-to-square"></i>
                             </button>
+                        @endif
                         </div>
                         <p id="adresseDisplay"class="text-gray-800 my-1">{{ $fournisseur->numCivique }}
                             , {{ $fournisseur->rue }}</p>
@@ -787,8 +801,6 @@
                             </p>
                         @endfor
                     </fieldset>
-
-                    
 
                     <div id="adresse-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <div class="relative p-4 w-full max-w-2xl max-h-full">
@@ -1140,9 +1152,11 @@
                         </ul>
                         </p>
                     </fieldset>
-                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Enregistrer</button>
-                    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Exporter vers les finances</button>
-                    <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Supprimer</button>
+                    @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
+                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Enregistrer</button>
+                        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Exporter vers les finances</button>
+                        <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Supprimer</button>
+                    @endif
                 </div>
             </div>
         </div>

@@ -240,7 +240,7 @@
         </div>
         <div class="border-t border-gray-200 dark:border-gray-700 pb-4"></div>
         @auth
-            @if(Auth::check() && Auth::user()->role == 'Responsable')
+            @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                 <div class="flex pb-4">
                     <div class="flex items-center me-4 ml-1">
                         <input id="En attente" type="checkbox" value=""
