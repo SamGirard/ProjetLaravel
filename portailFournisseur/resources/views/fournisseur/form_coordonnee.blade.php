@@ -93,6 +93,7 @@
                                 <select id="ville" name="ville"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     <!-- Options pour les villes ici -->
+                                    <option value="" disabled selected>Choisissez une ville...</option>
                                 </select>
                             </div>
 
@@ -102,7 +103,8 @@
                                     <select id="province" name="province"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                         @foreach($provinces as $province)
-                                            <option value="{{ $province }}">{{ $province }}</option>
+                                            <option
+                                                value="{{ $province }}" {{(auth()->check() && auth()->user()->province == $province) ? 'selected' : '' }}>{{ $province }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -448,9 +450,13 @@
                 // Diviser le contenu par lignes
                 const rows = data.split('\n');
 
-                // Transformer chaque ligne en tableau de colonnes
+                // Récupérer l'élément select pour la ville
                 const selectElement = document.getElementById('ville');
 
+                // Supposons que la ville de l'utilisateur connecté soit dans une variable `villeUtilisateur`
+                const villeUtilisateur = @json(auth()->check() ? auth()->user()->ville : null);  // Récupérer la ville de l'utilisateur si connecté, sinon null
+
+                // Ajouter les options au select
                 for (let i = 1; i < rows.length; i++) {
                     const columns = rows[i].split(",");
 
@@ -459,9 +465,15 @@
                         option.value = columns[1].trim(); // Retirer les espaces inutiles
                         option.textContent = columns[1].trim().slice(1, -1); // Supposer qu'il y a des guillemets à enlever
 
+                        // Vérifier si c'est la ville de l'utilisateur
+                        if (option.value === villeUtilisateur) {
+                            option.selected = true;  // Pré-sélectionner l'option
+                        }
+
                         selectElement.appendChild(option); // Ajouter l'option au select
                     }
                 }
+
                 // Initialiser Tom Select une fois que les options sont ajoutées
                 new TomSelect(selectElement, {
                     create: false, // Empêcher la création de nouvelles options
@@ -475,6 +487,7 @@
                 console.error('Erreur lors du chargement des villes :', error);
             }
         }
+
 
         // Charger les villes une fois que le DOM est prêt
         document.addEventListener('DOMContentLoaded', chargerVilles);
