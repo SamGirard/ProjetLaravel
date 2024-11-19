@@ -172,7 +172,7 @@
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Adresse</legend>
                         <div class="text-right">
-                            <a href="#" class="text-blue-600 hover:text-blue-900"><i
+                            <a href="{{ route('create_coordonnee',auth()->user()->id) }}" class="text-blue-600 hover:text-blue-900"><i
                                     class="text-xl fa-regular fa-pen-to-square"></i></a>
                         </div>
                         <p class="text-gray-800 my-1">{{ auth::user()->numCivique }}

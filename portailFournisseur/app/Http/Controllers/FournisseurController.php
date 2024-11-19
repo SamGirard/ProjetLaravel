@@ -152,7 +152,7 @@ class FournisseurController extends Controller
     {
         $provinces = ['Québec', 'Ontario', 'Alberta', 'Manitoba', 'Saskatchewan', 'Colombie-Britannique', 'Nunavut', 'Territoire du Nort-Ouest', 'Yukon', 'Île-du-Prince-Édouard', 'Nouveau-Brunswick', 'Nouvelle-Écosse', 'Terre-Neuve-et-Labrador'];
 
-        if ($request->session()->has('form_service'))
+        if ($request->session()->has('form_service') || auth::user())
             return view('fournisseur/form_coordonnee', compact('provinces'));
         else
             return redirect()->route('create_identification');

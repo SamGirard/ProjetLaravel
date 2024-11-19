@@ -12,7 +12,7 @@ Route::get('ajouter_identification',[FournisseurController::class,'create_identi
 Route::post('ajouter_identification',[FournisseurController::class,'store_identification'])->name('store_identification');
 Route::get('ajouter_service/{neq?}',[FournisseurController::class,'create_service'])->name('create_service');
 Route::post('ajouter_service',[FournisseurController::class,'store_service'])->name('store_service');
-Route::get('ajouter_coordonnee/',[FournisseurController::class,'create_coordonnee'])->name('create_coordonnee');
+Route::get('ajouter_coordonnee/{id?}',[FournisseurController::class,'create_coordonnee'])->name('create_coordonnee');
 Route::post('ajouter_coordonnee',[FournisseurController::class,'store_coordonnee'])->name('store_coordonnee');
 Route::get('ajouter_contact',[FournisseurController::class,'create_contact'])->name('create_contact');
 Route::post('ajouter_contact',[FournisseurController::class,'store_contact'])->name('store_contact');
