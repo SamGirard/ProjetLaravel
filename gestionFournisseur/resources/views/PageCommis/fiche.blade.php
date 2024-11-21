@@ -77,7 +77,11 @@
                             @endif
                         </p>
                         @else
-                        
+                        <span
+                                                        class="{{ $fournisseur->etatDemande == 'Accepter' ? 'bg-green-100 text-green-800' : ($status == 'En attente' ? 'bg-blue-100 text-blue-800' : ($status == 'Refusé' ? 'refusedButton bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')) }} 
+                                                                                                 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                                                        {{ $fournisseur->etatDemande }}
+                                                    </span>
                         @endif
                     </fieldset>
 
@@ -849,79 +853,92 @@
                                             <p id="siteInternetErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un site internet valide.</p>
                                         </div>
                                     </div>
-                                    @for($i = 0; $i < count($telephoneNumbers); $i++)
-                                    <div class="mb-6">
-                                        <div class="flex items-center">
-                                            <div class="flex flex-col">
-                                                <label 
-                                                    for="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-                                                >
-                                                    Type {{ $i+1 }}
-                                                </label> 
-                                                <select 
-                                                    id="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}"
-                                                    name="TypeNumTelephone" 
-                                                    class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                >
-                                                    <option value="Bureau" {{ $typeNumTelephone[$i] == 'Bureau' ? 'selected' : '' }}>Bureau</option>
-                                                    <option value="Télécopieur" {{ $typeNumTelephone[$i] == 'Télécopieur' ? 'selected' : '' }}>Télécopieur</option>
-                                                    <option value="Cellulaire" {{ $typeNumTelephone[$i] == 'Cellulaire' ? 'selected' : '' }}>Cellulaire</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="flex-grow">
-                                                <label 
-                                                    for="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-                                                >
-                                                    Numéro de téléphone {{ $i+1 }}
-                                                </label>
-                                                <input 
-                                                    type="text" 
-                                                    id="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                    placeholder="{{ $telephoneNumbers[$i] }}" 
-                                                    value="{{ $telephoneNumbers[$i] }}"
-                                                    name="numeroTelephone"
-                                                    required 
-                                                />
-                                            </div>
-
-                                            <div class="flex flex-col w-1/4">
-                                                <label 
-                                                    for="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-                                                >
-                                                    Poste {{ $i+1 }}
-                                                </label>
-                                                <input 
-                                                    type="text" 
-                                                    id="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                    placeholder="{{ $poste[$i] }}" 
-                                                    value="#{{ $poste[$i] }}"
-                                                    name="poste"  
-                                                    required 
-                                                />
-                                            </div>
-
-                                            <button 
-                                                type="button" 
-                                                class="text-red-500 hover:text-red-700 ml-2 mt-6" 
-                                                id="delete-contact-{{ $i }}"
-                                            >
-                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                                                </svg>
-                                            </button>
+                                    <input type="hidden" name="typeNumTelephone" id="typeNumTelephone"
+                                        value="{{ $fournisseur->typeNumTelephone }}">
+                                    <input type="hidden" name="numeroTelephone" id="numeroTelephone"
+                                        value="{{ $fournisseur->numeroTelephone }}">
+                                    <input type="hidden" name="poste" id="poste"
+                                        value="{{ $fournisseur->poste }}">
+                                    <div id="telephone-container">
+                                        @for($i = 0; $i < count($telephoneNumbers); $i++)
+                                        <div class="telephoneFormDisplay">
                                         </div>
+                                        <div class="mb-6 telephoneFormDisplay">
+                                            <div class="flex items-center">
+                                                <div class="flex flex-col">
+                                                    <label 
+                                                        for="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                        class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+                                                    >
+                                                        Type {{ $i+1 }}
+                                                    </label> 
+                                                    <select 
+                                                        id="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}"
+                                                        class="typeNumTelephone bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                    >
+                                                        <option value="Bureau" {{ $typeNumTelephone[$i] == 'Bureau' ? 'selected' : '' }}>Bureau</option>
+                                                        <option value="Télécopieur" {{ $typeNumTelephone[$i] == 'Télécopieur' ? 'selected' : '' }}>Télécopieur</option>
+                                                        <option value="Cellulaire" {{ $typeNumTelephone[$i] == 'Cellulaire' ? 'selected' : '' }}>Cellulaire</option>
+                                                    </select>
+                                                </div>
 
-                                        <p id="numTelephone-contact-error-{{ $fournisseur->id }}-{{ $i }}" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">
-                                            Veuillez entrer un numéro de téléphone valide
-                                        </p>
+                                                <div class="flex-grow">
+                                                    <label 
+                                                        for="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                        class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+                                                    >
+                                                        Numéro de téléphone {{ $i+1 }}
+                                                    </label>
+                                                    <input 
+                                                        type="text" 
+                                                        id="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                        class="numTelephone bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="{{ $telephoneNumbers[$i] }}" 
+                                                        value="{{ $telephoneNumbers[$i] }}"
+                                                        required 
+                                                    />
+                                                </div>
+
+                                                <div class="flex flex-col w-1/4">
+                                                    <label 
+                                                        for="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                        class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+                                                    >
+                                                        Poste {{ $i+1 }}
+                                                    </label>
+                                                    <input 
+                                                        type="text" 
+                                                        id="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                        class="poste bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="{{ $poste[$i] }}" 
+                                                        value="{{ $poste[$i] }}"
+                                                        required 
+                                                    />
+                                                </div>
+
+                                                <button 
+                                                    type="button" 
+                                                    class="text-red-500 hover:text-red-700 ml-2 mt-6" 
+                                                    id="delete-contact"
+                                                >
+                                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            <p id="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}-error" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">
+                                                Type de numéro invalide. Choisissez Bureau, Télécopieur ou Cellulaire.
+                                            </p>
+                                            <p id="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}-error" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">
+                                                Numéro de téléphone invalide. Format attendu: ###-###-####.
+                                            </p>
+                                            <p id="poste-contact-{{ $fournisseur->id }}-{{ $i }}-error" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">
+                                                Poste invalide. Maximum 6 chiffres numériques uniquement.
+                                            </p>
+                                        </div>
+                                        @endfor
                                     </div>
-                                @endfor
                                 </div>
                                 <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                                     <button data-modal-hide="adresse-modal" id="save-adresse" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
@@ -941,9 +958,176 @@
                     var isCodePostalValid = true;
                     var isSiteInternetValid = true;
 
+                    function validateType(selectElement) {
+                        const validValues = ["Bureau", "Télécopieur", "Cellulaire"];
+                        if (!validValues.includes(selectElement.value)) {
+                            $('#' + selectElement.id + '-error').removeClass('hidden');
+                            return false;
+                        } else {
+                            $('#' + selectElement.id + '-error').addClass('hidden');
+                            return true;
+                        }
+                    }
+
+                    function validateNumero(inputElement) {
+                        const regex = /^\d{3}-\d{3}-\d{4}$|^\d{10}$/;
+                        if (!regex.test(inputElement.value)) {
+                            $('#' + inputElement.id + '-error').removeClass('hidden');
+                            return false;
+                        } else {
+                            $('#' + inputElement.id + '-error').addClass('hidden');
+                            return true;
+                        }
+                    }
+
+                    function validatePoste(inputElement) {
+                        const regex = /^\d{0,6}$/;
+                        if (!regex.test(inputElement.value)) {
+                            $('#' + inputElement.id + '-error').removeClass('hidden');
+                            return false;
+                        } else {
+                            $('#' + inputElement.id + '-error').addClass('hidden');
+                            return true;
+                        }
+                    }
+
+                    function validateAllNum() {
+                        let allValid = true;
+
+                        document.querySelectorAll('.typeNumTelephone').forEach(select => {
+                            if (!validateType(select)) {
+                                allValid = false;
+                            }
+                        });
+
+                        document.querySelectorAll('.numTelephone').forEach(input => {
+                            if (!validateNumero(input)) {
+                                allValid = false;
+                            }
+                        });
+
+                        document.querySelectorAll('.poste').forEach(input => {
+                            if (!validatePoste(input)) {
+                                allValid = false;
+                            }
+                        });
+
+                        return allValid;
+                    }
+
+                    function attachValidation() {
+                        document.querySelectorAll('.typeNumTelephone').forEach(select => {
+                            select.addEventListener('input', () => validateType(select));
+                            select.addEventListener('input', () => checkAdressFormValidity());
+                        });
+
+                        document.querySelectorAll('.numTelephone').forEach(input => {
+                            input.addEventListener('input', () => validateNumero(input));
+                            input.addEventListener('input', () => checkAdressFormValidity());
+                        });
+
+                        document.querySelectorAll('.poste').forEach(input => {
+                            input.addEventListener('input', () => validatePoste(input));
+                            input.addEventListener('input', () => checkAdressFormValidity());
+                        });
+                    }
+
+                    attachValidation();
+
+                    function addDeleteFunctionality(button) {
+                        button.addEventListener('click', function () {
+                            const formGroup = button.closest('.telephoneFormDisplay');
+                            formGroup.remove();
+                        });
+                    }
+
+                    document.querySelectorAll('#delete-contact').forEach(addDeleteFunctionality);
+
+                    document.getElementById('add-number').addEventListener('click', function () {
+                        const container = document.querySelector('.telephoneFormDisplay') 
+                            ? document.querySelector('.telephoneFormDisplay').parentElement 
+                            : document.getElementById('telephone-container');
+                        const formGroups = container.querySelectorAll('.telephoneFormDisplay');
+                        const newIndex = formGroups.length;
+
+                        const newFormGroup = document.createElement('div');
+                        newFormGroup.classList.add('mb-6', 'telephoneFormDisplay');
+                        newFormGroup.innerHTML = `
+                            <div class="flex items-center">
+                                <div class="flex flex-col">
+                                    <label for="typeNumTelephone-contact-{{$fournisseur->id }}-${newIndex }" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                        Type ${newIndex}
+                                    </label>
+                                    <select 
+                                        id="typeNumTelephone-contact-{{$fournisseur->id }}-${newIndex }"
+                                        class="typeNumTelephone bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    >
+                                        <option value="Bureau">Bureau</option>
+                                        <option value="Télécopieur">Télécopieur</option>
+                                        <option value="Cellulaire">Cellulaire</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex-grow">
+                                    <label for="numTelephone-contact-{{ $fournisseur->id }}-${newIndex }" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                        Numéro de téléphone ${newIndex}
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="numTelephone-contact-{{ $fournisseur->id }}-${newIndex }" 
+                                        class="numTelephone bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Entrez le numéro" 
+                                        required 
+                                    />
+                                </div>
+
+                                <div class="flex flex-col w-1/4">
+                                    <label for="poste-contact-{{ $fournisseur->id }}-${newIndex }" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                        Poste ${newIndex}
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="poste-contact-{{ $fournisseur->id }}-${newIndex }" 
+                                        class="poste bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Entrez le poste"  
+                                        required 
+                                    />
+                                </div>
+
+                                <button 
+                                    type="button" 
+                                    class="text-red-500 hover:text-red-700 ml-2 mt-6 delete-contact"
+                                >
+                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <p id="typeNumTelephone-contact-{{$fournisseur->id }}-${newIndex }-error" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">
+                                            Type de numéro invalide. Choisissez Bureau, Télécopieur ou Cellulaire.
+                                        </p>
+                                        <p id="numTelephone-contact-{{ $fournisseur->id }}-${newIndex }-error" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">
+                                            Numéro de téléphone invalide. Format attendu: ###-###-####.
+                                        </p>
+                                        <p id="poste-contact-{{ $fournisseur->id }}-${newIndex }-error" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">
+                                            Poste invalide. Maximum 6 chiffres numériques uniquement.
+                                        </p>
+                        `;
+
+                        container.appendChild(newFormGroup);
+
+                        const deleteButton = newFormGroup.querySelector('.delete-contact');
+                        addDeleteFunctionality(deleteButton);
+                        checkAdressFormValidity();
+                    });
+
+                    document.getElementById('add-number').addEventListener('click', () => {
+                        setTimeout(attachValidation, 0);
+                    });
+
                     function checkAdressFormValidity() {
                         const saveButton = document.getElementById('save-adresse');
-                        if (isAdressFormValid()) {
+                        if (isAdressFormValid() && validateAllNum()) {
                             saveButton.removeAttribute('disabled');
                         } else {
                             saveButton.setAttribute('disabled', true);
@@ -1031,6 +1215,36 @@
                                 document.getElementById('province').value + ") " + 
                                 document.getElementById('codePostal').value;
                             document.getElementById('siteInternetDisplay').textContent = document.getElementById('siteInternet').value;
+
+                            var typeNumTelephoneValue = "[";
+                            var numeroTelephoneValue = "[";
+                            var posteValue = "[";
+
+                            const container = document.getElementById('telephone-container');
+                            const formGroups = container.querySelectorAll('.telephoneFormDisplay');
+
+                            formGroups.forEach((formGroup, index) => {
+                                const typeNumTelephone = document.getElementById('typeNumTelephone-contact-{{$fournisseur->id }}-'+index);
+                                const numTelephone = document.getElementById(`numTelephone-contact-{{$fournisseur->id }}-${index}`);
+                                const poste = document.getElementById(`poste-contact-{{$fournisseur->id }}-${index}`);
+
+                                if (typeNumTelephone && numTelephone && poste) {
+                                    typeNumTelephoneValue += '"' + typeNumTelephone.value + '",';
+                                    numeroTelephoneValue += '' + numTelephone.value + ',';
+                                    posteValue += '"' + poste.value + '",';
+                                }
+                            });
+
+                            typeNumTelephoneValue = typeNumTelephoneValue.slice(0, -1);
+                            numeroTelephoneValue = numeroTelephoneValue.slice(0, -1);
+                            posteValue = posteValue.slice(0, -1);
+                            typeNumTelephoneValue += "]";
+                            numeroTelephoneValue += "]";
+                            posteValue += "]";
+
+                            document.getElementById('typeNumTelephone').value = typeNumTelephoneValue;
+                            document.getElementById('numeroTelephone').value = numeroTelephoneValue;
+                            document.getElementById('poste').value = posteValue;
                         }
                     });
                     
