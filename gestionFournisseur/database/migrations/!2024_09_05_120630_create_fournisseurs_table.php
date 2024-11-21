@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->integer('numTPS')->nullable();
             $table->integer('numTVQ')->nullable();
-            $table->string('conditionPaiement', 128)->nullable();
+            $table->string('conditionPaiement')->nullable();
             $table->string('devise', 64)->nullable();
             $table->string('modeCommunication', 64)->nullable();
             $table->string('numCivique', 8);

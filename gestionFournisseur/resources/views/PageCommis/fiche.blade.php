@@ -1403,11 +1403,20 @@
                         <fieldset class="border-2 border-blue-600 rounded-lg p-4">
                             <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Finances</legend>
                             <div class="text-right">
-                                <butto data-modal-target="finance-modal" data-modal-toggle="finance-modal" class="text-blue-600 hover:text-blue-900" type="button">
+                                <button data-modal-target="finance-modal" data-modal-toggle="finance-modal" class="text-blue-600 hover:text-blue-900" type="button">
                                     <i class="text-xl fa-regular fa-pen-to-square" aria-hidden="true"></i>
                                 </button>
                             </div>
-                            
+                            @if($fournisseur)
+                                <h1>TPS : {{$fournisseur->numTPS}}</h1>
+                                <h1>TVQ : {{$fournisseur->numTVQ}}</h1>
+                                <h1 class="font-bold mt-2">Conditions de paiements</h1>
+                                <h1>{{$fournisseur->conditionPaiement}}</h1>
+                                <h1 class="font-bold mt-2">Devises</h1>
+                                <h1>{{$fournisseur->devise}}</h1>
+                                <h1 class="font-bold mt-2">Mode de communication</h1>
+                                <h1>{{$fournisseur->modeCommunication}}</h1>
+                            @endif
                         </fieldset>
                     </div>
                     <div id="finance-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -1415,7 +1424,7 @@
                             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                        Adresse
+                                        Finances
                                     </h3>
                                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="finance-modal">
                                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -1425,90 +1434,58 @@
                                     </button>
                                 </div>
                                 <div class="p-4 md:p-5 space-y-4">
-                                    <div class="grid gap-6 mb-6 md:grid-cols-2">
+                                    <div class="grid gap-6 mb-6 md:grid-cols-1">
                                         <div>
                                             <label for="numTPS" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro TPS</label>
-                                            <input type="text" name="numTPS" id="numTPS" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numCivique }}" value="{{ $fournisseur->numCivique }}" />
+                                            <input type="text" name="numTPS" id="numTPS" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numTPS }}" value="{{ $fournisseur->numTPS }}" />
                                             <p id="numTPSErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de TPS valide.</p>
                                         </div>
                                         <div>
                                             <label for="numTVQ" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro TVQ</label>
-                                            <input type="text" name="rue" id="TVQ" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->rue }}" value="{{ $fournisseur->rue }}" required />
-                                            <p id="rueErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de TVS valide.</p>
+                                            <input type="text" name="numTVQ" id="numTVQ" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numTVQ }}" value="{{ $fournisseur->numTVQ }}" required />
+                                            <p id="numTVQErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de TVQ valide.</p>
+                                        </div>
+                                        <div>
+                                            <label for="conditionPaiement">Conditions de paiement</label>
+                                            <select name="conditionPaiement" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="conditionPaiement">
+                                                <option value="payable immédiatement sans réduction">payable immédiatement sans réduction</option>
+                                                <option value="payable immédiatement sans réduction, Date de base au 15 du mois suivant">payable immédiatement sans réduction, Date de base au 15 du mois suivant</option>
+                                                <option value="dans les 15 jours 2% escpte, dans les 30 jours sans déduction">dans les 15 jours 2% escpte, dans les 30 jours sans déduction</option>
+                                                <option value="après entrée facture jusqu'au 15 du mois, jusqu'au 15 du mois suivant 2% escpte">après entrée facture jusqu'au 15 du mois, jusqu'au 15 du mois suivant 2% escpte</option>
+                                                <option value="dans les 10 jours 2% escpte, dans les 30 jours sans déduction">dans les 10 jours 2% escpte, dans les 30 jours sans déduction</option>
+                                                <option value="dans les 15 jours sans déduction">dans les 15 jours sans déduction</option>
+                                                <option value="dans les 30 jours sans déduction">dans les 30 jours sans déduction</option>
+                                                <option value="dans les 45 jours sans déduction">dans les 45 jours sans déduction</option>
+                                                <option value="dans les 60 jours sans déduction">dans les 60 jours sans déduction</option>
+                                            </select>
+                                        </div>
+                                        <label for="">Devise</label>
+                                        <div class="grid gap-4 md:grid-cols-3">
+                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+                                                <input id="bordered-radio-1" type="radio" value="CAD" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="bordered-radio-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">CAD</label>
+                                            </div>
+                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+                                                <input checked id="bordered-radio-2" type="radio" value="USD" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">USD</label>
+                                            </div>
+                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+                                                <input checked id="bordered-radio-2" type="radio" value="EUR" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">EUR</label>
+                                            </div>
+                                        </div>
+                                        <label for="">Mode de communication</label>
+                                        <div class="grid gap-4 md:grid-cols-2">
+                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+                                                <input id="bordered-radio-1" type="radio" value="Courriel" name="modeCommunication" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="bordered-radio-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Courriel</label>
+                                            </div>
+                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+                                                <input checked id="bordered-radio-2" type="radio" value="Courriel régulier" name="modeCommunication" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Courriel régulier</label>
+                                            </div>
                                         </div>
                                     </div>
-                                    @for($i = 0; $i < count($telephoneNumbers); $i++)
-                                    <div class="mb-6">
-                                        <div class="flex items-center">
-                                            <div class="flex flex-col">
-                                                <label 
-                                                    for="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-                                                >
-                                                    Type {{ $i+1 }}
-                                                </label> 
-                                                <select 
-                                                    id="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}"
-                                                    class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                >
-                                                    <option value="Bureau" {{ $typeNumTelephone[$i] == 'Bureau' ? 'selected' : '' }}>Bureau</option>
-                                                    <option value="Télécopieur" {{ $typeNumTelephone[$i] == 'Télécopieur' ? 'selected' : '' }}>Télécopieur</option>
-                                                    <option value="Cellulaire" {{ $typeNumTelephone[$i] == 'Cellulaire' ? 'selected' : '' }}>Cellulaire</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="flex-grow">
-                                                <label 
-                                                    for="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-                                                >
-                                                    Numéro de téléphone {{ $i+1 }}
-                                                </label>
-                                                <input 
-                                                    type="text" 
-                                                    id="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                    placeholder="{{ $telephoneNumbers[$i] }}" 
-                                                    value="{{ $telephoneNumbers[$i] }}"
-                                                    name="numeroTelephone"
-                                                    required 
-                                                />
-                                            </div>
-
-                                            <div class="flex flex-col w-1/4">
-                                                <label 
-                                                    for="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-                                                >
-                                                    Poste {{ $i+1 }}
-                                                </label>
-                                                <input 
-                                                    type="text" 
-                                                    id="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                    placeholder="{{ $poste[$i] }}" 
-                                                    value='["#{{ $poste[$i] }}"]'
-                                                    name="poste"  
-                                                    required 
-                                                />
-                                            </div>
-
-                                            <button 
-                                                type="button" 
-                                                class="text-red-500 hover:text-red-700 ml-2 mt-6" 
-                                                id="delete-contact-{{ $i }}"
-                                            >
-                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                                                </svg>
-                                            </button>
-                                        </div>
-
-                                        <p id="numTelephone-contact-error-{{ $fournisseur->id }}-{{ $i }}" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">
-                                            Veuillez entrer un numéro de téléphone valide
-                                        </p>
-                                    </div>
-                                @endfor
                                 </div>
                                 <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                                     <button data-modal-hide="finance-modal" id="save-adresse" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
@@ -1518,6 +1495,55 @@
                             </div>
                         </div>
                     </div>
+
+                    <script>
+                        var isNumTPSValid = true;
+                        var isNumTVQValid = true;
+                        var isConditionPaiementValid = true;
+                        
+                        function validateType(selectElement) {
+                            const validValues = ["payable immédiatement sans réduction", 
+                                                    "payable immédiatement sans réduction, Date de base au 15 du mois suivant", 
+                                                    "dans les 15 jours 2% escpte, dans les 30 jours sans déduction",
+                                                    "après entrée facture jusqu'au 15 du mois, jusqu'au 15 du mois suivant 2% escpte",
+                                                    "dans les 10 jours 2% escpte, dans les 30 jours sans déduction",
+                                                    "dans les 15 jours sans déduction",
+                                                    "dans les 30 jours sans déduction",
+                                                    "dans les 45 jours sans déduction",
+                                                    "dans les 60 jours sans déduction",
+                                                ];
+                            if (!validValues.includes(selectElement.value)) {
+                                $('#' + selectElement.id + '-error').removeClass('hidden');
+                                return false;
+                            } else {
+                                $('#' + selectElement.id + '-error').addClass('hidden');
+                                return true;
+                            }
+                        }
+
+                        document.getElementById('numTPS').addEventListener('input', function() {
+                            if (this.value != "") {
+                                $('#numTPSErrorMessage').addClass('hidden');
+                                isNumTPSValid = true;
+                            } else {
+                                $('#numTPSErrorMessage').removeClass('hidden');
+                                isNumTPSValid = false;
+                            }
+                            checkAdressFormValidity();
+                        });
+
+                        document.getElementById('numTVQ').addEventListener('input', function() {
+                            if (this.value != "") {
+                                $('#numTVQErrorMessage').addClass('hidden');
+                                isNumTVQValid = true;
+                            } else {
+                                $('#numTVQErrorMessage').removeClass('hidden');
+                                isNumTVQValid = false;
+                            }
+                            checkAdressFormValidity();
+                        });
+                        
+                    </script>
 
                     @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Enregistrer</button>
