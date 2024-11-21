@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -47,10 +48,11 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
+        $request->validate([
             'password' => ['required', 'current_password'],
         ]);
 
+        $this->supprimerBrochures();
         $user = $request->user();
 
         Auth::logout();
@@ -61,6 +63,21 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    private function supprimerBrochures()
+    {
+        foreach (auth()->user()->brochures as $id) {
+            $brochure = Brochure::find($id);
+            if ($brochure) {
+                // Supprimer le fichier du stockage
+                $filePath = 'public/brochures/' . $brochure->nom;
+                if (Storage::exists($filePath)) {
+                    Storage::delete($filePath);
+                }
+                $brochure->delete();
+            }
+        }
     }
 
     public function create_contact()
@@ -112,28 +129,4 @@ class ProfileController extends Controller
     {
         return view('profile.parametres');
     }
-
-    use Illuminate\Support\Facades\Storage;
-
-    public function supprimerBrochures(Request $request)
-    {
-
-        foreach (auth()->user()->brochures as $id) {
-            // Trouver la brochure par ID
-            $brochure = Brochure::find($id);
-
-            if ($brochure) {
-                // Supprimer le fichier du stockage
-                $filePath = 'public/brochures/' . $brochure->nom;
-                if (Storage::exists($filePath)) {
-                    Storage::delete($filePath);
-                }
-
-                // Supprimer l'enregistrement de la base de données
-                $brochure->delete();
-            }
-        }
-        return redirect()->back()->with('success', 'Les brochures ont été supprimées avec succès.');
-    }
-
 }
