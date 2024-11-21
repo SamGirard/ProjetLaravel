@@ -1321,7 +1321,6 @@
                 </script>
 
                 <div class="mx-1">
-
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Produits et services offerts
                         </legend>
@@ -1430,17 +1429,15 @@
                         </ul>
                         </p>
                     </fieldset>
-                    <div class="mx-1 w-1/3">
-                        <fieldset class="border-2 border-blue-600 rounded-lg p-4">
-                            <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Finances</legend>
-                            <div class="text-right">
-                                <butto data-modal-target="finance-modal" data-modal-toggle="finance-modal" class="text-blue-600 hover:text-blue-900" type="button">
-                                    <i class="text-xl fa-regular fa-pen-to-square" aria-hidden="true"></i>
-                                </button>
-                            </div>
-                            
-                        </fieldset>
-                    </div>
+                    <fieldset class="border-2 border-blue-600 rounded-lg p-4">
+                        <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Finances</legend>
+                        <div class="text-right">
+                            <button data-modal-target="finance-modal" data-modal-toggle="finance-modal" class="text-blue-600 hover:text-blue-900" type="button">
+                                <i class="text-xl fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                            </button>
+                        </div>
+
+                    </fieldset>
                     <div id="finance-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <div class="relative p-4 w-full max-w-2xl max-h-full">
                             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
