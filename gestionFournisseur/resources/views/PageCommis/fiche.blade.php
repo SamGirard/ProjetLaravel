@@ -783,27 +783,28 @@
                             , {{ $fournisseur->rue }}</p>
                         <p id="coordoneDisplay" class="text-gray-800 my-1">{{trim($fournisseur->ville, '"') }}
                             ({{ $fournisseur->province }}) {{ $fournisseur->codePostal }}</p>
-                        <p id="siteInternetDisplay" class="text-gray-800 my-1"><a target="_blank"
-                                href="{{ $fournisseur->siteInternet }}">{{ $fournisseur->siteInternet }}</a>
-                        </p>
+                        <a id="siteInternetDisplay" class="text-gray-800 my-1" href="{{ $fournisseur->siteInternet }}" target="_blank">
+                                {{ $fournisseur->siteInternet }}
+                        </a>
                         @php
                             $telephoneNumbers = json_decode($fournisseur->numeroTelephone, true);
                             $typeNumTelephone = json_decode($fournisseur->typeNumTelephone, true);
                             $poste = json_decode($fournisseur->poste, true);
                         @endphp
-
-                        @for($i = 0; $i < count($telephoneNumbers); $i++)
-                            <p class="text-gray-800 my-1">
-                                @if(isset($typeNumTelephone[$i]) && $typeNumTelephone[$i] == "Telecopieur")
-                                    <i class="fa-solid fa-fax mr-2"></i>
-                                @elseif(isset($typeNumTelephone[$i]) && $typeNumTelephone[$i] == "Cellulaire")
-                                    <i class="fa-solid fa-phone mr-2"></i>
-                                @else
-                                    <i class="fa-solid fa-desktop mr-2"></i>
-                                @endif
-                                {{ $telephoneNumbers[$i] }} @isset($poste[$i]) #{{ $poste[$i] }} @endisset
-                            </p>
-                        @endfor
+                        <div class="telephoneDisplay">
+                            @for($i = 0; $i < count($telephoneNumbers); $i++)
+                                <p class="text-gray-800 my-1">
+                                    @if(isset($typeNumTelephone[$i]) && $typeNumTelephone[$i] == "Telecopieur")
+                                        <i class="fa-solid fa-fax mr-2"></i>
+                                    @elseif(isset($typeNumTelephone[$i]) && $typeNumTelephone[$i] == "Cellulaire")
+                                        <i class="fa-solid fa-phone mr-2"></i>
+                                    @else
+                                        <i class="fa-solid fa-desktop mr-2"></i>
+                                    @endif
+                                    {{ $telephoneNumbers[$i] }} @isset($poste[$i]) #{{ $poste[$i] }} @endisset
+                                </p>
+                            @endfor
+                        </div>
                     </fieldset>
 
                     <div id="adresse-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -1248,6 +1249,7 @@
                                 document.getElementById('province').value + ") " + 
                                 document.getElementById('codePostal').value;
                             document.getElementById('siteInternetDisplay').textContent = document.getElementById('siteInternet').value;
+                            document.getElementById('siteInternetDisplay').href = document.getElementById('siteInternet').value;
 
                             var typeNumTelephoneValue = "[";
                             var numeroTelephoneValue = "[";
@@ -1278,6 +1280,27 @@
                             document.getElementById('typeNumTelephone').value = typeNumTelephoneValue;
                             document.getElementById('numeroTelephone').value = numeroTelephoneValue;
                             document.getElementById('poste').value = posteValue;
+
+                            const telephoneDisplay = document.querySelector('.telephoneDisplay');
+                            telephoneDisplay.innerHTML = '';
+
+                            const typeNumTelephoneArray = JSON.parse(typeNumTelephoneValue);
+                            const numeroTelephoneArray = JSON.parse(numeroTelephoneValue);
+                            const posteArray = JSON.parse(posteValue);
+
+                            typeNumTelephoneArray.forEach((type, index) => {
+                                let icon = '';
+                                if (type === "Telecopieur") {
+                                    icon = '<i class="fa-solid fa-fax mr-2"></i>';
+                                } else if (type === "Cellulaire") {
+                                    icon = '<i class="fa-solid fa-phone mr-2"></i>';
+                                } else {
+                                    icon = '<i class="fa-solid fa-desktop mr-2"></i>';
+                                }
+
+                                const telephoneText = numeroTelephoneArray[index] + (posteArray[index] ? ' #' + posteArray[index] : '');
+                                telephoneDisplay.innerHTML += `<p class="text-gray-800 my-1">${icon} ${telephoneText}</p>`;
+                            });
                         }
                     });
                     
@@ -1287,7 +1310,7 @@
                         document.getElementById('ville').value = document.getElementById('coordoneDisplay').textContent.split(' (')[0];
                         document.getElementById('province').value = document.getElementById('coordoneDisplay').textContent.split(' (')[1].split(')')[0];
                         document.getElementById('codePostal').value = document.getElementById('coordoneDisplay').textContent.split(' (')[1].split(')')[1];
-                        document.getElementById('siteInternet').value = document.getElementById('siteInternet').textContent;
+                        document.getElementById('siteInternet').value = document.getElementById('siteInternetDisplay').textContent;
                     });
 
                     function isAdressFormValid() {
