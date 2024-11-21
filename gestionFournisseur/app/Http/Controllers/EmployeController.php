@@ -46,10 +46,6 @@ class EmployeController extends Controller
         Auth::login($user);
         session()->regenerate();   
         
-        Mail::to($user->courriel)->send(new MailConnection($user->role));
-
-        // Rediriger l'utilisateur vers la bonne vue selon son rôle
-        // Rediriger l'utilisateur selon son rôle
         if ($user->role == "Administrateur") {
             return redirect()->route('role');
 
