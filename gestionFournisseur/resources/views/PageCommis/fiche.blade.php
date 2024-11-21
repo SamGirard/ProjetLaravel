@@ -326,7 +326,7 @@
                                                         </div>
                                                         <div>
                                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type de numéro</label>
-                                                            <select id="typeNumTelephone-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                            <select id="typeNumTelephone-contact-{{ $contact->id }}" name="typeNumTelephone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                                 <option value="Bureau" <?= $contact->typeNumTelephone == 'Bureau' ? 'selected' : '' ?>>Bureau</option>
                                                                 <option value="Télécopieur" <?= $contact->typeNumTelephone == 'Télécopieur' ? 'selected' : '' ?>>Télécopieur</option>
                                                                 <option value="Cellulaire" <?= $contact->typeNumTelephone == 'Cellulaire' ? 'selected' : '' ?>>Cellulaire</option>
@@ -349,7 +349,7 @@
                                                 </div>
                                             </div>
                                         @endforeach
-            <!--FIN CONTACT-->      </div>
+             <!--FIN CONTACT-->      </div>
                                     <button id="add-contact" type="button">
                                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
@@ -827,6 +827,16 @@
                                             <p id="provinceErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer une province valide.</p>
                                         </div>
                                         <div>
+                                            <label for="regionAdministrative" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Région Administrative</label>
+                                            <input type="text" name="regionAdministrative" id="regionAdministrative" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->regionAdministrative }}" value="{{ $fournisseur->regionAdministrative }}" />
+                                            <p id="regionAdministrativeErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez choisir une région administrative.</p>
+                                        </div>
+                                        <div>
+                                            <label for="code_administratif" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code Administratif</label>
+                                            <input type="text" name="code_administratif" id="code_administratif" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->code_administratif }}" value="{{ $fournisseur->code_administratif }}" required />
+                                            <p id="code_administratifErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un code administraif valide.</p>
+                                        </div>
+                                        <div>
                                             <label for="codePostal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code postal</label>
                                             <input type="text" name="codePostal" id="codePostal" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->codePostal }}" value="{{ $fournisseur->codePostal }}" required />
                                             <p id="codePostalErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un code postal valide.</p>
@@ -849,7 +859,6 @@
                                                 </label> 
                                                 <select 
                                                     id="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}"
-                                                    name="TypeNumTelephone" 
                                                     class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 >
                                                     <option value="Bureau" {{ $typeNumTelephone[$i] == 'Bureau' ? 'selected' : '' }}>Bureau</option>
@@ -888,7 +897,7 @@
                                                     id="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
                                                     class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                     placeholder="{{ $poste[$i] }}" 
-                                                    value="#{{ $poste[$i] }}"
+                                                    value='["#{{ $poste[$i] }}"]'
                                                     name="poste"  
                                                     required 
                                                 />
@@ -928,6 +937,8 @@
                     var isPronviceValid = true;
                     var isCodePostalValid = true;
                     var isSiteInternetValid = true;
+                    var isRegionAdministrativeValid = true;
+                    var isCodeAdministratifValid = true;
 
                     function checkAdressFormValidity() {
                         const saveButton = document.getElementById('save-adresse');
@@ -981,6 +992,28 @@
                         } else {
                             $('#villeErrorMessage').removeClass('hidden');
                             isVilleValid = false;
+                        }
+                        checkAdressFormValidity();
+                    });
+
+                    document.getElementById('regionAdministrative').addEventListener('input', function() {
+                        if (this.value != "") {
+                            $('#regionAdministrativeErrorMessage').addClass('hidden');
+                            isRegionAdministrativeValid = true;
+                        } else {
+                            $('#regionAdministrativeErrorMessage').removeClass('hidden');
+                            isRegionAdministrativeValid = false;
+                        }
+                        checkAdressFormValidity();
+                    });
+
+                    document.getElementById('code_administratif').addEventListener('input', function() {
+                        if (this.value != "") {
+                            $('#code_administratifErrorMessage').addClass('hidden');
+                            isCodeAdministratifValid = true;
+                        } else {
+                            $('#code_administratifErrorMessage').removeClass('hidden');
+                            isCodeAdministratifValid = false;
                         }
                         checkAdressFormValidity();
                     });
@@ -1140,14 +1173,139 @@
                         </ul>
                         </p>
                     </fieldset>
+
+                    <div class="mx-1 w-1/3">
+                        <fieldset class="border-2 border-blue-600 rounded-lg p-4">
+                            <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Finances</legend>
+                            <div class="text-right">
+                                <butto data-modal-target="finance-modal" data-modal-toggle="finance-modal" class="text-blue-600 hover:text-blue-900" type="button">
+                                    <i class="text-xl fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            
+                        </fieldset>
+                    </div>
+                    <div id="finance-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative p-4 w-full max-w-2xl max-h-full">
+                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                        Adresse
+                                    </h3>
+                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="finance-modal">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                <div class="p-4 md:p-5 space-y-4">
+                                    <div class="grid gap-6 mb-6 md:grid-cols-2">
+                                        <div>
+                                            <label for="numTPS" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro TPS</label>
+                                            <input type="text" name="numTPS" id="numTPS" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numCivique }}" value="{{ $fournisseur->numCivique }}" />
+                                            <p id="numTPSErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de TPS valide.</p>
+                                        </div>
+                                        <div>
+                                            <label for="numTVQ" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro TVQ</label>
+                                            <input type="text" name="rue" id="TVQ" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->rue }}" value="{{ $fournisseur->rue }}" required />
+                                            <p id="rueErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de TVS valide.</p>
+                                        </div>
+                                    </div>
+                                    @for($i = 0; $i < count($telephoneNumbers); $i++)
+                                    <div class="mb-6">
+                                        <div class="flex items-center">
+                                            <div class="flex flex-col">
+                                                <label 
+                                                    for="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+                                                >
+                                                    Type {{ $i+1 }}
+                                                </label> 
+                                                <select 
+                                                    id="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}"
+                                                    class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                >
+                                                    <option value="Bureau" {{ $typeNumTelephone[$i] == 'Bureau' ? 'selected' : '' }}>Bureau</option>
+                                                    <option value="Télécopieur" {{ $typeNumTelephone[$i] == 'Télécopieur' ? 'selected' : '' }}>Télécopieur</option>
+                                                    <option value="Cellulaire" {{ $typeNumTelephone[$i] == 'Cellulaire' ? 'selected' : '' }}>Cellulaire</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="flex-grow">
+                                                <label 
+                                                    for="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+                                                >
+                                                    Numéro de téléphone {{ $i+1 }}
+                                                </label>
+                                                <input 
+                                                    type="text" 
+                                                    id="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    placeholder="{{ $telephoneNumbers[$i] }}" 
+                                                    value="{{ $telephoneNumbers[$i] }}"
+                                                    name="numeroTelephone"
+                                                    required 
+                                                />
+                                            </div>
+
+                                            <div class="flex flex-col w-1/4">
+                                                <label 
+                                                    for="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+                                                >
+                                                    Poste {{ $i+1 }}
+                                                </label>
+                                                <input 
+                                                    type="text" 
+                                                    id="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                    class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    placeholder="{{ $poste[$i] }}" 
+                                                    value='["#{{ $poste[$i] }}"]'
+                                                    name="poste"  
+                                                    required 
+                                                />
+                                            </div>
+
+                                            <button 
+                                                type="button" 
+                                                class="text-red-500 hover:text-red-700 ml-2 mt-6" 
+                                                id="delete-contact-{{ $i }}"
+                                            >
+                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+
+                                        <p id="numTelephone-contact-error-{{ $fournisseur->id }}-{{ $i }}" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">
+                                            Veuillez entrer un numéro de téléphone valide
+                                        </p>
+                                    </div>
+                                @endfor
+                                </div>
+                                <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                    <button data-modal-hide="finance-modal" id="save-adresse" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
+                                    <button type="button" id="add-number" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 ml-2.5 py-2.5 text-center">Ajouter un numéro</button>
+                                    <button data-modal-hide="finance-modal" id="cancel-adresse" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Annuler</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Enregistrer</button>
-                    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Exporter vers les finances</button>
-                    <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Supprimer</button>
+                    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Exporter vers les finances</button>             
                 </div>
             </div>
         </div>
     </div>
 </form>
+<form method="POST" class="ml-14" action="{{route('supprimerFournisseur', [$fournisseur->id] )}}">
+    @csrf
+    @method('DELETE')
+    <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?');">Supprimer le fournisseur</button>
+</form>   
 @endif
 
 </div>
