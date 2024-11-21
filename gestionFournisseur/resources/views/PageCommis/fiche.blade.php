@@ -1329,25 +1329,34 @@
                             <a href="#" class="text-blue-600 hover:text-blue-900"><i
                                     class="text-xl fa-regular fa-pen-to-square"></i></a>
                         </div>
+
                         @php
                             $categories = [];
-                            // Organiser les produits par catégorie et sous-catégorie
+
+                            // Loop through each service in the collection
                             foreach ($services as $service) {
-                                $valeurs = explode('/', $service);
+                                // Decode the JSON string in 'produit_services' to an array
+                                $produitServices = json_decode($service->produit_services, true);
 
-                                // Structurer les catégories et sous-catégories sans répétition
-                                $categorie = $valeurs[0] ?? '';
-                                $sousCategorie = $valeurs[1] ?? '';
-                                $element = $valeurs[2] ?? '';
-                                $sousElement = $valeurs[3] ?? '';
+                                // Loop through each product service in 'produit_services'
+                                foreach ($produitServices as $produit) {
+                                    $valeurs = explode('/', $produit);
 
-                                if (!isset($categories[$categorie])) {
-                                    $categories[$categorie] = [];
+                                    // Structurer les catégories et sous-catégories sans répétition
+                                    $categorie = $valeurs[0] ?? '';
+                                    $sousCategorie = $valeurs[1] ?? '';
+                                    $element = $valeurs[2] ?? '';
+                                    $sousElement = $valeurs[3] ?? '';
+
+                                    // Organize by categories and subcategories
+                                    if (!isset($categories[$categorie])) {
+                                        $categories[$categorie] = [];
+                                    }
+                                    if (!isset($categories[$categorie][$sousCategorie])) {
+                                        $categories[$categorie][$sousCategorie] = [];
+                                    }
+                                    $categories[$categorie][$sousCategorie][] = [$element, $sousElement];
                                 }
-                                if (!isset($categories[$categorie][$sousCategorie])) {
-                                    $categories[$categorie][$sousCategorie] = [];
-                                }
-                                $categories[$categorie][$sousCategorie][] = [$element, $sousElement];
                             }
                         @endphp
 
@@ -1368,11 +1377,10 @@
                             </ul>
                         @endforeach
 
-
                         <hr class="border-0 h-1 bg-blue-600 my-2">
                         <h2><strong>Détails</strong></h2>
                         <p>
-
+                            {{$service->details}}
                         </p>
                     </fieldset>
 
