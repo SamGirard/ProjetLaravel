@@ -226,6 +226,7 @@
                 <form id="exportForm" action="{{ route('export.fournisseurs') }}" method="GET">
                     @csrf
                     <input type="hidden" name="filteredFournisseurs" id="filteredFournisseurs">
+                    <input type="hidden" name="checkedFournisseurs" id="checkedFournisseurs">
                     <button type="submit"
                         class="flex-shrink-0 z-10 inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm py-2.5 px-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 hover:text-blue-600">
                         <svg class="w-5 h-5 pr-1 text-inherit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -805,9 +806,10 @@
             });
 
             function populateInputs() {
-                const filteredInput = document.getElementById('filteredFournisseurs');
-
-                filteredInput.value = JSON.stringify(filteredFournisseurs);
+                const filteredFournisseur = document.getElementById('filteredFournisseurs');
+                const checkedFournisseur = document.getElementById('checkedFournisseurs');
+                filteredFournisseur.value = JSON.stringify(filteredFournisseurs);
+                checkedFournisseur.value = checkedFournisseurs;
             }
 
             document.getElementById('exportForm').onsubmit = function () {

@@ -68,22 +68,34 @@ class gestionController extends Controller
     }
 
     public function exportFournisseurs(Request $request) {
-        $checkedFournisseurs = json_decode($request->input('checkedFournisseurs', '[]'), true);
-        $filteredFournisseurs = json_decode($request->input('filteredFournisseurs', '[]'), true);
+        Log::info($request->all());
     
-        $fournisseurs = !empty($checkedFournisseurs) ? $checkedFournisseurs : $filteredFournisseurs;
-
+        $elements = explode(',', $request->checkedFournisseurs);
+        $ids = [];
+    
+        foreach ($elements as $index => $value) {
+            if ($value === 'true') {
+                $ids[] = $index + 1;
+            }
+        }
+    
+        $users = User::whereIn('id', $ids)->get();
+    
+        $filteredFournisseurs = json_decode($request->input('filteredFournisseurs', '[]'), true);
+        $fournisseurs = !empty($users) ? $users->toArray() : $filteredFournisseurs;
+    
         if (empty($fournisseurs)) {
             return response()->json(['error' => 'No fournisseurs to export.'], 400);
         }
-    
+
         $response = new StreamedResponse(function() use ($fournisseurs) {
             $handle = fopen('php://output', 'w');
     
-            fputcsv($handle, array_keys($fournisseurs[0]));
-    
-            foreach ($fournisseurs as $fournisseur) {
-                fputcsv($handle, array_values($fournisseur));
+            if (!empty($fournisseurs)) {
+                fputcsv($handle, array_keys($fournisseurs[0]));  
+                foreach ($fournisseurs as $fournisseur) {
+                    fputcsv($handle, array_values($fournisseur));
+                }
             }
     
             fclose($handle);
