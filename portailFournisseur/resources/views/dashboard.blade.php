@@ -103,7 +103,7 @@
                                 <div class="flex space-x-2">
                                     <span class="flex items-center justify-center"><a
                                             class="px-2 py-2 bg-blue-300 rounded-lg fa-regular fa-pen-to-square text-blue-500 hover:text-blue-800 text-xl"
-                                            href="#"></a></span>
+                                            href="{{ route('create_contact',$contact->id) }}"></a></span>
                                     <span data-modal-target="supprimer-contact{{$contact->id}}"
                                           data-modal-toggle="supprimer-contact{{$contact->id}}"
                                           class="flex items-center justify-center">

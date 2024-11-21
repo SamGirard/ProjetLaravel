@@ -193,7 +193,7 @@ class FournisseurController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store_contact(Request $request)
+    public function store_contact(Request $request, ?int $id)
     {
 
         $validated = $request->validate([
@@ -206,21 +206,35 @@ class FournisseurController extends Controller
             'poste_contact' => ['nullable', 'max_digits:6', 'numeric'],
         ]);
         if (auth()->user()) {
-            $contact = new Contact();
-            $contact->nom = $request->input('nom_contact');
-            $contact->prenom = $request->input('prenom_contact');
-            $contact->courriel = $request->input('email_contact');
-            $contact->fonction = $request->input('fonction_contact');
-            $contact->nom = $request->input('nom_contact');
-            $contact->typeNumTelephone = $request->input('type_telephone_contact');
-            $contact->numTelephone = $request->input('telephone_contact');
-            $contact->poste = $request->input('poste_contact');
-            $contact->fournisseur_id = auth()->user()->id;
-            $contact->save();
+            if ($request->isMethod('post')) {
+                $contact = new Contact();
+                $contact->nom = $request->input('nom_contact');
+                $contact->prenom = $request->input('prenom_contact');
+                $contact->courriel = $request->input('email_contact');
+                $contact->fonction = $request->input('fonction_contact');
+                $contact->nom = $request->input('nom_contact');
+                $contact->typeNumTelephone = $request->input('type_telephone_contact');
+                $contact->numTelephone = $request->input('telephone_contact');
+                $contact->poste = $request->input('poste_contact');
+                $contact->fournisseur_id = auth()->user()->id;
+                $contact->save();
+            } else if ($request->isMethod('put') && $id != null) {
+                $contact = Contact::findOrFail($id);
+                $contact->update([
+                    'nom' => $request->input('nom_contact'),
+                    'prenom' => $request->input('prenom_contact'),
+                    'courriel' => $request->input('email_contact'),
+                    'fonction' => $request->input('fonction_contact'),
+                    'typeNumTelephone' => $request->input('type_telephone_contact'),
+                    'numTelephone' => $request->input('telephone_contact'),
+                    'poste' => $request->input('poste_contact'),
+                    'fournisseur_id' => auth()->user()->id
+                ]);
+            }
             Mail::to(Parametre::first()->courrielAppro)->send(
-                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()->message])
+                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()])
             );
-            return redirect()->route('dashboard')->with(['ajouter_contact' => 'contact enregistré']);
+            return redirect()->route('dashboard')->with(['ajouter_contact' => 'Contact mis à jour avec succès']);
         } else {
 
             $request->session()->put('form_contact', $request->all());
@@ -228,14 +242,16 @@ class FournisseurController extends Controller
         }
     }
 
-    public function create_contact(Request $request)
+    public function create_contact(Request $request, ?int $id)
     {
-        if ($request->session()->has('form_coordonnee'))
-            return view('fournisseur./form_contact');
-        else
+        if ($request->session()->has('form_coordonnee') || auth()->check()) {
+            $contact = null;
+            if (auth()->check() && $id != null)
+                $contact = Contact::findOrFail($id);
+            return view('fournisseur/form_contact')->with('contact', $contact);
+        } else
             return redirect() > route('create_identification');
     }
-
 
     public function create_brochure(Request $request)
     {

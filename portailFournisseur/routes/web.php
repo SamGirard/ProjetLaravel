@@ -8,18 +8,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('ajouter_identification',[FournisseurController::class,'create_identification'])->name('create_identification');
-Route::post('ajouter_identification',[FournisseurController::class,'store_identification'])->name('store_identification');
-Route::get('ajouter_service/{neq?}',[FournisseurController::class,'create_service'])->name('create_service');
-Route::post('ajouter_service',[FournisseurController::class,'store_service'])->name('store_service');
-Route::get('ajouter_coordonnee/{id?}',[FournisseurController::class,'create_coordonnee'])->name('create_coordonnee');
-Route::post('ajouter_coordonnee',[FournisseurController::class,'store_coordonnee'])->name('store_coordonnee');
-Route::get('ajouter_contact',[FournisseurController::class,'create_contact'])->name('create_contact');
-Route::post('ajouter_contact',[FournisseurController::class,'store_contact'])->name('store_contact');
-Route::get('ajouter_brochure/',[FournisseurController::class,'create_brochure'])->name('create_brochure');
-Route::post('ajouter_brochure',[FournisseurController::class,'store_brochure'])->name('store_brochure');
+Route::get('ajouter_identification', [FournisseurController::class, 'create_identification'])->name('create_identification');
+Route::post('ajouter_identification', [FournisseurController::class, 'store_identification'])->name('store_identification');
+Route::get('ajouter_service/{neq?}', [FournisseurController::class, 'create_service'])->name('create_service');
+Route::post('ajouter_service', [FournisseurController::class, 'store_service'])->name('store_service');
+Route::get('ajouter_coordonnee/{id?}', [FournisseurController::class, 'create_coordonnee'])->name('create_coordonnee');
+Route::post('ajouter_coordonnee', [FournisseurController::class, 'store_coordonnee'])->name('store_coordonnee');
+Route::get('ajouter_contact/{id?}', [FournisseurController::class, 'create_contact'])->name('create_contact');
+Route::match(['post', 'put'], 'ajouter_contact/{id?}', [FournisseurController::class, 'store_contact'])->name('store_contact');
+Route::get('ajouter_brochure/', [FournisseurController::class, 'create_brochure'])->name('create_brochure');
+Route::post('ajouter_brochure', [FournisseurController::class, 'store_brochure'])->name('store_brochure');
 
-Route::get('/chercherService/{value}',[FournisseurController::class,'chercherService'])->name('cherherService');
+Route::get('/chercherService/{value}', [FournisseurController::class, 'chercherService'])->name('cherherService');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -30,14 +30,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::delete('/supprimer-contact/{id}',[ProfileController::class,'destroyContact'])->name('supprimer-contact');
-    Route::get('ajouter_contact',[ProfileController::class,'create_contact'])->name('profil.create_contact');
+    Route::delete('/supprimer-contact/{id}', [ProfileController::class, 'destroyContact'])->name('supprimer-contact');
+    Route::get('ajouter_contact', [ProfileController::class, 'create_contact'])->name('profil.create_contact');
 
-    Route::get('ajouter_finance',[ProfileController::class,'create_finance'])->name('profil.create_finance');
-    Route::post('ajouter_finance',[ProfileController::class,'store_finance'])->name('profil.store_finance');
+    Route::get('ajouter_finance', [ProfileController::class, 'create_finance'])->name('profil.create_finance');
+    Route::post('ajouter_finance', [ProfileController::class, 'store_finance'])->name('profil.store_finance');
 
-    Route::get('/parametres',[ProfileController::class,'create_parametre'])->name('profil.create_parametre');
+    Route::get('/parametres', [ProfileController::class, 'create_parametre'])->name('profil.create_parametre');
 });
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

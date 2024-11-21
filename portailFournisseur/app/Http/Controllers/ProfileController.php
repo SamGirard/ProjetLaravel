@@ -63,21 +63,24 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function create_contact(){
+    public function create_contact()
+    {
         return view('profile.ajouter_contact');
     }
 
-    public function create_finance(){
+    public function create_finance()
+    {
         return view('profile.ajouter_finances');
     }
 
-    public function store_finance(Request $request){
+    public function store_finance(Request $request)
+    {
         $validated = $request->validate([
-            'num_tps'=>'required',
-            'num_tvq'=>'required',
-            'condition_paiement'=>'required',
-            'devise'=>'required',
-            'mode_communication'=>'required'
+            'num_tps' => 'required',
+            'num_tvq' => 'required',
+            'condition_paiement' => 'required',
+            'devise' => 'required',
+            'mode_communication' => 'required'
         ]);
 
         auth()->user()->numTPS = $request->input('num_tps');
@@ -88,23 +91,25 @@ class ProfileController extends Controller
         auth()->user()->save();
 
         Mail::to(Parametre::first()->courrielAppro)->send(
-            new ModificationFournisseur(['nom'=>auth()->user()->nomEntreprise,'message'=>DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()->message])
+            new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()->message])
         );
         return redirect()->route('dashboard')->with(['ajouter_finance' => 'données de finances ajoutées!']);
     }
+
     public function destroyContact($id)
     {
         $contact = Contact::find($id);
         if ($contact) {
             $contact->delete();
             Mail::to(Parametre::first()->courrielAppro)->send(
-                new ModificationFournisseur(['nom'=>auth()->user()->nomEntreprise,'message'=>DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()->message])
+                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()->message])
             );
             return redirect()->route('dashboard')->with(['supprimer_contact' => 'contact supprimé']);
         }
     }
 
-    public function create_parametre(){
+    public function create_parametre()
+    {
         return view('profile.parametres');
     }
 
@@ -113,22 +118,22 @@ class ProfileController extends Controller
     public function supprimerBrochures(Request $request)
     {
 
-            foreach (auth()->user()->brochures as $id) {
-                // Trouver la brochure par ID
-                $brochure = Brochure::find($id);
+        foreach (auth()->user()->brochures as $id) {
+            // Trouver la brochure par ID
+            $brochure = Brochure::find($id);
 
-                if ($brochure) {
-                    // Supprimer le fichier du stockage
-                    $filePath = 'public/brochures/' . $brochure->nom;
-                    if (Storage::exists($filePath)) {
-                        Storage::delete($filePath);
-                    }
-
-                    // Supprimer l'enregistrement de la base de données
-                    $brochure->delete();
+            if ($brochure) {
+                // Supprimer le fichier du stockage
+                $filePath = 'public/brochures/' . $brochure->nom;
+                if (Storage::exists($filePath)) {
+                    Storage::delete($filePath);
                 }
+
+                // Supprimer l'enregistrement de la base de données
+                $brochure->delete();
             }
-            return redirect()->back()->with('success', 'Les brochures ont été supprimées avec succès.');
+        }
+        return redirect()->back()->with('success', 'Les brochures ont été supprimées avec succès.');
     }
 
 }
