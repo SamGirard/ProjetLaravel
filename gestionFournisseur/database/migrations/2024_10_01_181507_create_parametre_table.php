@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('parametre', function (Blueprint $table) {
+        Schema::create('parametres', function (Blueprint $table) {
             $table->string('courrielAppro', 64)->primary();
             $table->integer('delaiRevision');
             $table->integer('tailleMaxFichiers');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('parametre');
+        Schema::dropIfExists('parametres');
     }
 };

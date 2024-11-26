@@ -16,7 +16,7 @@ class Parametre extends Model
     // Define which attributes are mass assignable
     protected $fillable = ['courrielAppro', 'delaiRevision', 'tailleMaxFichiers', 'courrielFinance'];
 
-    protected $table = 'parametre';
+    protected $table = 'parametres';
 
     public $timestamps = false;
 }
