@@ -22,7 +22,7 @@
                     <div class="container mx-auto mt-6 flex">
                             <div class="flex-1 p-6 ml-6">
                                 <div class="flex justify-evenly">
-                                    <div class="mx-1">
+                                    <div class="mx-1 w-96">
                                     @php
                         $statuses = ['Accepter', 'Refusé', 'En attente', 'Réviser'];
                     @endphp
@@ -1320,8 +1320,8 @@
                     checkAdressFormValidity();
                 </script>
 
-                <div class="mx-1">
-                    <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
+                <div class="mx-1 w-full">
+                    <fieldset class="border-2 border-blue-600 rounded-lg p-4">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Produits et services offerts
                         </legend>
                         <div class="text-right">
@@ -1429,7 +1429,7 @@
                         </ul>
                         </p>
                     </fieldset>
-                    <div class="mx-1 w-1/3">
+                    <div>
                         <fieldset class="border-2 border-blue-600 rounded-lg p-4">
                             <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Finances</legend>
                             <div class="text-right">
