@@ -11,7 +11,7 @@
 @csrf
 @method('PATCH')
     <div class="container mx-auto mt-6 flex">
-        <div class="flex-1 bg-white shadow-lg rounded-lg p-6 ml-6">
+        <div class="flex-1">
             <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Fiche fournisseur - {{ $fournisseur->nomEntreprise }}</h1>
             <div class="flex justify-evenly">
                 <div class="mx-1">
@@ -33,7 +33,7 @@
                             @if(in_array($fournisseur->etatDemande, $statuses))
                                     <input type="hidden" name="etatDemande" id="etatDemande"
                                         value="{{ $fournisseur->etatDemande }}">
-                                    <button id="dropdownEtatButton" data-dropdown-toggle="dropdownEtat"
+                                    <button id="dropdownEtatButton"
                                         class="text-center inline-flex items-center 
                                                 {{ $fournisseur->etatDemande == 'En attente' ? 'bg-blue-100 text-blue-800' : ($fournisseur->etatDemande == 'Accepter' ? 'bg-green-100 text-green-800' : ($fournisseur->etatDemande == 'Réviser' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800')) }}
                                                 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300" type="button">
@@ -44,8 +44,8 @@
                                                 stroke-width="2" d="m1 1 4 4 4-4" />
                                         </svg>
                                     </button>
-                                <div id="dropdownEtat" class="hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
-                                    <ul class="p-2" aria-labelledby="dropdownEtatButton">
+                                <div id="dropdownEtat" class="hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44"> 
+                                    <ul class="p-2">
                                         @foreach($statuses as $status)
                                             @if($status !== $fournisseur->etatDemande)
                                                 <li>
@@ -84,6 +84,10 @@
                     </fieldset>
 
                     <script>
+                        $('#dropdownEtatButton').on('click', function () {
+                            $('#dropdownEtat').removeClass('hidden');
+                        })
+
                         $('#dropdownEtat').on('click', '.changeStatusButton', function () {
                             $('#dropdownEtat').addClass('hidden');
 
