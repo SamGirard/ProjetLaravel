@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    src: url(../font/AlumniSans-VariableFont_wght.ttf);
+    font-family: bozo;
+}
+
+@font-face {
+    src: url(../font//TT\ Hoves\ Pro\ Trial\ Condensed\ Light.ttf);
+    font-family: Cambria;
+}
+
+@font-face {
+    src: url(../font/TT\ Hoves\ Pro\ Trial\ Condensed\ Medium.ttf);
+    font-family: Cochin;
+}
+
+@font-face {
+    src: url(../font/TT\ Hoves\ Pro\ Trial\ Condensed\ Bold.ttf);
+    font-family: Courrier;
+}
+
 
 .content {
     display: none;
@@ -13,4 +33,17 @@
 .text-disabled {
     color: gray; /* Changer la couleur du texte en gris quand désactivé */
     opacity: 0.6; /* Réduire l'opacité pour renforcer l'effet désactivé */
+}
+
+h1{
+    font-family: bozo;
+    font-size: 40pt !important;
+}
+
+p, td, label, button {
+    font-family: Cochin;;
+}
+
+h2, h3, h4, h5, h6, th, span, li{
+    font-family: Courrier;
 }

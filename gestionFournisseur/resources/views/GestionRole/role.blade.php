@@ -8,7 +8,7 @@
                     <div class="mx-auto grid max-w-3xl gap-x-8 gap-y-10 px-6 lg:px-8 xl:grid-cols-1">
                         <div class="max-w-2xl">
                             <div class="flex">
-                                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Gestion des utilisateurs</h2>
+                                <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Gestion des utilisateurs</h1>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mt-2 ml-2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
                                 </svg>
@@ -37,10 +37,10 @@
                         @endif
                     </ul>
                     <div class="flex space-x-4">
-                        <button class="bg-blue-600 px-4 py-2 rounded-lg text-white hover:bg-blue-500" type="submit">
+                        <button class="bg-blue-500 px-4 py-2 rounded-lg text-white hover:bg-blue-500" type="submit">
                             Enregistrer
                         </button>  
-                        <a class="bg-blue-600 px-4 py-2 rounded-lg text-white hover:bg-blue-500" href="{{ route('employes.create')}}">Ajouter</a>
+                        <a class="bg-blue-500 px-4 py-2 rounded-lg text-white hover:bg-blue-500" href="{{ route('employes.create')}}">Ajouter</a>
                         <button data-modal-target="small-modal" data-modal-toggle="small-modal" class="px-1 text-black underline hover:text-red" type="button">
                             Supprimer
                         </button>                
