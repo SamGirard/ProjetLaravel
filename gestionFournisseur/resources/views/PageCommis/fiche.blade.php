@@ -1408,14 +1408,14 @@
                                 </button>
                             </div>
                             @if($fournisseur)
-                                <h1>TPS : {{$fournisseur->numTPS}}</h1>
-                                <h1>TVQ : {{$fournisseur->numTVQ}}</h1>
-                                <h1 class="font-bold mt-2">Conditions de paiements</h1>
-                                <h1>{{$fournisseur->conditionPaiement}}</h1>
-                                <h1 class="font-bold mt-2">Devises</h1>
-                                <h1>{{$fournisseur->devise}}</h1>
-                                <h1 class="font-bold mt-2">Mode de communication</h1>
-                                <h1>{{$fournisseur->modeCommunication}}</h1>
+                                <p>TPS : {{$fournisseur->numTPS}}</p>
+                                <p>TVQ : {{$fournisseur->numTVQ}}</p>
+                                <p class="font-bold mt-2">Conditions de paiements</p>
+                                <p>{{$fournisseur->conditionPaiement}}</p>
+                                <p class="font-bold mt-2">Devises</p>
+                                <p>{{$fournisseur->devise}}</p>
+                                <p class="font-bold mt-2">Mode de communication</p>
+                                <p>{{$fournisseur->modeCommunication}}</p>
                             @endif
                         </fieldset>
                     </div>
