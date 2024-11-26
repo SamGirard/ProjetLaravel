@@ -14,7 +14,7 @@ class ParametreSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('parametre')->insert([
+        DB::table('parametres')->insert([
             'courrielAppro' => 'approvisionnement@v3r.net',
             'delaiRevision' => 24,
             'tailleMaxFichiers' => 75,

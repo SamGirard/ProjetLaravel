@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('regionAdministrative', 64)->nullable();
             $table->string('code_administratif');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

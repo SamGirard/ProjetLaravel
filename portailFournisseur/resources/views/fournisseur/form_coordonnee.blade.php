@@ -453,7 +453,7 @@
                 // Récupérer l'élément select pour la ville
                 const selectElement = document.getElementById('ville');
 
-                // Supposons que la ville de l'utilisateur connecté soit dans une variable `villeUtilisateur`
+
                 const villeUtilisateur = @json(auth()->check() ? auth()->user()->ville : null);  // Récupérer la ville de l'utilisateur si connecté, sinon null
 
                 // Ajouter les options au select

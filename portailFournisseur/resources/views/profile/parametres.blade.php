@@ -159,10 +159,12 @@
 
 @section('scripts')
     <script>
-        var element = document.getElementById('supprimer-profil');
-        console.log(element);
+        let element = document.getElementById('supprimer-profil');
         @error('password')
             element.classList.remove('hidden');
+        element.classList.add('flex', 'items-center', 'justify-center');
         @enderror
     </script>
 @endsection
+
+

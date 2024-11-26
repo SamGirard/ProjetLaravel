@@ -21,7 +21,7 @@ return new class extends Migration
             $table->json('produit_services');
             $table->string('details',500);
             $table->unsignedBigInteger('fournisseur_id');
-            $table->foreign('fournisseur_id')->references('id')->on('users');
+            $table->foreign('fournisseur_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

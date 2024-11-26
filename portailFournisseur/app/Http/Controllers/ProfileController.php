@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Mail\ModificationFournisseur;
+use App\Models\Brochure;
 use App\Models\Contact;
 use App\Models\Parametre;
 use Illuminate\Http\RedirectResponse;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
+use function Webmozart\Assert\Tests\StaticAnalysis\email;
 
 class ProfileController extends Controller
 {
@@ -62,13 +64,16 @@ class ProfileController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        Mail::to([Parametre::first()->courrielAppro, auth()->user()->email])->send(
+            new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()->message])
+        );
+        return redirect()->route('login');
     }
 
     private function supprimerBrochures()
     {
-        foreach (auth()->user()->brochures as $id) {
-            $brochure = Brochure::find($id);
+        foreach (auth()->user()->brochures as $brochure) {
+           // $brochure = Brochure::find($id);
             if ($brochure) {
                 // Supprimer le fichier du stockage
                 $filePath = 'public/brochures/' . $brochure->nom;

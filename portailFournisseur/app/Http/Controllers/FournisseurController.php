@@ -193,7 +193,7 @@ class FournisseurController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store_contact(Request $request, ?int $id)
+    public function store_contact(Request $request, int $id=null)
     {
 
         $validated = $request->validate([
@@ -242,7 +242,7 @@ class FournisseurController extends Controller
         }
     }
 
-    public function create_contact(Request $request, ?int $id)
+    public function create_contact(Request $request, int $id=null)
     {
         if ($request->session()->has('form_coordonnee') || auth()->check()) {
             $contact = null;
