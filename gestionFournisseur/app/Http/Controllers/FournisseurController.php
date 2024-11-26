@@ -114,6 +114,7 @@ class FournisseurController extends Controller
             $fournisseur = User::findOrFail($id);
             Contact::where('fournisseur_id', $id)->delete();
             Service::where('fournisseur_id', $id)->delete();
+            Brochure::where('fournisseur_id', $id)->delete();
             
             $fournisseur->delete();
 

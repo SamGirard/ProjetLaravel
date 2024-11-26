@@ -77,11 +77,9 @@
                             @endif
                         </p>
                         @else
-                        <span
-                                                        class="{{ $fournisseur->etatDemande == 'Accepter' ? 'bg-green-100 text-green-800' : ($status == 'En attente' ? 'bg-blue-100 text-blue-800' : ($status == 'Refusé' ? 'refusedButton bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')) }} 
-                                                                                                 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
-                                                        {{ $fournisseur->etatDemande }}
-                                                    </span>
+                            <span class="{{ $fournisseur->etatDemande == 'Accepter' ? 'bg-green-100 text-green-800' : ($status == 'En attente' ? 'bg-blue-100 text-blue-800' : ($status == 'Refusé' ? 'refusedButton bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')) }} text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                                    {{ $fournisseur->etatDemande }}
+                            </span>
                         @endif
                     </fieldset>
 
@@ -136,11 +134,11 @@
                 <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
                     <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Identification</legend>
                     <div class="text-right">
-                    @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
-                        <button data-modal-target="identification-modal" data-modal-toggle="identification-modal" class="text-blue-600 hover:text-blue-900" type="button">
-                            <i class="text-xl fa-regular fa-pen-to-square"></i>
-                        </button>
-                    @endif
+                        @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
+                            <button data-modal-target="identification-modal" data-modal-toggle="identification-modal" class="text-blue-600 hover:text-blue-900" type="button">
+                                <i class="text-xl fa-regular fa-pen-to-square"></i>
+                            </button>
+                        @endif
                     </div>
                     <p id="neq-display" class="text-gray-800">{{ $fournisseur->neq }}</p>
                     <p id="nomEntreprise-display" class="text-gray-800">{{ $fournisseur->nomEntreprise }}</p>
@@ -1382,17 +1380,21 @@
                             {{$service->details}}
                         </p>
                     </fieldset>
-
-                    <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
-                        <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Brochures et cartes
-                            d'affaire
-                        </legend>
+                    <div class="grid grid-cols-2">
+                        <fieldset class="border-2 border-blue-600 rounded-lg p-4 col-span-1">
+                        <div class="text-right">
+                            <button data-modal-target="brochure-modal" data-modal-toggle="brochure-modal" class="text-blue-600 hover:text-blue-900" type="button">
+                                <i class="text-xl fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Brochures et cartes d'affaire</legend>
                         <p class="text-gray-800">
                         <ul>
                             @foreach($brochures as $brochure)
                                 <li class="flex items-center mb-2">
                                     <a href="{{ asset('storage/brochures/' . $brochure->nom) }}"
                                         download="{{ $brochure->nom }}">
+                                        
                                         @php
                                             // Déterminer l'extension du fichier
                                             $extension = pathinfo($brochure->nom, PATHINFO_EXTENSION);
@@ -1428,9 +1430,10 @@
                             @endforeach
                         </ul>
                         </p>
-                    </fieldset>
-                    <div>
-                        <fieldset class="border-2 border-blue-600 rounded-lg p-4">
+                        </fieldset>
+                    
+                        <div>
+                        <fieldset class="border-2 border-blue-600 rounded-lg p-4 col-span-2 ml-2">
                             <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Finances</legend>
                             <div class="text-right">
                                 <butto data-modal-target="finance-modal" data-modal-toggle="finance-modal" class="text-blue-600 hover:text-blue-900" type="button">
@@ -1449,6 +1452,8 @@
                             @endif
                             
                         </fieldset>
+                    </div>
+
                     </div>
                     <div id="finance-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <div class="relative p-4 w-full max-w-2xl max-h-full">
@@ -1575,6 +1580,74 @@
                         });
                         
                     </script>
+
+                    <div id="brochure-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative p-4 w-full max-w-2xl max-h-full">
+                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                        Brochures et carte d'affiares
+                                    </h3>
+                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="brochure-modal">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                <div class="p-4 md:p-5 space-y-4">
+                                    <div class="grid grid-cols-2 gap-6 mb-6">
+                                        <ul>
+                                            @foreach($brochures as $brochure)
+                                                <li class="flex items-center mb-2 col-span-1 mb-4">
+                                                    <a href="{{ asset('storage/brochures/' . $brochure->nom) }}"
+                                                        download="{{ $brochure->nom }}">
+                                                        
+                                                        @php
+                                                            // Déterminer l'extension du fichier
+                                                            $extension = pathinfo($brochure->nom, PATHINFO_EXTENSION);
+                                                            // Définir la classe d'icône et la couleur en fonction de l'extension
+                                                            switch ($extension) {
+                                                                case 'pdf':
+                                                                    $iconClass = 'fa-regular fa-file-pdf text-red-500'; // Couleur rouge pour PDF
+                                                                        break;
+                                                                    case 'doc':
+                                                                    case 'docx':
+                                                                        $iconClass = 'fa-regular fa-file-word text-blue-500'; // Couleur bleue pour Word
+                                                                        break;
+                                                                    case 'xls':
+                                                                    case 'xlsx':
+                                                                        $iconClass = 'fa-regular fa-file-excel text-green-500'; // Couleur verte pour Excel
+                                                                        break;
+                                                                    case 'ppt':
+                                                                    case 'pptx':
+                                                                        $iconClass = 'fa-regular fa-file-powerpoint text-orange-500'; // Couleur orange pour PowerPoint
+                                                                        break;
+                                                                    default:
+                                                                    $iconClass = 'fa-regular fa-file text-gray-500'; // Couleur par défaut
+                                                            }
+                                                        @endphp
+
+                                                        <i class="{{ $iconClass }} mr-2"></i>
+                                                            {{ $brochure->nom }}
+                                                    </a>
+                                                    <span class="ml-2">{{ number_format(Storage::size('public/brochures/' . $brochure->nom) / 1024, 2) }}Ko</span>
+                                                </li>
+                                                <div class="col-span-2">
+                                                    <button class="bg-white text-white border-2 border-rose-500 hover:text-white bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"">Supprimer</button>
+                                                </div>
+
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                    <button data-modal-hide="brochure-modal" id="save-adresse" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
+                                    <button data-modal-hide="brochure-modal" id="cancel-adresse" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Annuler</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Enregistrer</button>

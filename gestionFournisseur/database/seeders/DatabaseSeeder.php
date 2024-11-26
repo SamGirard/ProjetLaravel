@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             ModeleCourrielSeeder::class,
             ParametreSeeder::class,
             ServicesTableSeeder::class,
+            BrochureTableSeeder::class,
         ]);
     }
 
@@ -32,6 +33,7 @@ class DatabaseSeeder extends Seeder
             ModeleCourrielSeeder::class,
             ParametreSeeder::class,
             ServicesTableSeeder::class,
+            BrochureTableSeeder::class,
         ]);
     }
 }
