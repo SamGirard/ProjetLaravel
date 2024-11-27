@@ -11,9 +11,6 @@ Route::get('/presentation',
 [FournisseurController::class, 'presentation'])->name('presentation');
 
 //Route de Sam pour menu test
-Route::get('/loginEmploye', 
-[FournisseurController::class, 'index'])->name('index');
-
 
 //Route de Sam pour liste fournisseur
 Route::get('/fournisseurs/{fournisseur}/',

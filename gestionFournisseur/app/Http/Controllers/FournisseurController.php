@@ -124,6 +124,15 @@ class FournisseurController extends Controller
                 }
             }
 
+            $services = Service::where('fournisseur_id', $fournisseurId)->first();
+
+            if ($services) {
+                $services->produit_services = $request->produit_services;
+                $services->save();
+            } else {
+                return response()->json(['message' => 'Service not found'], 404);
+            }
+
         } catch(\Throwable $e){
             Log::debug($e);
             return redirect()->route('pageCommis.liste');

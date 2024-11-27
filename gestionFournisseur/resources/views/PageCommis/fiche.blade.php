@@ -1350,8 +1350,11 @@
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Produits et services offerts
                         </legend>
                         <div class="text-right">
-                            <a href="#" class="text-blue-600 hover:text-blue-900"><i
-                                    class="text-xl fa-regular fa-pen-to-square"></i></a>
+                        @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
+                            <button data-modal-target="produits-modal" data-modal-toggle="produits-modal" class="text-blue-600 hover:text-blue-900" type="button">
+                                <i class="text-xl fa-regular fa-pen-to-square"></i>
+                            </button>
+                        @endif
                         </div>
 
                         @php
@@ -1384,30 +1387,192 @@
                             }
                         @endphp
 
-                        {{-- Affichage structuré en Blade --}}
-                        @foreach($categories as $categorie => $sousCategories)
-                            <ul>
-                                <li>{{ $categorie }}</li>
-                                @foreach($sousCategories as $sousCategorie => $elements)
-                                    <ul class="ml-3">
-                                        <li>{{ $sousCategorie }}</li>
-                                        @foreach($elements as [$element, $sousElement])
-                                            <ul class="ml-6">
-                                                <li>{{ $element }} - {{ $sousElement }}</li>
-                                            </ul>
-                                        @endforeach
-                                    </ul>
-                                @endforeach
-                            </ul>
-                        @endforeach
-
+                        <div id="produitsListFieldset">
+                            @foreach($categories as $categorie => $sousCategories)
+                                <ul>
+                                    <li>{{ $categorie }}</li>
+                                    @foreach($sousCategories as $sousCategorie => $elements)
+                                        <ul class="ml-3">
+                                            <li>{{ $sousCategorie }}</li>
+                                            @foreach($elements as [$element, $sousElement])
+                                                <ul class="ml-6">
+                                                    <li>{{ $element }} - {{ $sousElement }}</li>
+                                                </ul>
+                                            @endforeach
+                                        </ul>
+                                    @endforeach
+                                </ul>
+                            @endforeach
+                        </div>
                         <hr class="border-0 h-1 bg-blue-600 my-2">
                         <h2><strong>Détails</strong></h2>
-                        <p>
+                        <p id="detailsFieldset">
                             {{$service->details}}
                         </p>
                     </fieldset>
 
+                    <div id="produits-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative p-4 w-full max-w-2xl max-h-full">
+                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                        Produits et services offerts
+                                    </h3>
+                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="produits-modal">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                <input type="hidden" name="produit_services" id="produit_services"
+                                        value="{{ $service->produit_services }}">
+                                <div class="p-4 md:p-5 space-y-4">
+                                    <h4 class="font-semibold text-gray-700">Liste des produits et services</h4>
+                                    <ul id="product-list-modal" class="space-y-3">
+                                        @foreach($categories as $categorie => $sousCategories)
+                                            <li data-category="{{ $categorie }}">
+                                                <strong>{{ $categorie }}</strong>
+                                                <ul class="ml-4 space-y-2">
+                                                    @foreach($sousCategories as $sousCategorie => $elements)
+                                                        <li data-subcategory="{{ $sousCategorie }}">
+                                                            <strong>{{ $sousCategorie }}</strong>
+                                                            <ul class="ml-6 space-y-1">
+                                                                @foreach($elements as [$element, $sousElement])
+                                                                    <li class="flex items-center justify-between" data-element="{{ $element }}" data-sub-element="{{ $sousElement }}">
+                                                                        <span>{{ $element }} - {{ $sousElement }}</span>
+                                                                        <button 
+                                                                            class="delete-produit">
+                                                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                    <label for="details"><h4 class="font-semibold text-gray-700 mb-0 pb-0">Détails</h4></label>
+                                    <textarea id="details" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez écrire les détails...">{{ $service->details }}</textarea>
+                                </div>
+                                <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                    <button data-modal-hide="produits-modal" id="save-produits" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
+                                    <button type="button" id="add-produits" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 ml-2.5 py-2.5 text-center">Ajouter un produit / service</button>
+                                    <button data-modal-hide="produits-modal" id="cancel-produits" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Annuler</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        $(document).ready(function () {
+                            const $productListModal = $('#product-list-modal');
+                            const $addProductBtn = $('#add-produits');
+                            const $cancelProductBtn = $('#cancel-produits');
+                            const $saveProductBtn = $('#save-produits');
+                            const $detailsTextareaModal = $('#details');
+                            const $produitServicesInput = $('#produit_services');
+
+                            let initialproductListModal = $productListModal.html();
+                            let initialDetailsModal = $detailsTextareaModal.val();
+
+                            let produitServices = JSON.parse($produitServicesInput.val() || '[]');
+
+                            function updateProduitServices() {
+                                let remainingServices = [];
+                                
+                                $productListModal.find('li[data-category]').each(function () {
+                                    const category = $(this).data('category');
+
+                                    $(this).find('li[data-subcategory]').each(function () {
+                                        const subCategory = $(this).data('subcategory');
+
+                                        $(this).find('li[data-element]').each(function () {
+                                            const element = $(this).data('element');
+
+                                            remainingServices.push(element);
+                                        });
+                                    });
+                                });
+
+                                produitServices = produitServices.filter(service => 
+                                    remainingServices.some(id => service.includes(id.toString()))
+                                );
+
+                                $produitServicesInput.val(JSON.stringify(produitServices));
+                            }
+
+                            $productListModal.on('click', '.delete-produit', function () {
+                                const $productItem = $(this).closest('li');
+                                const $subcategory = $productItem.closest('[data-subcategory]');
+                                const $category = $productItem.closest('[data-category]');
+
+                                $productItem.remove();
+
+                                if ($subcategory && $subcategory.find('ul > li').length === 0) {
+                                    $subcategory.remove();
+                                }
+
+                                if ($category && $category.find('[data-subcategory]').length === 0) {
+                                    $category.remove();
+                                }
+                            });
+
+                            $cancelProductBtn.on('click', function () {
+                                $productListModal.html(initialproductListModal);
+                                $detailsTextareaModal.val(initialDetailsModal);
+                                produitServices = JSON.parse($produitServicesInput.val() || '[]');
+                            });
+
+                            $saveProductBtn.on('click', function () {
+                                initialproductListModal = $productListModal.html();
+                                initialDetailsModal = $detailsTextareaModal.val();
+
+                                const $produitsListFieldset = $('#produitsListFieldset');
+                                const $detailsFieldset = $('#detailsFieldset');
+
+                                $produitsListFieldset.empty();
+
+                                $productListModal.find('li[data-category]').each(function () {
+                                    const $categoryItem = $(this);
+                                    const category = $categoryItem.data('category');
+                                    const $categoryUl = $('<ul></ul>');
+                                    const $categoryLi = $('<li></li>').text(category);
+                                    $categoryUl.append($categoryLi);
+
+                                    $categoryItem.find('li[data-subcategory]').each(function () {
+                                        const $subCategoryItem = $(this);
+                                        const subCategory = $subCategoryItem.data('subcategory');
+                                        const $subCategoryUl = $('<ul></ul>').addClass('ml-3');
+                                        const $subCategoryLi = $('<li></li>').text(subCategory);
+                                        $subCategoryUl.append($subCategoryLi);
+
+                                        const $elementsUl = $('<ul></ul>').addClass('ml-6');
+                                        $subCategoryItem.find('li[data-element]').each(function () {
+                                            const $elementItem = $(this);
+                                            const element = $elementItem.data('element');
+                                            const subElement = $elementItem.data('sub-element');
+                                            const $elementLi = $('<li></li>').text(`${element} - ${subElement}`);
+                                            $elementsUl.append($elementLi);
+                                        });
+
+                                        $subCategoryLi.append($elementsUl);
+                                        $categoryUl.append($subCategoryUl);
+                                    });
+
+                                    $produitsListFieldset.append($categoryUl);
+                                });
+
+                                $detailsFieldset.text(initialDetailsModal);
+
+                                updateProduitServices();
+                            });
+                        });
+                    </script>
 
 
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
