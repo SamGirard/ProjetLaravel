@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('numTelephone', 10);
             $table->string('poste', 6)->nullable();
             $table->unsignedBigInteger('fournisseur_id');
-            $table->foreign('fournisseur_id')->references('id')->on('users');
+            $table->foreign('fournisseur_id')->references('id')->on('users')->onDelete("cascade");
             $table->timestamps();
         });
     }
