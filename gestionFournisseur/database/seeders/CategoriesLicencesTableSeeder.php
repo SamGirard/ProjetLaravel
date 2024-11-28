@@ -17,6 +17,6 @@ class CategoriesLicencesTableSeeder extends Seeder
             ['Id' => 1, 'Titre' => 'Entrepreneur général (Annexe I)'],
             ['Id' => 2, 'Titre' => 'Entrepreneur spécialisé (Annexe II)'],
             ['Id' => 3, 'Titre' => 'Entrepreneur spécialisé (Annexe III)']
-    ]);
+        ]);
     }
 }

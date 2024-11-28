@@ -82,6 +82,28 @@ class FournisseurController extends Controller
             $fournisseur->siteInternet = $request->siteInternet;
             $fournisseur->regionAdministrative = $request->regionAdministrative;
             $fournisseur->code_administratif = $request->code_administratif;
+
+            try{
+                if ($request->hasFile('brochures')) {
+                    // Supprimer toutes les brochures existantes liées au fournisseur
+                    Brochure::where('fournisseur_id', $fournisseur->id)->delete();
+                
+                    // Réenregistrer les nouvelles brochures
+                    foreach ($request->file('brochures') as $brochure) {
+                        // Validation et stockage du fichier
+                        $path = $brochure->store('brochures', 'public');
+                        
+                        // Création d'une nouvelle entrée dans la table brochures
+                        Brochure::create([
+                            'type' => $brochure->getClientOriginalExtension(),
+                            'nom' => $brochure->getClientOriginalName(), 
+                            'fournisseur_id' => $fournisseur->id, 
+                        ]);
+                    }
+                }
+            } catch(\Throwable $e){
+                Debug::log($e);
+            }
                 
             Mail::to($fournisseur->email)->send(new MailModificationFournisseur($request->nomEntreprise, $request->etatDemande, $etatInitial, $fournisseur->id));
 
@@ -150,6 +172,7 @@ class FournisseurController extends Controller
             $fournisseur = User::findOrFail($id);
             Contact::where('fournisseur_id', $id)->delete();
             Service::where('fournisseur_id', $id)->delete();
+            Brochure::where('fournisseur_id', $id)->delete();
             
             $fournisseur->delete();
 

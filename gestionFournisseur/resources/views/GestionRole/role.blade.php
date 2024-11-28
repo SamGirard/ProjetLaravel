@@ -85,8 +85,8 @@
                         </div>
                         <!-- Modal body -->
                         <div class="p-4 md:p-5 space-y-4">
-                            <h1 class="text-xs text-orange-500 opacity-80">*Pour supprimer un administrateur, veuillez en ajouter un troisième</h1>
-                            <h1 class="text-xs text-orange-500 opacity-80">*Pour supprimer un responsable, veuillez en ajouter un deuxième</h1>
+                            <p class="text-xs text-orange-500 opacity-80">*Pour supprimer un administrateur, veuillez en ajouter un troisième</p>
+                            <p class="text-xs text-orange-500 opacity-80">*Pour supprimer un responsable, veuillez en ajouter un deuxième</p>
 
                             <div class="p-1">
                                 <label for="input-group-search" class="sr-only">Rechercher</label>
