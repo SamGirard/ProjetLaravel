@@ -298,8 +298,8 @@
                         </p>
                     </fieldset>
                 </div>
-
-                <div class="mx-1 w-1/3">
+                @if(auth()->user()->numTPS==null and auth()->user()->numTVQ==null and auth()->user()->etatDemande=="Accepter")
+                    <div class="mx-1 w-1/3">
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Finances</legend>
                         <div class="text-right">
@@ -328,7 +328,7 @@
                         </p>
                     </fieldset>
                 </div>
-
+                @endif
             </div>
         </div>
     </div>

@@ -35,12 +35,6 @@ class FournisseurController extends Controller
         return view('pageTest.test', compact('fournisseurs'));
     }
 
-    public function show(Fournisseur $fournisseur)
-    {
-        $infosRbq = $fournisseur->infosRbq;
-        return view('pageTest.show', compact('fournisseur', 'infosRbq'));
-
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -231,6 +225,8 @@ class FournisseurController extends Controller
                     'fournisseur_id' => auth()->user()->id
                 ]);
             }
+
+
             Mail::to(Parametre::first()->courrielAppro)->send(
                 new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()])
             );

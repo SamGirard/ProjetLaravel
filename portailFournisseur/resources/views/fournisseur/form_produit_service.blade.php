@@ -48,6 +48,9 @@
                                    class="block text-gray-600 text-sm font-bold mb-2">Statut</label>
                             <select id="statut_licence_rbq" name="statut_licence_rbq"
                                     class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
+                                <option value="Valide">Valide</option>
+                                <option value="Valide avec restriction">Valide avec restriction</option>
+                                <option value="Non valide">Non valide</option>
                             </select>
                         </div>
                     </div>
