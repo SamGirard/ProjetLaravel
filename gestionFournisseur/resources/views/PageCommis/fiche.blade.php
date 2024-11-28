@@ -1395,9 +1395,9 @@
                         <p class="text-gray-800">
                         <ul>
                             @foreach($brochures as $brochure)
-                                <li class="flex items-center mb-2">
+                                <li class="flex items-center mb-2" id="brochureAffiche">
                                     <a href="{{ asset('storage/brochures/' . $brochure->nom) }}"
-                                        download="{{ $brochure->nom }}">
+                                        download="{{ $brochure->nom }}" class="brochureAfficheNom">
                                         
                                         @php
                                             // Déterminer l'extension du fichier
@@ -1423,16 +1423,19 @@
                                                     $iconClass = 'fa-regular fa-file text-gray-500'; // Couleur par défaut
                                             }
                                         @endphp
-
                                         <i class="{{ $iconClass }} mr-2"></i>
                                             {{ $brochure->nom }}
                                     </a>
                                     <span
-                                        class="ml-2">{{ number_format(Storage::size('public/brochures/' . $brochure->nom) / 1024, 2) }}
+                                        class="ml-2 sizeAffiche">{{ number_format(Storage::size('public/brochures/' . $brochure->nom) / 1024, 2) }}
                                         Ko</span>
                                 </li>
                             @endforeach
                         </ul>
+                        </p>
+                        <p id="titreNouveau"></p>
+                        <p>
+                            <ul id="brochuresNouvelles"></ul>
                         </p>
                         </fieldset>
                     
@@ -1592,20 +1595,21 @@
                                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                                         Brochures et carte d'affiares
                                     </h3>
-                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="brochure-modal">
+                                    <button type="button" id="fermer" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="brochure-modal">
                                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                         </svg>
                                         <span class="sr-only">Close modal</span>
                                     </button>
                                 </div>
-                                <div class="p-4 md:p-5 space-y-4">
-                                    <div class="grid grid-cols-2 gap-6 mb-6">
+                                <div class="p-4 md:p-5 space-y-4" id="mainDiv">
+                                    <div class="mb-6">
                                         <ul>
                                             @foreach($brochures as $brochure)
-                                                <li class="flex items-center mb-2 col-span-1 mb-4">
+                                            <div class="flex justify-around">
+                                                <li class="items-center mb-2 mb-4">
                                                     <a href="{{ asset('storage/brochures/' . $brochure->nom) }}"
-                                                        download="{{ $brochure->nom }}">
+                                                        download="{{ $brochure->nom }}" class="nomBrochure">
                                                         
                                                         @php
                                                             // Déterminer l'extension du fichier
@@ -1635,23 +1639,139 @@
                                                         <i class="{{ $iconClass }} mr-2"></i>
                                                             {{ $brochure->nom }}
                                                     </a>
-                                                    <span class="ml-2">{{ number_format(Storage::size('public/brochures/' . $brochure->nom) / 1024, 2) }}Ko</span>
+                                                    <span class="ml-2 size">{{ number_format(Storage::size('public/brochures/' . $brochure->nom) / 1024, 2) }}Ko</span>
                                                 </li>
-                                                <div class="col-span-2">
-                                                    <button class="bg-white text-white border-2 border-rose-500 hover:text-white bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"">Supprimer</button>
-                                                </div>
-
+                                                <button type="button" class="text-gray-400 retirerBrochure bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                                    </svg>
+                                                    <span class="sr-only">Close modal</span>
+                                                </button>                                         
+                                            </div>                       
                                             @endforeach
                                         </ul>
                                     </div>
+                                    <div class="flex items-center justify-center w-full">
+                                        <label for="brochures" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                                </svg>
+                                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Cliquer pour importer</span> ou glisser et relâcher</p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">DOC, DOCX, PDF, JPG, XLS, XLSX, etc.</p>
+                                            </div>
+                                            <input type="file" name="brochures[]" id="brochures" class="hidden" onChange="afficherNomFichier()" multiple/>
+                                        </label>
+                                    </div>                                 
+                                </div>
+                                <div id="resultat" class="px-4 pb-4">
                                 </div>
                                 <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                                    <button data-modal-hide="brochure-modal" id="save-adresse" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
-                                    <button data-modal-hide="brochure-modal" id="cancel-adresse" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Annuler</button>
+                                    <button data-modal-hide="brochure-modal" id="save-brochures" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
+                                    <button data-modal-hide="brochure-modal" id="cancel-brochures" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Annuler</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <script>
+                            var newBrochure = document.getElementById("brochures");
+
+                            newBrochure.addEventListener('change', function(){
+                                const files = newBrochure.files;
+                                const brochuresNouvelles = document.getElementById("brochuresNouvelles");
+                                document.getElementById("titreNouveau").innerHTML = "Nouveaux";
+
+                                for(let i = 0; i < files.length; i++){
+
+                                    const li = document.createElement("li");
+                                    const lien = document.createElement("a");
+                                    const mot = document.createElement("span");
+
+                                    li.classList.add("flex", "items-center", "mb-2");
+                                    lien.classList.add("nouvelleBrochure");
+                                    mot.classList.add("ml-2", "sizeAffiche");
+
+                                    lien.href = "";
+                                    lien.textContent = files[i].name;
+                                    mot.textContent = ((files[i].size) / 1000).toFixed(2) + " Ko";
+                                    
+                                    li.appendChild(lien);
+                                    li.appendChild(mot);
+
+                                    brochuresNouvelles.appendChild(li);
+                                }
+                            })
+                        </script>
+
+                    <script>
+                        function afficherNomFichier(){
+                            var fichier = document.getElementById("brochures").value;
+                            const nom = document.createElement("p");
+
+                            nom.innerHTML = fichier;
+
+                            document.getElementById("resultat").appendChild(nom);
+                        }
+
+
+                        let elements = [];
+                        const elementsBrochures = document.getElementsByClassName("retirerBrochure");
+
+                        for(let i=0; i<elementsBrochures.length; i++) {
+                            elementsBrochures[i].addEventListener('click', function(){
+                                const nom = document.getElementsByClassName("nomBrochure");
+                                for(let j=0; j<nom.length; j++){
+                                    nom[i].style.opacity = "0.2";
+                                    elements.push(nom[i].textContent.trim());
+                                }
+
+                                const taille = document.getElementsByClassName("size");
+                                for(let k=0; k<taille.length; k++){
+                                    taille[i].style.opacity = "0.2";
+                                }
+                            });
+                        }
+                        const elementsAfficherNom = document.getElementsByClassName("brochureAfficheNom");
+
+                        document.getElementById('save-brochures').addEventListener('click', function(event) {
+                            for(let l = elementsAfficherNom.length - 1; l >= 0; l--){
+                                if(elements.includes(elementsAfficherNom[l].textContent.trim())){
+                                    elementsAfficherNom[l].remove();
+                                    document.getElementsByClassName("sizeAffiche")[l].remove();
+                                }
+                            }
+                        });
+                        
+
+
+
+                        document.getElementById('cancel-brochures').addEventListener('click', function(event) {
+                            for(let i=0; i<elementsBrochures.length; i++) {
+                                const nom = document.getElementsByClassName("nomBrochure");
+                                for(let j=0; j<nom.length; j++){
+                                    nom[i].style.opacity = "1";
+                                }
+
+                                const taille = document.getElementsByClassName("size");
+                                    taille[i].style.opacity = "1";
+                                }
+                        });
+
+                        document.getElementById('fermer').addEventListener('click', function(event) {
+                            for(let i=0; i<elementsBrochures.length; i++) {
+                                const nom = document.getElementsByClassName("nomBrochure");
+                                for(let j=0; j<nom.length; j++){
+                                    nom[i].style.opacity = "1";
+                                }
+
+                                const taille = document.getElementsByClassName("size");
+                                    taille[i].style.opacity = "1";
+                                }
+                        });
+
+                        
+                    </script>
 
                     @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Enregistrer</button>
