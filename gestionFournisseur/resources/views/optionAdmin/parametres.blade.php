@@ -50,7 +50,7 @@
                                         <div class="mb-5 mt-2 text-red-500">{{ $message }}</div>
                                     @enderror
                                     <div class="flex align-items-center">
-                                        <button type="submit" class="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded my-4">
+                                        <button type="submit" class="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded-lg my-4">
                                             Enregistrer les modifications 
                                         </button>
                                         @if (session('success'))

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->json('numeroTelephone');
             $table->json('poste')->nullable();
             $table->string('email')->unique();
-            $table->enum('etatDemande', ['Accepter', 'Refusé', 'En attente', 'Réviser']);
+            $table->enum('etatDemande', ['Acceptée', 'Refusée', 'En attente', 'À réviser'])->default('En attente');
             $table->string('raisonRefus')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

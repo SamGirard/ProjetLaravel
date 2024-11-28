@@ -58,7 +58,7 @@ function verifCheckSupprimer() {
 
         // Désactiver la case Responsable si nous avons déjà 1 responsable ou plus
         if (role === "Responsable") {
-            if (nbrResponsable >= 1) {
+            if (nbrResponsable < 2) {
                 checkbox.disabled = true;
                 label.classList.add("text-disabled"); // Appliquer le style de texte désactivé
             } else {
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
 
         roleSelect.forEach(select => {
-            if (nbrAdmin == 2 && select.value == "Administrateur") {
+            if (nbrAdmin <= 2 && select.value == "Administrateur") {
                 select.disabled = true; // Désactive les rôles qui ne sont pas Administrateur si le nombre d'admins est <= 2
             } else if (nbrResponsable <= 1 && select.value == "Responsable") {
                 select.disabled = true; // Désactive les rôles qui ne sont pas Responsable si le nombre de responsables est <= 1
