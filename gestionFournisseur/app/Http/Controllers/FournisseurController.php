@@ -102,7 +102,7 @@ class FournisseurController extends Controller
                     }
                 }
             } catch(\Throwable $e){
-                Debug::log($e);
+                Log::debug($e);
             }
                 
             Mail::to($fournisseur->email)->send(new MailModificationFournisseur($request->nomEntreprise, $request->etatDemande, $etatInitial, $fournisseur->id));

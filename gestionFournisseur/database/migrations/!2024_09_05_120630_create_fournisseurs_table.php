@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->integer('neq')->unique()->nullable();
+            $table->unsignedBigInteger('neq')->unique()->nullable();
             $table->string('nomEntreprise', 64);
             $table->json('typeNumTelephone');
             $table->json('numeroTelephone');
