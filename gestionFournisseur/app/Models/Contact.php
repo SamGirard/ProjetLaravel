@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'prenom',
+        'nom',
+        'fonction',
+        'courriel',
+        'typeNumTelephone',
+        'numTelephone',
+        'poste',
+        'fournisseur_id',
+    ];
 }

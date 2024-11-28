@@ -7,7 +7,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://kit.fontawesome.com/f25f0490b7.js" crossorigin="anonymous"></script>
 
-<form method="POST" action="{{route('updateFiche', [$fournisseur]) }}">
+<form method="POST" id="formFournisseur" action="{{route('updateFiche', [$fournisseur]) }}">
 @csrf
 @method('PATCH')
     <div class="container mx-auto mt-6 flex">
@@ -81,9 +81,21 @@
                     </fieldset>
 
                     <script>
-                        $('#dropdownEtatButton').on('click', function () {
-                            $('#dropdownEtat').removeClass('hidden');
-                        })
+                        $('#dropdownEtatButton').on('click', function (event) {
+                            if ($('#dropdownEtat').hasClass('hidden')) {
+                                $('#dropdownEtat').removeClass('hidden');
+                                setTimeout(() => {
+                                    $(document).one('click', function (event) {
+                                        if (!$(event.target).closest('#dropdownEtat, #dropdownEtatButton').length) {
+                                            console.log("ben");
+                                            $('#dropdownEtat').addClass('hidden');
+                                        }
+                                    });
+                                }, 0);
+                            } else {
+                                $('#dropdownEtat').addClass('hidden');
+                            }
+                        });
 
                         $('#dropdownEtat').on('click', '.changeStatusButton', function () {
                             $('#dropdownEtat').addClass('hidden');
@@ -306,6 +318,7 @@
                                 </div>
                                 <div class="p-4 md:p-5 space-y-4">
                                     <div id="accordion-contact" data-accordion="collapse" data-active-classes="bg-white dark:bg-gray-900 text-gray-900 dark:text-white" data-inactive-classes="text-gray-500 dark:text-gray-400">
+                                        <input type="hidden" name="contacts" id="contactsInput">
                                         @foreach($contacts as $contact)
                                             <h2 id="accordion-contact-heading-{{ $contact->id }}">
                                                 <button type="button" class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#accordion-contact-body-{{ $contact->id }}" aria-expanded="false" aria-controls="accordion-contact-body-{{ $contact->id }}">
@@ -766,6 +779,12 @@
                                     fieldset.appendChild(hr);
                                 });
                         });
+
+                        document.getElementById('formFournisseur').addEventListener('submit', function (e) {
+                            const contactsJson = JSON.stringify(contacts);
+                            document.getElementById('contactsInput').value = contactsJson;
+                        });
+
                     </script>
                     @endif
 
@@ -787,6 +806,9 @@
                         </a>
                         @php
                             $telephoneNumbers = json_decode($fournisseur->numeroTelephone, true);
+                            if (!is_array($telephoneNumbers)) {
+                                $telephoneNumbers = [$telephoneNumbers];
+                            }
                             $typeNumTelephone = json_decode($fournisseur->typeNumTelephone, true);
                             $poste = json_decode($fournisseur->poste, true);
                         @endphp
@@ -863,11 +885,11 @@
                                             <p id="siteInternetErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un site internet valide.</p>
                                         </div>
                                     </div>
-                                    <input type="hidden" name="typeNumTelephone" id="typeNumTelephone"
+                                    <input type="hidden" name="typeNumTelephoneTest" id="typeNumTelephoneTest"
                                         value="{{ $fournisseur->typeNumTelephone }}">
-                                    <input type="hidden" name="numeroTelephone" id="numeroTelephone"
+                                    <input type="hidden" name="numeroTelephoneTest" id="numeroTelephoneTest"
                                         value="{{ $fournisseur->numeroTelephone }}">
-                                    <input type="hidden" name="poste" id="poste"
+                                    <input type="hidden" name="posteTest" id="posteTest"
                                         value="{{ $fournisseur->poste }}">
                                     <div id="telephone-container">
                                         @for($i = 0; $i < count($telephoneNumbers); $i++)
@@ -1258,14 +1280,14 @@
                             const formGroups = container.querySelectorAll('.telephoneFormDisplay');
 
                             formGroups.forEach((formGroup, index) => {
-                                const typeNumTelephone = document.getElementById('typeNumTelephone-contact-{{$fournisseur->id }}-'+index);
-                                const numTelephone = document.getElementById(`numTelephone-contact-{{$fournisseur->id }}-${index}`);
-                                const poste = document.getElementById(`poste-contact-{{$fournisseur->id }}-${index}`);
+                                const formTypeNumTelephone = document.getElementById('typeNumTelephone-contact-{{$fournisseur->id }}-'+index);
+                                const formNumTelephone = document.getElementById(`numTelephone-contact-{{$fournisseur->id }}-${index}`);
+                                const formPoste = document.getElementById(`poste-contact-{{$fournisseur->id }}-${index}`);
 
-                                if (typeNumTelephone && numTelephone && poste) {
-                                    typeNumTelephoneValue += '"' + typeNumTelephone.value + '",';
-                                    numeroTelephoneValue += '' + numTelephone.value + ',';
-                                    posteValue += '"' + poste.value + '",';
+                                if (formTypeNumTelephone && formNumTelephone && formPoste) {
+                                    typeNumTelephoneValue += '"' + formTypeNumTelephone.value + '",';
+                                    numeroTelephoneValue += '' + formNumTelephone.value + ',';
+                                    posteValue += '"' + formPoste.value + '",';
                                 }
                             });
 
@@ -1276,17 +1298,16 @@
                             numeroTelephoneValue += "]";
                             posteValue += "]";
 
-                            document.getElementById('typeNumTelephone').value = typeNumTelephoneValue;
-                            document.getElementById('numeroTelephone').value = numeroTelephoneValue;
-                            document.getElementById('poste').value = posteValue;
-
+                            document.getElementById('typeNumTelephoneTest').value = typeNumTelephoneValue;
+                            document.getElementById('numeroTelephoneTest').value = numeroTelephoneValue;
+                            document.getElementById('posteTest').value = posteValue.replace(/#/g, '');
                             const telephoneDisplay = document.querySelector('.telephoneDisplay');
                             telephoneDisplay.innerHTML = '';
 
                             const typeNumTelephoneArray = JSON.parse(typeNumTelephoneValue);
                             const numeroTelephoneArray = JSON.parse(numeroTelephoneValue);
                             const posteArray = JSON.parse(posteValue);
-
+                            console.log(posteValue)
                             typeNumTelephoneArray.forEach((type, index) => {
                                 let icon = '';
                                 if (type === "Telecopieur") {
@@ -1319,13 +1340,16 @@
                     checkAdressFormValidity();
                 </script>
 
-                <div class="mx-1 w-full">
+                <div class="mx-1">
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Produits et services offerts
                         </legend>
                         <div class="text-right">
-                            <a href="#" class="text-blue-600 hover:text-blue-900"><i
-                                    class="text-xl fa-regular fa-pen-to-square"></i></a>
+                        @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
+                            <button data-modal-target="produits-modal" data-modal-toggle="produits-modal" class="text-blue-600 hover:text-blue-900" type="button">
+                                <i class="text-xl fa-regular fa-pen-to-square"></i>
+                            </button>
+                        @endif
                         </div>
 
                         @php
@@ -1358,26 +1382,26 @@
                             }
                         @endphp
 
-                        {{-- Affichage structuré en Blade --}}
-                        @foreach($categories as $categorie => $sousCategories)
-                            <ul>
-                                <li>{{ $categorie }}</li>
-                                @foreach($sousCategories as $sousCategorie => $elements)
-                                    <ul class="ml-3">
-                                        <li>{{ $sousCategorie }}</li>
-                                        @foreach($elements as [$element, $sousElement])
-                                            <ul class="ml-6">
-                                                <li>{{ $element }} - {{ $sousElement }}</li>
-                                            </ul>
-                                        @endforeach
-                                    </ul>
-                                @endforeach
-                            </ul>
-                        @endforeach
-
+                        <div id="produitsListFieldset">
+                            @foreach($categories as $categorie => $sousCategories)
+                                <ul>
+                                    <li>{{ $categorie }}</li>
+                                    @foreach($sousCategories as $sousCategorie => $elements)
+                                        <ul class="ml-3">
+                                            <li>{{ $sousCategorie }}</li>
+                                            @foreach($elements as [$element, $sousElement])
+                                                <ul class="ml-6">
+                                                    <li>{{ $element }} - {{ $sousElement }}</li>
+                                                </ul>
+                                            @endforeach
+                                        </ul>
+                                    @endforeach
+                                </ul>
+                            @endforeach
+                        </div>
                         <hr class="border-0 h-1 bg-blue-600 my-2">
                         <h2><strong>Détails</strong></h2>
-                        <p>
+                        <p id="detailsFieldset">
                             {{$service->details}}
                         </p>
                     </fieldset>
@@ -1390,7 +1414,7 @@
                                 <i class="text-xl fa-regular fa-pen-to-square" aria-hidden="true"></i>
                             </button>
                         </div>
-                        <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Brochures et cartes d'affaires</legend>
+                        <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Brochures et cartes d'affaire</legend>
                         <p class="text-gray-800">
                         <ul>
                             @foreach($brochures as $brochure)
@@ -1461,12 +1485,22 @@
                     </div>
 
                     </div>
+                    </fieldset>
+                    <fieldset class="border-2 border-blue-600 rounded-lg p-4">
+                        <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Finances</legend>
+                        <div class="text-right">
+                            <button data-modal-target="finance-modal" data-modal-toggle="finance-modal" class="text-blue-600 hover:text-blue-900" type="button">
+                                <i class="text-xl fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                            </button>
+                        </div>
+
+                    </fieldset>
                     <div id="finance-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <div class="relative p-4 w-full max-w-2xl max-h-full">
                             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                        Finances
+                                        Adresse
                                     </h3>
                                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="finance-modal">
                                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -1476,58 +1510,90 @@
                                     </button>
                                 </div>
                                 <div class="p-4 md:p-5 space-y-4">
-                                    <div class="grid gap-6 mb-6 md:grid-cols-1">
+                                    <div class="grid gap-6 mb-6 md:grid-cols-2">
                                         <div>
                                             <label for="numTPS" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro TPS</label>
-                                            <input type="text" name="numTPS" id="numTPS" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numTPS }}" value="{{ $fournisseur->numTPS }}" />
+                                            <input type="text" name="numTPS" id="numTPS" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numCivique }}" value="{{ $fournisseur->numCivique }}" />
                                             <p id="numTPSErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de TPS valide.</p>
                                         </div>
                                         <div>
                                             <label for="numTVQ" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro TVQ</label>
-                                            <input type="text" name="numTVQ" id="numTVQ" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numTVQ }}" value="{{ $fournisseur->numTVQ }}" required />
-                                            <p id="numTVQErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de TVQ valide.</p>
-                                        </div>
-                                        <div>
-                                            <label for="conditionPaiement">Conditions de paiement</label>
-                                            <select name="conditionPaiement" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="conditionPaiement">
-                                                <option value="payable immédiatement sans réduction">payable immédiatement sans réduction</option>
-                                                <option value="payable immédiatement sans réduction, Date de base au 15 du mois suivant">payable immédiatement sans réduction, Date de base au 15 du mois suivant</option>
-                                                <option value="dans les 15 jours 2% escpte, dans les 30 jours sans déduction">dans les 15 jours 2% escpte, dans les 30 jours sans déduction</option>
-                                                <option value="après entrée facture jusqu'au 15 du mois, jusqu'au 15 du mois suivant 2% escpte">après entrée facture jusqu'au 15 du mois, jusqu'au 15 du mois suivant 2% escpte</option>
-                                                <option value="dans les 10 jours 2% escpte, dans les 30 jours sans déduction">dans les 10 jours 2% escpte, dans les 30 jours sans déduction</option>
-                                                <option value="dans les 15 jours sans déduction">dans les 15 jours sans déduction</option>
-                                                <option value="dans les 30 jours sans déduction">dans les 30 jours sans déduction</option>
-                                                <option value="dans les 45 jours sans déduction">dans les 45 jours sans déduction</option>
-                                                <option value="dans les 60 jours sans déduction">dans les 60 jours sans déduction</option>
-                                            </select>
-                                        </div>
-                                        <label for="">Devise</label>
-                                        <div class="grid gap-4 md:grid-cols-3">
-                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
-                                                <input id="bordered-radio-1" type="radio" value="CAD" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="bordered-radio-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">CAD</label>
-                                            </div>
-                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
-                                                <input checked id="bordered-radio-2" type="radio" value="USD" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">USD</label>
-                                            </div>
-                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
-                                                <input checked id="bordered-radio-2" type="radio" value="EUR" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">EUR</label>
-                                            </div>
-                                        </div>
-                                        <label for="">Mode de communication</label>
-                                        <div class="grid gap-4 md:grid-cols-2">
-                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
-                                                <input id="bordered-radio-1" type="radio" value="Courriel" name="modeCommunication" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="bordered-radio-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Courriel</label>
-                                            </div>
-                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
-                                                <input checked id="bordered-radio-2" type="radio" value="Courriel régulier" name="modeCommunication" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Courriel régulier</label>
-                                            </div>
+                                            <input type="text" name="rue" id="TVQ" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->rue }}" value="{{ $fournisseur->rue }}" required />
+                                            <p id="rueErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de TVS valide.</p>
                                         </div>
                                     </div>
+                                    @for($i = 0; $i < count($telephoneNumbers); $i++)
+                                    <div class="mb-6">
+                                        <div class="flex items-center">
+                                            <div class="flex flex-col">
+                                                <label 
+                                                    for="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+                                                >
+                                                    Type {{ $i+1 }}
+                                                </label> 
+                                                <select 
+                                                    id="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}"
+                                                    class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                >
+                                                    <option value="Bureau" {{ $typeNumTelephone[$i] == 'Bureau' ? 'selected' : '' }}>Bureau</option>
+                                                    <option value="Télécopieur" {{ $typeNumTelephone[$i] == 'Télécopieur' ? 'selected' : '' }}>Télécopieur</option>
+                                                    <option value="Cellulaire" {{ $typeNumTelephone[$i] == 'Cellulaire' ? 'selected' : '' }}>Cellulaire</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="flex-grow">
+                                                <label 
+                                                    for="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+                                                >
+                                                    Numéro de téléphone {{ $i+1 }}
+                                                </label>
+                                                <input 
+                                                    type="text" 
+                                                    id="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    placeholder="{{ $telephoneNumbers[$i] }}" 
+                                                    value="{{ $telephoneNumbers[$i] }}"
+                                                    name="numeroTelephone"
+                                                    required 
+                                                />
+                                            </div>
+
+                                            <div class="flex flex-col w-1/4">
+                                                <label 
+                                                    for="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+                                                >
+                                                    Poste {{ $i+1 }}
+                                                </label>
+                                                <input 
+                                                    type="text" 
+                                                    id="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
+                                                    class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    placeholder="{{ $poste[$i] }}" 
+                                                    value='["#{{ $poste[$i] }}"]'
+                                                    name="poste"  
+                                                    required 
+                                                />
+                                            </div>
+
+                                            <button 
+                                                type="button" 
+                                                class="text-red-500 hover:text-red-700 ml-2 mt-6" 
+                                                id="delete-contact-{{ $i }}"
+                                            >
+                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+
+                                        <p id="numTelephone-contact-error-{{ $fournisseur->id }}-{{ $i }}" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">
+                                            Veuillez entrer un numéro de téléphone valide
+                                        </p>
+                                    </div>
+                                @endfor
                                 </div>
                                 <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                                     <button data-modal-hide="finance-modal" id="save-adresse" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
@@ -1790,148 +1856,4 @@
 @endif
 
 </div>
-
-
-<!--/////////////////////////////////////////////-->
-<!--
-<div>
-    <form method="POST" action="{{route('updateFiche', [$fournisseur]) }}">
-        @csrf
-        @method('PATCH')
-        <h1>Test de formulaire</h1>
-        <input type="text" name="neq" placeholder="NEQ" value="{{$fournisseur->neq}}">
-        <br>
-        <input type="text" name="nomEntreprise" id="" value="{{$fournisseur->nomEntreprise}}" placeholder="Nom de l'entreprise">
-        <br>
-     
-        @if($fournisseur)
-            <select name="typeNumTelephone">
-                <option value="">Type de téléphone</option>
-                <option value='["Bureau"]'>Bureau</option>
-                <option value='["Télécopieur"]'>Télécopieur</option>
-                <option value='["Cellulaire"]'>Cellulaire</option>
-            </select>
-        @endif
-        <br>
-
-        <input type="text" name="numeroTelephone" value="{{$fournisseur->numeroTelephone}}" placeholder="Num de tel format ###-###-####">
-        <br>
-        <input type="text" name="poste" placeholder="poste" value="{{$fournisseur->poste}}">
-        <br>
-        <input type="email" name="email" placeholder="email" value="{{$fournisseur->email}}">
-        <br>
-        @if($fournisseur)
-            <select name="etatDemande">
-                <option value="">État de la demande</option>
-                <option value="Accepter">Accepter</option>
-                <option value="Refusé">Refusé</option>
-                <option value="En attente">En attente</option>
-                <option value="À réviser">À réviser</option>
-            </select>
-        @endif
-        <br>
-        <textarea name="raisonRefus" id="" placeholder="raison de refus"></textarea>
-        <br>
-        <input type="text" name="numTPS" placeholder="numero TPS" value="{{$fournisseur->numTPS}}">
-        <br>
-        <input type="text" name="numTVQ" placeholder="numero Tvq" value="{{$fournisseur->numTVQ}}">
-        <br>
-
-        @if($fournisseur)
-            <select name="conditionPaiement">
-                <option value="">Condition de paiement</option>
-                <option value="30 jours net">30 jours net</option>
-                <option value="45 jours net">45 jours net</option>
-                <option value="60 jours net">60 jours net</option>
-            </select>
-        @endif
-        <br>
-
-        @if($fournisseur)
-            <select name="devise">
-                <option value="">Devise</option>
-                <option value="CAD">CAD</option>
-                <option value="USD">USD</option>
-                <option value="EUR">EUR</option>
-            </select>
-        @endif
-        <br>
-
-        @if($fournisseur)
-            <select name="modeCommunication">
-                <option value="">Mode de communication</option>
-                <option value="Téléphone">Téléphone</option>
-                <option value="Courriel">Courriel</option>
-            </select>
-        @endif
-        <br>
-
-        <input type="text" name="numCivique" placeholder="numeroCivique" value="{{$fournisseur->numCivique}}">
-        <br>
-
-        <input type="text" name="rue" placeholder="rue" value="{{$fournisseur->rue}}">
-        <br>
-
-        <input type="text" name="bureau" placeholder="bureau" value="{{$fournisseur->bureau}}">
-        <br>
-
-        @if($fournisseur)
-            <select name="ville">
-                <option value="">Ville</option>
-                <option value="Montréal">Montréal</option>
-                <option value="Ville de Québec">Ville de Québec</option>
-                <option value="Trois-Rivières">Trois-Rivières</option>
-                <option value="Shawinigan">Shawinigan</option>
-            </select>
-        @endif
-        <br>
-
-        @if($fournisseur)
-            <select name="province">
-                <option value="">Province</option>
-                <option value="Québec">Québec</option>
-                <option value="Ontario">Ontario</option>
-                <option value="Alberta">Alberta</option>
-                <option value="Manitoba">Manitoba</option>
-            </select>
-        @endif
-        <br>
-
-        <input type="text" name="codePostal" placeholder="Code postal" value="{{$fournisseur->codePostal}}">
-        <br>
-
-        <input type="text" name="siteInternet" placeholder="Site internet" value="{{$fournisseur->siteInternet}}">
-        <br>
-
-        @if($fournisseur)
-            <select name="regionAdministrative">
-                <option value="">Region Admin</option>
-                <option value="Montréal">Montréal</option>
-                <option value="Centre-du-Québec">Centre-du-Québec</option>
-                <option value="Mauricie">Mauricie</option>
-            </select>
-        @endif
-        <br>
-
-        @if($fournisseur)
-            <select name="code_administratif">
-                <option value="">Code Administratif</option>
-                <option value="ADM001">ADM001</option>
-                <option value="ADM002">ADM001</option>
-                <option value="ADM003">ADM003</option>
-            </select>
-        @endif
-        <br>
-
-        <button type="submit" class="mt-5">Enregistrer</button>
-
-    </form>
-    <br>
-    <form method="POST" action="{{route('supprimerFournisseur', [$fournisseur->id] )}}">
-        @csrf
-        @method('DELETE')
-        <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?');">Supprimer le fournisseur</button>
-    </form>
-</div>
- -->
 @endsection

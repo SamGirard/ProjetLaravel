@@ -22,13 +22,13 @@ class FournisseurController extends Controller
 {
     public function index(){
         // Récupérer tous les fournisseurs
-        $fournisseurs = Fournisseur::all();
+        $fournisseurs = User::all();
 
         // Passer les données à la vue
         return view('pageTest.test', compact('fournisseurs'));
     }
 
-    public function show(Fournisseur $fournisseur){
+    public function show(User $fournisseur){
         $infosRbq = $fournisseur->infosRbq;
         return view('pageTest.show', compact('fournisseur', 'infosRbq'));
 
@@ -62,9 +62,9 @@ class FournisseurController extends Controller
 
             $fournisseur->neq = $request->neq;
             $fournisseur->nomEntreprise = $request->nomEntreprise;
-            $fournisseur->typeNumTelephone = $request->typeNumTelephone;
-            $fournisseur->numeroTelephone = $request->numeroTelephone;
-            $fournisseur->poste = $request->poste;
+            $fournisseur->typeNumTelephone = $request->typeNumTelephoneTest;
+            $fournisseur->numeroTelephone = $request->numeroTelephoneTest;
+            $fournisseur->poste = $request->posteTest;
             $fournisseur->email = $request->email; 
             $fournisseur->etatDemande = $request->etatDemande;
             $fournisseur->raisonRefus = $request->raisonRefus;
@@ -117,7 +117,43 @@ class FournisseurController extends Controller
                 $fournisseur->raisonRefus = $request->raisonRefus;
                 Brochure::where('fournisseur_id', $fournisseur->id)->delete();
             }
+
             $fournisseur->save();
+
+            $contacts = json_decode($request->input('contacts'), true);
+            $fournisseurId = $fournisseur->id;
+
+            if ($contacts && $fournisseurId) {
+                foreach ($contacts as $contactData) {
+                    $existingContact = Contact::where('id', $contactData['id'])
+                        ->where('fournisseur_id', $fournisseurId)
+                        ->first();
+        
+                    if ($existingContact) {
+                        $existingContact->delete();
+                    }
+        
+                    Contact::create([
+                        'prenom' => $contactData['prenom'],
+                        'nom' => $contactData['nom'],
+                        'fonction' => $contactData['fonction'],
+                        'courriel' => $contactData['courriel'],
+                        'typeNumTelephone' => $contactData['typeNumTelephone'],
+                        'numTelephone' => $contactData['numTelephone'],
+                        'poste' => $contactData['poste'] ?? null,
+                        'fournisseur_id' => $fournisseurId,
+                    ]);
+                }
+            }
+
+            $services = Service::where('fournisseur_id', $fournisseurId)->first();
+
+            if ($services) {
+                $services->produit_services = $request->produit_services;
+                $services->save();
+            } else {
+                return response()->json(['message' => 'Service not found'], 404);
+            }
 
         } catch(\Throwable $e){
             Log::debug($e);
@@ -140,7 +176,7 @@ class FournisseurController extends Controller
             
             $fournisseur->delete();
 
-            Mail::to($fournisseurs->email)->send(new MailSuppressionFournisseur($fournisseur->nomEntreprise));
+            Mail::to($fournisseur->email)->send(new MailSuppressionFournisseur($fournisseur->nomEntreprise));
             return redirect()->route('pageCommis.liste')->with('success', 'Le fournisseurs est supprimer!');
         }
         catch(\Throwable $e){

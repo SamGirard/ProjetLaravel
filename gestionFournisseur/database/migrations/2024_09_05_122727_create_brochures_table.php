@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('nom');
             $table->unsignedBigInteger('fournisseur_id');
-            $table->foreign('fournisseur_id')->references('id')->on('users');
+            $table->foreign('fournisseur_id')->references('id')->on('users')->onDelete("cascade");
             $table->timestamps();
         });
     }
