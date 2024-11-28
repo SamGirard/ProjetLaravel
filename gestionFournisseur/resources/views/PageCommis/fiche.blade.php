@@ -1448,13 +1448,13 @@
                                 </button>
                             </div>
                             @if($fournisseur)
-                                <p>TPS : {{$fournisseur->numTPS}}</p>
-                                <p>TVQ : {{$fournisseur->numTVQ}}</p>
-                                <p class="font-bold mt-2">Conditions de paiements</p>
-                                <p>{{$fournisseur->conditionPaiement}}</p>
-                                <p class="font-bold mt-2">Devises</p>
-                                <p>{{$fournisseur->devise}}</p>
-                                <p class="font-bold mt-2">Mode de communication</p>
+                                <p><span>TPS</span> : {{$fournisseur->numTPS}}</p>
+                                <p class="mb-2"><span>TVQ</span> : {{$fournisseur->numTVQ}}</p>
+                                <span class="font-bold mt-2">Conditions de paiements</span>
+                                <p class="mb-2">{{$fournisseur->conditionPaiement}}</p>
+                                <span class="font-bold mt-2">Devises</span>
+                                <p class="mb-2">{{$fournisseur->devise}}</p>
+                                <span class="font-bold mt-2">Mode de communication</span>
                                 <p>{{$fournisseur->modeCommunication}}</p>
                             @endif
                             
@@ -1532,7 +1532,6 @@
                                 </div>
                                 <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                                     <button data-modal-hide="finance-modal" id="save-adresse" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
-                                    <button type="button" id="add-number" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 ml-2.5 py-2.5 text-center">Ajouter un numéro</button>
                                     <button data-modal-hide="finance-modal" id="cancel-adresse" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Annuler</button>
                                 </div>
                             </div>
@@ -1675,7 +1674,7 @@
                     </div>
 
                     <script>
-                            var newBrochure = document.getElementById("brochures");
+                            newBrochure = document.getElementById("brochures");
 
                             newBrochure.addEventListener('change', function(){
                                 const files = newBrochure.files;
