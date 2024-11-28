@@ -293,7 +293,7 @@
                                     <p class="text-gray-800">{{ $contact->nom }}, {{ $contact->prenom }}</p>
                                     <p class="text-gray-800">{{ $contact->fonction }}</p>
                                     <p class="text-gray-800">{{ $contact->courriel }}</p>
-                                    <p class="text-gray-800">{{ $contact->numTelephone }} #{{ $contact->poste }}</p>
+                                    <p class="text-gray-800">{{ preg_replace('/(\d{3})(\d{3})(\d{4})/', '$1-$2-$3', $contact->numTelephone) }} #{{ $contact->poste }}</p>
                                 </div>
                             </div>
                             <hr class="border-0 h-1 bg-blue-600 my-2">
@@ -770,7 +770,7 @@
                                         <p class="text-gray-800">${contact.nom}, ${contact.prenom}</p>
                                         <p class="text-gray-800">${contact.fonction}</p>
                                         <p class="text-gray-800">${contact.courriel}</p>
-                                        <p class="text-gray-800">${contact.numTelephone} #${contact.poste}</p>
+                                        <p class="text-gray-800">${contact.numTelephone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')} #${contact.poste}</p>
                                     `;
                                     contactDiv.appendChild(detailsDiv);
 
@@ -823,7 +823,7 @@
                                     @else
                                         <i class="fa-solid fa-desktop mr-2"></i>
                                     @endif
-                                    {{ $telephoneNumbers[$i] }} @isset($poste[$i]) #{{ $poste[$i] }} @endisset
+                                    {{ preg_replace('/(\d{3})(\d{3})(\d{4})/', '$1-$2-$3', $telephoneNumbers[$i]) }} @isset($poste[$i]) #{{ $poste[$i] }} @endisset
                                 </p>
                             @endfor
                         </div>

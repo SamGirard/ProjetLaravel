@@ -635,7 +635,6 @@
                     let isChecked = false;
 
                     commodities.forEach(commodity => {
-                        console.log(commodity);
                         compteurLicences[commodity.id]++;
                     })
 

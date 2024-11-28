@@ -20,11 +20,19 @@
         </thead>
         <tbody>
             @foreach($fournisseurs as $fournisseur)
+                @php
+                    $telephoneNumbers = json_decode($fournisseur->numeroTelephone, true);
+                        if (!is_array($telephoneNumbers)) {
+                            $telephoneNumbers = [$telephoneNumbers];
+                        }
+                    @endphp
                 <tr class="bg-white border-b dark:bg-gray-800" x-data="{ currentContactIndex: 0 }">
                     <td class="px-6 py-4">
                         <div class="font-medium text-gray-900">{{ $fournisseur->nomEntreprise }}</div>
                         <div class="text-sm">{{ $fournisseur->email }}</div>
-                        <div class="text-sm">{{ $fournisseur->numeroTelephone }}</div>
+                        @for($i = 0; $i < count($telephoneNumbers); $i++)
+                        <div class="text-sm">{{ preg_replace('/(\d{3})(\d{3})(\d{4})/', '$1-$2-$3', $telephoneNumbers[$i]) }}</div>
+                        @endfor
                     </td>
 
                     <td class="px-6 py-4">
@@ -56,7 +64,7 @@
                                         <div class="text-sm">
                                             <div>{{ $contact->prenom }} {{ $contact->nom }}, {{ $contact->fonction }}</div>
                                             <div>{{ $contact->courriel }}</div>
-                                            <div>{{ $contact->numTelephone }}</div>
+                                            <div>{{ preg_replace('/(\d{3})(\d{3})(\d{4})/', '$1-$2-$3', $contact->numTelephone) }}</div>
                                         </div>
                                     </div>
                                 @endforeach
