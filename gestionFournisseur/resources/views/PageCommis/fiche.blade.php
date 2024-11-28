@@ -74,9 +74,11 @@
                             @endif
                         </p>
                         @else
+
                             <span class="{{ $fournisseur->etatDemande == 'Acceptée' ? 'bg-green-100 text-green-800' : ($status == 'En attente' ? 'bg-blue-100 text-blue-800' : ($status == 'Refusée' ? 'refusedButton bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')) }} text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
                                     {{ $fournisseur->etatDemande }}
                             </span>
+
                         @endif
                     </fieldset>
 
@@ -147,11 +149,11 @@
                 <fieldset class="border-2 border-blue-600 rounded-lg p-4 mt-2">
                     <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Identification</legend>
                     <div class="text-right">
-                        @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
-                            <button data-modal-target="identification-modal" data-modal-toggle="identification-modal" class="text-blue-600 hover:text-blue-900" type="button">
-                                <i class="text-xl fa-regular fa-pen-to-square"></i>
-                            </button>
-                        @endif
+                    @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
+                        <button data-modal-target="identification-modal" data-modal-toggle="identification-modal" class="text-blue-600 hover:text-blue-900" type="button">
+                            <i class="text-xl fa-regular fa-pen-to-square"></i>
+                        </button>
+                    @endif
                     </div>
                     <p id="neq-display" class="text-gray-800">{{ $fournisseur->neq }}</p>
                     <p id="nomEntreprise-display" class="text-gray-800">{{ $fournisseur->nomEntreprise }}</p>
@@ -1406,8 +1408,171 @@
                         </p>
                     </fieldset>
 
+                    <div id="produits-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative p-4 w-full max-w-2xl max-h-full">
+                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                        Produits et services offerts
+                                    </h3>
+                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="produits-modal">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                <input type="hidden" name="produit_services" id="produit_services"
+                                        value="{{ $service->produit_services }}">
+                                <div class="p-4 md:p-5 space-y-4">
+                                    <h4 class="font-semibold text-gray-700">Liste des produits et services</h4>
+                                    <ul id="product-list-modal" class="space-y-3">
+                                        @foreach($categories as $categorie => $sousCategories)
+                                            <li data-category="{{ $categorie }}">
+                                                <strong>{{ $categorie }}</strong>
+                                                <ul class="ml-4 space-y-2">
+                                                    @foreach($sousCategories as $sousCategorie => $elements)
+                                                        <li data-subcategory="{{ $sousCategorie }}">
+                                                            <strong>{{ $sousCategorie }}</strong>
+                                                            <ul class="ml-6 space-y-1">
+                                                                @foreach($elements as [$element, $sousElement])
+                                                                    <li class="flex items-center justify-between" data-element="{{ $element }}" data-sub-element="{{ $sousElement }}">
+                                                                        <span>{{ $element }} - {{ $sousElement }}</span>
+                                                                        <button 
+                                                                            class="delete-produit">
+                                                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                    <label for="details"><h4 class="font-semibold text-gray-700 mb-0 pb-0">Détails</h4></label>
+                                    <textarea id="details" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez écrire les détails...">{{ $service->details }}</textarea>
+                                </div>
+                                <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                    <button data-modal-hide="produits-modal" id="save-produits" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
+                                    <button type="button" id="add-produits" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 ml-2.5 py-2.5 text-center">Ajouter un produit / service</button>
+                                    <button data-modal-hide="produits-modal" id="cancel-produits" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Annuler</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <div class="grid grid-cols-2">
+                    <script>
+                        $(document).ready(function () {
+                            const $productListModal = $('#product-list-modal');
+                            const $addProductBtn = $('#add-produits');
+                            const $cancelProductBtn = $('#cancel-produits');
+                            const $saveProductBtn = $('#save-produits');
+                            const $detailsTextareaModal = $('#details');
+                            const $produitServicesInput = $('#produit_services');
+
+                            let initialproductListModal = $productListModal.html();
+                            let initialDetailsModal = $detailsTextareaModal.val();
+
+                            let produitServices = JSON.parse($produitServicesInput.val() || '[]');
+
+                            function updateProduitServices() {
+                                let remainingServices = [];
+                                
+                                $productListModal.find('li[data-category]').each(function () {
+                                    const category = $(this).data('category');
+
+                                    $(this).find('li[data-subcategory]').each(function () {
+                                        const subCategory = $(this).data('subcategory');
+
+                                        $(this).find('li[data-element]').each(function () {
+                                            const element = $(this).data('element');
+
+                                            remainingServices.push(element);
+                                        });
+                                    });
+                                });
+
+                                produitServices = produitServices.filter(service => 
+                                    remainingServices.some(id => service.includes(id.toString()))
+                                );
+
+                                $produitServicesInput.val(JSON.stringify(produitServices));
+                            }
+
+                            $productListModal.on('click', '.delete-produit', function () {
+                                const $productItem = $(this).closest('li');
+                                const $subcategory = $productItem.closest('[data-subcategory]');
+                                const $category = $productItem.closest('[data-category]');
+
+                                $productItem.remove();
+
+                                if ($subcategory && $subcategory.find('ul > li').length === 0) {
+                                    $subcategory.remove();
+                                }
+
+                                if ($category && $category.find('[data-subcategory]').length === 0) {
+                                    $category.remove();
+                                }
+                            });
+
+                            $cancelProductBtn.on('click', function () {
+                                $productListModal.html(initialproductListModal);
+                                $detailsTextareaModal.val(initialDetailsModal);
+                                produitServices = JSON.parse($produitServicesInput.val() || '[]');
+                            });
+
+                            $saveProductBtn.on('click', function () {
+                                initialproductListModal = $productListModal.html();
+                                initialDetailsModal = $detailsTextareaModal.val();
+
+                                const $produitsListFieldset = $('#produitsListFieldset');
+                                const $detailsFieldset = $('#detailsFieldset');
+
+                                $produitsListFieldset.empty();
+
+                                $productListModal.find('li[data-category]').each(function () {
+                                    const $categoryItem = $(this);
+                                    const category = $categoryItem.data('category');
+                                    const $categoryUl = $('<ul></ul>');
+                                    const $categoryLi = $('<li></li>').text(category);
+                                    $categoryUl.append($categoryLi);
+
+                                    $categoryItem.find('li[data-subcategory]').each(function () {
+                                        const $subCategoryItem = $(this);
+                                        const subCategory = $subCategoryItem.data('subcategory');
+                                        const $subCategoryUl = $('<ul></ul>').addClass('ml-3');
+                                        const $subCategoryLi = $('<li></li>').text(subCategory);
+                                        $subCategoryUl.append($subCategoryLi);
+
+                                        const $elementsUl = $('<ul></ul>').addClass('ml-6');
+                                        $subCategoryItem.find('li[data-element]').each(function () {
+                                            const $elementItem = $(this);
+                                            const element = $elementItem.data('element');
+                                            const subElement = $elementItem.data('sub-element');
+                                            const $elementLi = $('<li></li>').text(`${element} - ${subElement}`);
+                                            $elementsUl.append($elementLi);
+                                        });
+
+                                        $subCategoryLi.append($elementsUl);
+                                        $categoryUl.append($subCategoryUl);
+                                    });
+
+                                    $produitsListFieldset.append($categoryUl);
+                                });
+
+                                $detailsFieldset.text(initialDetailsModal);
+
+                                updateProduitServices();
+                            });
+                        });
+                    </script>
+
+
+<div class="grid grid-cols-2">
                         <fieldset class="border-2 border-blue-600 rounded-lg p-4 col-span-1">
                         <div class="text-right">
                             <button data-modal-target="brochure-modal" data-modal-toggle="brochure-modal" class="text-blue-600 hover:text-blue-900" type="button">
@@ -1485,22 +1650,12 @@
                     </div>
 
                     </div>
-                    </fieldset>
-                    <fieldset class="border-2 border-blue-600 rounded-lg p-4">
-                        <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Finances</legend>
-                        <div class="text-right">
-                            <button data-modal-target="finance-modal" data-modal-toggle="finance-modal" class="text-blue-600 hover:text-blue-900" type="button">
-                                <i class="text-xl fa-regular fa-pen-to-square" aria-hidden="true"></i>
-                            </button>
-                        </div>
-
-                    </fieldset>
                     <div id="finance-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <div class="relative p-4 w-full max-w-2xl max-h-full">
                             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                        Adresse
+                                        Finances
                                     </h3>
                                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="finance-modal">
                                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -1510,90 +1665,58 @@
                                     </button>
                                 </div>
                                 <div class="p-4 md:p-5 space-y-4">
-                                    <div class="grid gap-6 mb-6 md:grid-cols-2">
+                                    <div class="grid gap-6 mb-6 md:grid-cols-1">
                                         <div>
                                             <label for="numTPS" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro TPS</label>
-                                            <input type="text" name="numTPS" id="numTPS" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numCivique }}" value="{{ $fournisseur->numCivique }}" />
+                                            <input type="text" name="numTPS" id="numTPS" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numTPS }}" value="{{ $fournisseur->numTPS }}" />
                                             <p id="numTPSErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de TPS valide.</p>
                                         </div>
                                         <div>
                                             <label for="numTVQ" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro TVQ</label>
-                                            <input type="text" name="rue" id="TVQ" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->rue }}" value="{{ $fournisseur->rue }}" required />
-                                            <p id="rueErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de TVS valide.</p>
+                                            <input type="text" name="numTVQ" id="numTVQ" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numTVQ }}" value="{{ $fournisseur->numTVQ }}" required />
+                                            <p id="numTVQErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de TVQ valide.</p>
+                                        </div>
+                                        <div>
+                                            <label for="conditionPaiement">Conditions de paiement</label>
+                                            <select name="conditionPaiement" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="conditionPaiement">
+                                                <option value="payable immédiatement sans réduction">payable immédiatement sans réduction</option>
+                                                <option value="payable immédiatement sans réduction, Date de base au 15 du mois suivant">payable immédiatement sans réduction, Date de base au 15 du mois suivant</option>
+                                                <option value="dans les 15 jours 2% escpte, dans les 30 jours sans déduction">dans les 15 jours 2% escpte, dans les 30 jours sans déduction</option>
+                                                <option value="après entrée facture jusqu'au 15 du mois, jusqu'au 15 du mois suivant 2% escpte">après entrée facture jusqu'au 15 du mois, jusqu'au 15 du mois suivant 2% escpte</option>
+                                                <option value="dans les 10 jours 2% escpte, dans les 30 jours sans déduction">dans les 10 jours 2% escpte, dans les 30 jours sans déduction</option>
+                                                <option value="dans les 15 jours sans déduction">dans les 15 jours sans déduction</option>
+                                                <option value="dans les 30 jours sans déduction">dans les 30 jours sans déduction</option>
+                                                <option value="dans les 45 jours sans déduction">dans les 45 jours sans déduction</option>
+                                                <option value="dans les 60 jours sans déduction">dans les 60 jours sans déduction</option>
+                                            </select>
+                                        </div>
+                                        <label for="">Devise</label>
+                                        <div class="grid gap-4 md:grid-cols-3">
+                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+                                                <input id="bordered-radio-1" type="radio" value="CAD" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="bordered-radio-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">CAD</label>
+                                            </div>
+                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+                                                <input checked id="bordered-radio-2" type="radio" value="USD" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">USD</label>
+                                            </div>
+                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+                                                <input checked id="bordered-radio-2" type="radio" value="EUR" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">EUR</label>
+                                            </div>
+                                        </div>
+                                        <label for="">Mode de communication</label>
+                                        <div class="grid gap-4 md:grid-cols-2">
+                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+                                                <input id="bordered-radio-1" type="radio" value="Courriel" name="modeCommunication" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="bordered-radio-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Courriel</label>
+                                            </div>
+                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+                                                <input checked id="bordered-radio-2" type="radio" value="Courriel régulier" name="modeCommunication" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Courriel régulier</label>
+                                            </div>
                                         </div>
                                     </div>
-                                    @for($i = 0; $i < count($telephoneNumbers); $i++)
-                                    <div class="mb-6">
-                                        <div class="flex items-center">
-                                            <div class="flex flex-col">
-                                                <label 
-                                                    for="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-                                                >
-                                                    Type {{ $i+1 }}
-                                                </label> 
-                                                <select 
-                                                    id="typeNumTelephone-contact-{{ $fournisseur->id }}-{{ $i }}"
-                                                    class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                >
-                                                    <option value="Bureau" {{ $typeNumTelephone[$i] == 'Bureau' ? 'selected' : '' }}>Bureau</option>
-                                                    <option value="Télécopieur" {{ $typeNumTelephone[$i] == 'Télécopieur' ? 'selected' : '' }}>Télécopieur</option>
-                                                    <option value="Cellulaire" {{ $typeNumTelephone[$i] == 'Cellulaire' ? 'selected' : '' }}>Cellulaire</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="flex-grow">
-                                                <label 
-                                                    for="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-                                                >
-                                                    Numéro de téléphone {{ $i+1 }}
-                                                </label>
-                                                <input 
-                                                    type="text" 
-                                                    id="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                    placeholder="{{ $telephoneNumbers[$i] }}" 
-                                                    value="{{ $telephoneNumbers[$i] }}"
-                                                    name="numeroTelephone"
-                                                    required 
-                                                />
-                                            </div>
-
-                                            <div class="flex flex-col w-1/4">
-                                                <label 
-                                                    for="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-                                                >
-                                                    Poste {{ $i+1 }}
-                                                </label>
-                                                <input 
-                                                    type="text" 
-                                                    id="poste-contact-{{ $fournisseur->id }}-{{ $i }}" 
-                                                    class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                    placeholder="{{ $poste[$i] }}" 
-                                                    value='["#{{ $poste[$i] }}"]'
-                                                    name="poste"  
-                                                    required 
-                                                />
-                                            </div>
-
-                                            <button 
-                                                type="button" 
-                                                class="text-red-500 hover:text-red-700 ml-2 mt-6" 
-                                                id="delete-contact-{{ $i }}"
-                                            >
-                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                                                </svg>
-                                            </button>
-                                        </div>
-
-                                        <p id="numTelephone-contact-error-{{ $fournisseur->id }}-{{ $i }}" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">
-                                            Veuillez entrer un numéro de téléphone valide
-                                        </p>
-                                    </div>
-                                @endfor
                                 </div>
                                 <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                                     <button data-modal-hide="finance-modal" id="save-adresse" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
@@ -1778,7 +1901,6 @@
                             document.getElementById("resultat").appendChild(nom);
                         }
 
-
                         let elements = [];
                         const elementsBrochures = document.getElementsByClassName("retirerBrochure");
 
@@ -1809,7 +1931,6 @@
                         
 
 
-
                         document.getElementById('cancel-brochures').addEventListener('click', function(event) {
                             for(let i=0; i<elementsBrochures.length; i++) {
                                 const nom = document.getElementsByClassName("nomBrochure");
@@ -1836,6 +1957,8 @@
 
                         
                     </script>
+
+
 
                     @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Enregistrer</button>
