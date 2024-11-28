@@ -16,16 +16,13 @@
             <div class="flex justify-evenly">
                 <div class="mx-1">
                     @php
-                        $statuses = ['Accepter', 'Refusé', 'En attente', 'Réviser'];
+                        $statuses = ['Acceptée', 'Refusée', 'En attente', 'À réviser'];
                     @endphp
                     @if($fournisseur)
                     <div class="container mx-auto mt-6 flex">
                             <div class="flex-1 p-6 ml-6">
                                 <div class="flex justify-evenly">
-                                    <div class="mx-1">
-                                    @php
-                        $statuses = ['Accepter', 'Refusé', 'En attente', 'Réviser'];
-                    @endphp
+                                    <div class="mx-1 w-96">
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Statut de la demande</legend>
                         @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
@@ -35,8 +32,8 @@
                                         value="{{ $fournisseur->etatDemande }}">
                                     <button id="dropdownEtatButton"
                                         class="text-center inline-flex items-center 
-                                                {{ $fournisseur->etatDemande == 'En attente' ? 'bg-blue-100 text-blue-800' : ($fournisseur->etatDemande == 'Accepter' ? 'bg-green-100 text-green-800' : ($fournisseur->etatDemande == 'Réviser' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800')) }}
-                                                text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300" type="button">
+                                                {{ $fournisseur->etatDemande == 'En attente' ? 'bg-blue-100 text-blue-800' : ($fournisseur->etatDemande == 'Acceptée' ? 'bg-green-100 text-green-800' : ($fournisseur->etatDemande == 'À réviser' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800')) }}
+                                                text-sm font-medium me-2 px-4 py-1.5 rounded dark:bg-green-900 dark:text-green-300" type="button">
                                         {{ $fournisseur->etatDemande }}
                                         <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                             fill="none" viewBox="0 0 10 6">
@@ -50,7 +47,7 @@
                                             @if($status !== $fournisseur->etatDemande)
                                                 <li>
                                                     <span
-                                                        class="changeStatusButton {{ $status == 'Accepter' ? 'bg-green-100 text-green-800' : ($status == 'En attente' ? 'bg-blue-100 text-blue-800' : ($status == 'Refusé' ? 'refusedButton bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')) }} 
+                                                        class="changeStatusButton {{ $status == 'Acceptée' ? 'bg-green-100 text-green-800' : ($status == 'En attente' ? 'bg-blue-100 text-blue-800' : ($status == 'Refusée' ? 'refusedButton bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')) }} 
                                                                                                  text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 hover:cursor-pointer">
                                                         {{ $status }}
                                                     </span>
@@ -77,11 +74,11 @@
                             @endif
                         </p>
                         @else
-                        <span
-                                                        class="{{ $fournisseur->etatDemande == 'Accepter' ? 'bg-green-100 text-green-800' : ($status == 'En attente' ? 'bg-blue-100 text-blue-800' : ($status == 'Refusé' ? 'refusedButton bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')) }} 
-                                                                                                 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
-                                                        {{ $fournisseur->etatDemande }}
-                                                    </span>
+
+                            <span class="{{ $fournisseur->etatDemande == 'Acceptée' ? 'bg-green-100 text-green-800' : ($status == 'En attente' ? 'bg-blue-100 text-blue-800' : ($status == 'Refusée' ? 'refusedButton bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')) }} text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                                    {{ $fournisseur->etatDemande }}
+                            </span>
+
                         @endif
                     </fieldset>
 
@@ -108,9 +105,9 @@
                             const newStatus = $(this).text().trim();
                             const statusClasses = {
                                 'En attente': 'bg-blue-100 text-blue-800',
-                                'Accepter': 'bg-green-100 text-green-800',
-                                'Réviser': 'bg-yellow-100 text-yellow-800',
-                                'Refusé': 'refusedButton bg-red-100 text-red-800'
+                                'Acceptée': 'bg-green-100 text-green-800',
+                                'À réviser': 'bg-yellow-100 text-yellow-800',
+                                'Refusée': 'refusedButton bg-red-100 text-red-800'
                             };
 
                             $('#dropdownEtatButton').html(`
@@ -118,7 +115,7 @@
                                 <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                 </svg>
-                            `).removeClass().addClass(`text-center inline-flex items-center text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 ${statusClasses[newStatus]}`);
+                            `).removeClass().addClass(`text-center inline-flex items-center text-md font-medium me-2 px-4 py-1.5 rounded dark:bg-green-900 dark:text-green-300 ${statusClasses[newStatus]}`);
 
                             $('#etatDemande').attr('value', newStatus);
 
@@ -130,7 +127,7 @@
                                 $('#refusedCheckboxDiv').addClass('hidden');
                             }
 
-                            const statuses = ['Accepter', 'En attente', 'Refusé', 'Réviser'];
+                            const statuses = ['Acceptée', 'En attente', 'Refusée', 'À réviser'];
                             const updatedStatuses = statuses.filter(status => status !== newStatus);
                             let dropdownContent = '';
 
@@ -1783,7 +1780,7 @@
                             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                        Brochures et carte d'affiares
+                                        Brochures et carte d'affaires
                                     </h3>
                                     <button type="button" id="fermer" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="brochure-modal">
                                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -1976,7 +1973,7 @@
 <form method="POST" class="ml-14" action="{{route('supprimerFournisseur', [$fournisseur->id] )}}">
     @csrf
     @method('DELETE')
-    <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?');">Supprimer le fournisseur</button>
+    <button type="submit" class="underline mt-2" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?');">Supprimer le fournisseur</button>
 </form>  
 @endif
 @endif
