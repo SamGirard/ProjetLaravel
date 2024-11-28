@@ -34,7 +34,7 @@ class GestionController extends Controller
         $contacts = Contact::where('fournisseur_id',  $fournisseur->id)->get();
         $etatDemande = User::where('id', $fournisseur->id)->get();
         $services = Service::where('fournisseur_id',  $fournisseur->id)->get();
-        $brochures = Brochure::where('fournisseur_id',  $fournisseur->id)->get();
+        $brochures = Brochure::where('fournisseur_id',  1000)->get();
 
         return view('pageCommis.fiche', compact('fournisseur', 'contacts', 'services', 'brochures'));
     }

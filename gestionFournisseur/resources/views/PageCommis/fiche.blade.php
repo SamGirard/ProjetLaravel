@@ -89,7 +89,6 @@
                                 setTimeout(() => {
                                     $(document).one('click', function (event) {
                                         if (!$(event.target).closest('#dropdownEtat, #dropdownEtatButton').length) {
-                                            console.log("ben");
                                             $('#dropdownEtat').addClass('hidden');
                                         }
                                     });
@@ -883,7 +882,7 @@
                                         </div>
                                         <div>
                                             <label for="siteInternet" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Site internet</label>
-                                            <input type="url" name="siteInternet" id="siteInternet" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->siteInternet }}" value="{{ $fournisseur->siteInternet }}" required />
+                                            <input type="url" name="siteInternet" id="siteInternet" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->siteInternet }}" value="{{ $fournisseur->siteInternet }}" />
                                             <p id="siteInternetErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un site internet valide.</p>
                                         </div>
                                     </div>
@@ -1572,7 +1571,7 @@
                     </script>
 
 
-<div class="grid grid-cols-2">
+                    <div class="grid grid-cols-2">
                         <fieldset class="border-2 border-blue-600 rounded-lg p-4 col-span-1">
                         <div class="text-right">
                             <button data-modal-target="brochure-modal" data-modal-toggle="brochure-modal" class="text-blue-600 hover:text-blue-900" type="button">
@@ -1673,7 +1672,7 @@
                                         </div>
                                         <div>
                                             <label for="numTVQ" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro TVQ</label>
-                                            <input type="text" name="numTVQ" id="numTVQ" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numTVQ }}" value="{{ $fournisseur->numTVQ }}" required />
+                                            <input type="text" name="numTVQ" id="numTVQ" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->numTVQ }}" value="{{ $fournisseur->numTVQ }}" />
                                             <p id="numTVQErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de TVQ valide.</p>
                                         </div>
                                         <div>
@@ -1693,27 +1692,23 @@
                                         <label for="">Devise</label>
                                         <div class="grid gap-4 md:grid-cols-3">
                                             <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
-                                                <input id="bordered-radio-1" type="radio" value="CAD" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="bordered-radio-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">CAD</label>
+                                                <input id="CAD" type="radio" value="CAD" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="CAD" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">CAD</label>
                                             </div>
                                             <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
-                                                <input checked id="bordered-radio-2" type="radio" value="USD" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">USD</label>
-                                            </div>
-                                            <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
-                                                <input checked id="bordered-radio-2" type="radio" value="EUR" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">EUR</label>
+                                                <input checked id="USD" type="radio" value="USD" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="USD" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">USD</label>
                                             </div>
                                         </div>
                                         <label for="">Mode de communication</label>
                                         <div class="grid gap-4 md:grid-cols-2">
                                             <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
-                                                <input id="bordered-radio-1" type="radio" value="Courriel" name="modeCommunication" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="bordered-radio-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Courriel</label>
+                                                <input id="Courriel" type="radio" value="Courriel" name="modeCommunication" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="Courriel" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Courriel</label>
                                             </div>
                                             <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
-                                                <input checked id="bordered-radio-2" type="radio" value="Courriel régulier" name="modeCommunication" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Courriel régulier</label>
+                                                <input checked id="Courriel régulier" type="radio" value="Courriel régulier" name="modeCommunication" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                <label for="Courriel régulier" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Courriel régulier</label>
                                             </div>
                                         </div>
                                     </div>
@@ -1795,6 +1790,7 @@
                                             @foreach($brochures as $brochure)
                                             <div class="flex justify-around">
                                                 <li class="items-center mb-2 mb-4">
+
                                                     <a href="{{ asset('storage/brochures/' . $brochure->nom) }}"
                                                         download="{{ $brochure->nom }}" class="nomBrochure">
                                                         
@@ -1827,6 +1823,7 @@
                                                             {{ $brochure->nom }}
                                                     </a>
                                                     <span class="ml-2 size">{{ number_format(Storage::size('public/brochures/' . $brochure->nom) / 1024, 2) }}Ko</span>
+                                                
                                                 </li>
                                                 <button type="button" class="text-gray-400 retirerBrochure bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
                                                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -1957,8 +1954,6 @@
 
                         
                     </script>
-
-
 
                     @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Enregistrer</button>
