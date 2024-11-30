@@ -9,7 +9,7 @@
         @include('partials/aside')
 
         <!-- Contenu principal -->
-        <div class="flex-1 bg-white shadow-lg rounded-lg p-6 ml-6">
+        <div class="flex-1 bg-white rounded-lg p-6 ml-6">
             @if(session()->has('status'))
                 <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
                      role="alert">
@@ -154,7 +154,7 @@
             </div>
         </div>
     </div>
-
+    @include('partials/footer')
 @endsection
 
 @section('scripts')

@@ -8,8 +8,8 @@
         @if(auth()->user())
             @include('partials/aside')
         @endif
-            <div class="flex-1 bg-white shadow-lg rounded-lg p-6 ml-6">
-        <form action="{{ route('store_identification') }}" method="post" class="bg-white shadow-xl rounded-xl px-10 py-8 mb-8 transition-all hover:shadow-2xl duration-300 ease-in-out">
+            <div class="flex-1 bg-white rounded-lg p-6 ml-6">
+                <form action="{{ route('store_identification') }}" method="post" class="bg-white shadow-xl rounded-xl px-10 py-8 mb-8 transition-all hover:shadow-2xl duration-300 ease-in-out">
             @csrf
             <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Identification</h1>
 
@@ -96,4 +96,5 @@
         </form>
             </div>
     </div>
+    @include('partials/footer')
 @endsection

@@ -9,7 +9,7 @@
         @include('partials/aside')
 
         <!-- Contenu principal -->
-        <div class="flex-1 bg-white shadow-lg rounded-lg p-6 ml-6">
+        <div class="flex-1 bg-white rounded-lg p-6 ml-6">
             <h1 class="text-3xl font-bold text-gray-900 mb-1 border-b-2 border-gray-300 pb-4">Ajouter un contact</h1>
             <div class="container mx-auto mt-6">
                 <form action="{{ route('store_contact') }}" method="post"
@@ -142,7 +142,7 @@
 
         </div>
     </div>
-
+    @include('partials/footer')
 @endsection
 
 

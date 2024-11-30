@@ -13,6 +13,7 @@ use App\Models\Licence;
 use App\Models\Parametre;
 use App\Models\Service;
 use App\Models\User;
+use GuzzleHttp\Client;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -143,12 +144,26 @@ class FournisseurController extends Controller
         return redirect()->route('create_coordonnee');
     }
 
+    public function fetchAllVille()
+    {
+        $client = new Client([
+            'verify' => false,
+        ]);
+        $sql = 'https://donneesquebec.ca/recherche/api/action/datastore_search_sql?sql=SELECT DISTINCT "munnom", "regadm" FROM "19385b4e-5503-4330-9e59-f998f5918363"';
+
+        $response = $client->request('GET', $sql);
+        $data = json_decode($response->getBody()->getContents());
+
+        return $data;
+    }
+
     public function create_coordonnee(Request $request)
     {
         $provinces = ['Québec', 'Ontario', 'Alberta', 'Manitoba', 'Saskatchewan', 'Colombie-Britannique', 'Nunavut', 'Territoire du Nort-Ouest', 'Yukon', 'Île-du-Prince-Édouard', 'Nouveau-Brunswick', 'Nouvelle-Écosse', 'Terre-Neuve-et-Labrador'];
+        $villes = $this->fetchAllVille()->result->records;
 
         if ($request->session()->has('form_service') || auth::user())
-            return view('fournisseur/form_coordonnee', compact('provinces'));
+            return view('fournisseur/form_coordonnee', compact('provinces','villes'));
         else
             return redirect()->route('create_identification');
 
@@ -175,7 +190,7 @@ class FournisseurController extends Controller
         ]);
         if (auth()->check()) {
             Mail::to(Parametre::first()->courrielAppro)->send(
-                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()->message])
+                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' =>"Modification de la fiche"])
             );
             return redirect()->route('dashboard')->with(['status' => 'coordonnées modifiées']);
         } else {
@@ -226,9 +241,8 @@ class FournisseurController extends Controller
                 ]);
             }
 
-
             Mail::to(Parametre::first()->courrielAppro)->send(
-                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()])
+                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise,  'message' =>"Modification de la fiche"])
             );
             return redirect()->route('dashboard')->with(['ajouter_contact' => 'Contact mis à jour avec succès']);
         } else {
@@ -329,7 +343,7 @@ class FournisseurController extends Controller
                 Auth::login($user);
 
                 Mail::to([$form_identification['email'], Parametre::first()->courrielAppro])->send(
-                    new DemandeFournisseur(['nom' => $form_identification['nom'], 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'reception')->first()->message])
+                    new DemandeFournisseur(['nom' => $form_identification['nom'], 'message' =>"Reception d'une demande"])
                 );
 
                 session()->forget(['form_identification', 'form_identification', 'form_service', 'form_contact']);

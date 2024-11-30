@@ -8,10 +8,11 @@
         @if(auth()->user())
             @include('partials/aside')
         @endif
-        <div class="flex-1 bg-white shadow-lg rounded-lg p-6 ml-6">
-            <form action="{{ auth()->check() &&  $contact!=null ? route('store_contact',$contact->id) : route('store_contact') }}"
-                  method="post"
-                  class="bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4">
+        <div class="flex-1 bg-white rounded-lg p-6 ml-6">
+            <form
+                action="{{ auth()->check() &&  $contact!=null ? route('store_contact',$contact->id) : route('store_contact') }}"
+                method="post"
+                class="bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4">
                 @csrf
                 @if(auth()->check() && $contact!=null)
                     @method('PUT')
@@ -97,15 +98,15 @@
                                 <select id="type_telephone_contact" name="type_telephone_contact"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option
-                                            {{ auth()->check() && $contact!=null && $contact->typeNumTelephone=='Bureau'? 'selected':'' }} value="Bureau">
+                                        {{ auth()->check() && $contact!=null && $contact->typeNumTelephone=='Bureau'? 'selected':'' }} value="Bureau">
                                         Bureau
                                     </option>
                                     <option
-                                            {{ auth()->check() && $contact!=null && $contact->typeNumTelephone=='Telecopieur'? 'selected':'' }} value="Telecopieur">
+                                        {{ auth()->check() && $contact!=null && $contact->typeNumTelephone=='Telecopieur'? 'selected':'' }} value="Telecopieur">
                                         Télécopieur
                                     </option>
                                     <option
-                                            {{ auth()->check() && $contact!=null && $contact->typeNumTelephone=='Cellulaire'? 'selected':'' }} value="Cellulaire">
+                                        {{ auth()->check() && $contact!=null && $contact->typeNumTelephone=='Cellulaire'? 'selected':'' }} value="Cellulaire">
                                         Cellulaire
                                     </option>
                                 </select>
@@ -115,10 +116,10 @@
                                        class="block text-lg text-gray-600 mb-2">Telephone</label>
                                 <div class="flex">
                                     <input
-                                            value="{{ auth()->check() && $contact!=null ? $contact->numTelephone : old('telephone_contact') }}"
-                                            class="@error('telephone_contact') border-red-500 @else border-gray-300 @enderror shadow-sm appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                            id="telephone_contact" name="telephone_contact" type="text"
-                                            placeholder="8165668877">
+                                        value="{{ auth()->check() && $contact!=null ? $contact->numTelephone : old('telephone_contact') }}"
+                                        class="@error('telephone_contact') border-red-500 @else border-gray-300 @enderror shadow-sm appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                        id="telephone_contact" name="telephone_contact" type="text"
+                                        placeholder="8165668877">
                                     @error('telephone_contact')
                                     <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
                                     @enderror
@@ -130,9 +131,10 @@
                             <div>
                                 <label for="poste_contact" class="block text-lg text-gray-600 mb-2">Poste</label>
                                 <div class="flex">
-                                    <input value="{{ auth()->check() && $contact!=null? $contact->poste : old('poste_contact') }}"
-                                           class="@error('poste_contact') border-red-500 @else border-gray-300 @enderror shadow-sm appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                           id="poste_contact" name="poste_contact" type="text">
+                                    <input
+                                        value="{{ auth()->check() && $contact!=null? $contact->poste : old('poste_contact') }}"
+                                        class="@error('poste_contact') border-red-500 @else border-gray-300 @enderror shadow-sm appearance-none border rounded-lg w-full py-3 px-5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                        id="poste_contact" name="poste_contact" type="text">
                                     @error('poste_contact')
                                     <i class="fa-solid fa-circle-xmark ml-2 text-lg text-red-500 icon-validate"></i>
                                     @enderror
@@ -148,19 +150,23 @@
                 <div class="@if(auth()->user()) text-right @else flex justify-between @endif mt-3">
                     @if(!auth()->user())
                         <button
-                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
-                                onclick="window.history.back();">
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
+                            onclick="window.history.back();">
                             Précédent
                         </button>
                     @endif
                     <button
                         class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 transform hover:scale-105"
                         type="submit">
-                        Suivant
+                        @if(auth()->check())
+                            {{ $contact!=null? 'Modifier' : 'Ajouter'}}
+                        @else
+                            Suivant
+                        @endif
                     </button>
                 </div>
             </form>
         </div>
     </div>
-
+    @include('partials/footer')
 @endsection

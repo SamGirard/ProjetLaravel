@@ -65,7 +65,7 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         Mail::to([Parametre::first()->courrielAppro, auth()->user()->email])->send(
-            new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()->message])
+            new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' =>"Modification de la fiche"])
         );
         return redirect()->route('login');
     }
@@ -113,7 +113,7 @@ class ProfileController extends Controller
         auth()->user()->save();
 
         Mail::to(Parametre::first()->courrielAppro)->send(
-            new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()->message])
+            new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' =>"Modification de la fiche"])
         );
         return redirect()->route('dashboard')->with(['ajouter_finance' => 'données de finances ajoutées!']);
     }
@@ -124,7 +124,7 @@ class ProfileController extends Controller
         if ($contact) {
             $contact->delete();
             Mail::to(Parametre::first()->courrielAppro)->send(
-                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' => DB::table('modele_courriel')->select('message')->where('objet', 'modification')->first()->message])
+                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' =>"Modification de la fiche"])
             );
             return redirect()->route('dashboard')->with(['supprimer_contact' => 'contact supprimé']);
         }

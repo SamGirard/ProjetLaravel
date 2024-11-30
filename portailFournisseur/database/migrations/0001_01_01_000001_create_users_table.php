@@ -19,12 +19,12 @@ return new class extends Migration
             $table->json('typeNumTelephone');
             $table->json('numeroTelephone');
             $table->json('poste', 64)->nullable();
-            $table->enum('etatDemande', ['Accepter', 'Refusé', 'En attente', 'Réviser'])->default('En attente');
+            $table->enum('etatDemande', ['Acceptée', 'Refusée', 'En attente', 'À réviser'])->default('En attente');
             $table->string('raisonRefus')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->integer('numTPS')->nullable();
-            $table->integer('numTVQ')->nullable();
+            $table->string('numTPS',255)->nullable();
+            $table->string('numTVQ',255)->nullable();
             $table->string('conditionPaiement', 128)->nullable();
             $table->string('devise', 64)->nullable();
             $table->string('modeCommunication', 64)->nullable();
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string('codePostal', 7);
             $table->string('siteInternet', 64)->nullable();
             $table->string('regionAdministrative', 64)->nullable();
-            $table->string('code_administratif');
+            $table->string('code_administratif')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

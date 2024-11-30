@@ -9,7 +9,7 @@
         @include('partials/aside')
 
         <!-- Contenu principal -->
-        <div class="flex-1 bg-white shadow-lg rounded-lg p-6 ml-6">
+        <div class="flex-1 bg-white rounded-lg p-6 ml-6">
             <h1 class="text-3xl font-bold text-gray-900 mb-1 border-b-2 border-gray-300 pb-4">Ajouter les finances</h1>
 
             <div class="container mx-auto">
@@ -67,15 +67,15 @@
                     <fieldset class="border border-gray-200 rounded-lg p-6">
                         <legend class="font-semibold text-gray-800 mb-4">Devise</legend>
                         <div class="flex items-center mb-4">
-                            <input id="cad" type="radio" value="CAD-Dollar canadien" name="devise"
+                            <input id="cad" type="radio" value="CAD" name="devise"
                                    class=" w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="cad" class="ms-2 block text-gray-600 text-sm font-bold">CAD-Dollar
-                                canadien</label>
+                            <label for="cad" class="ms-2 block text-gray-600 text-sm font-bold">CAD
+                                </label>
                         </div>
                         <div class="flex items-center">
-                            <input checked id="usd" type="radio" value="USD-Dollar des États-unis" name="devise"
+                            <input checked id="usd" type="radio" value="USD" name="devise"
                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="usd" class="ms-2 block text-gray-600 text-sm font-bold">USD-Dollar des
+                            <label for="usd" class="ms-2 block text-gray-600 text-sm font-bold">USD
                                 États-unis</label>
                         </div>
                     </fieldset>
@@ -108,7 +108,7 @@
 
         </div>
     </div>
-
+    @include('partials/footer')
 @endsection
 
 @section('scripts')

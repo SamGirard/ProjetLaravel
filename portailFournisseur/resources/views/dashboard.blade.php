@@ -39,7 +39,7 @@
             @endif
             <!-- Message de mise a jour des finances -->
 
-            @if(auth()->user()->numTPS==null and auth()->user()->numTVQ==null and auth()->user()->etatDemande=="Accepter")
+            @if(auth()->user()->numTPS==null and auth()->user()->numTVQ==null and auth()->user()->etatDemande=="Acceptée")
                 <div id="alert-border-4"
                      class="flex items-center p-4 mb-4 text-yellow-800 border-t-4 border-yellow-300 bg-yellow-50 dark:text-yellow-300 dark:bg-gray-800 dark:border-yellow-800"
                      role="alert">
@@ -64,10 +64,10 @@
                             @if(auth()->user()->etatDemande=="En attente")
                                 <span
                                     class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{ auth()->user()->etatDemande }}</span>
-                            @elseif(auth()->user()->etatDemande=="Accepter")
+                            @elseif(auth()->user()->etatDemande=="Acceptée")
                                 <span
                                     class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{ auth()->user()->etatDemande }}</span>
-                            @elseif(auth()->user()->etatDemande=="Réviser")
+                            @elseif(auth()->user()->etatDemande=="À réviser")
                                 <span
                                     class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{ auth()->user()->etatDemande }}</span>
                             @else
@@ -298,7 +298,7 @@
                         </p>
                     </fieldset>
                 </div>
-                @if(auth()->user()->numTPS==null and auth()->user()->numTVQ==null and auth()->user()->etatDemande=="Accepter")
+                @if(auth()->user()->numTPS!=null and auth()->user()->numTVQ!=null and auth()->user()->etatDemande=="Acceptée")
                     <div class="mx-1 w-1/3">
                     <fieldset class="border-2 border-blue-600 rounded-lg p-4">
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Finances</legend>

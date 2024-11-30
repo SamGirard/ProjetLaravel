@@ -8,7 +8,7 @@
         @if(auth()->user())
             @include('partials/aside')
         @endif
-        <div class="flex-1 bg-white shadow-lg rounded-lg p-6 ml-6">
+        <div class="flex-1 bg-white rounded-lg p-6 ml-6">
             <form action="{{ route('store_coordonnee') }}" method="post"
                   class="bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4">
                 @csrf
@@ -90,10 +90,12 @@
 
                             <div class="mb-4 mx-2">
                                 <label for="ville" class="block text-lg text-gray-600 mb-2">Ville</label>
-                                <select id="ville" name="ville"
+                                <select required id="ville" name="ville"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                    <!-- Options pour les villes ici -->
                                     <option value="" disabled selected>Choisissez une ville...</option>
+                                   @foreach($villes as $ville)
+                                        <option value="{{ $ville->munnom }}">{{ $ville->munnom }}</option>
+                                   @endforeach
                                 </select>
                             </div>
 
@@ -311,10 +313,17 @@
             </form>
         </div>
     </div>
-
+    @include('partials/footer')
 @endsection
 @section('scripts')
     <script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const ville = new TomSelect(document.getElementById('ville'), {
+                create: false, // Empêche la création de nouvelles options
+                sortField: { field: "text", direction: "asc" },
+            });
+        });
 
         function initMap() {
             if (localStorage.getItem('coordonnesFournisseur') == null) {
@@ -368,8 +377,8 @@
                                 'region_administrative': items['Région administrative']
                  */
                 let coordonnesFournisseur = JSON.parse(localStorage.getItem('coordonnesFournisseur'));
-                console.log(coordonnesFournisseur);
                 localStorage.clear();
+                console.log(coordonnesFournisseur);
                 document.getElementById('region_administrative').value = coordonnesFournisseur['region_administrative'];
                 document.getElementById('code_administratif').value = coordonnesFournisseur['code_region'];
                 document.getElementById('numero_civique').value = coordonnesFournisseur['adresse'].split(' ')[0];
@@ -416,82 +425,6 @@
             console.log(section_telephone);
         });
 
-        async function chagerToutesLesVilles(code_province) {
-
-            try {
-                const response = await fetch(`https://geogratis.gc.ca/services/geoname/en/geonames.json?province=${code_province}&concise=CITY`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const data = await response.json();
-
-                /* for(let i=0;i<data.items.length;i++){
-                     console.log(data.items[i].name);
-                 }*/
-
-            } catch (error) {
-                console.error('Erreur lors du chargement des villes :', error);
-            }
-        }
-
-
-        // Fonction pour charger les options depuis le fichier CSV
-        async function chargerVilles() {
-            try {
-                const response = await fetch('/storage/MUN.csv');
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const data = await response.text(); // Récupérer le contenu du fichier CSV
-
-                // Diviser le contenu par lignes
-                const rows = data.split('\n');
-
-                // Récupérer l'élément select pour la ville
-                const selectElement = document.getElementById('ville');
-
-
-                const villeUtilisateur = @json(auth()->check() ? auth()->user()->ville : null);  // Récupérer la ville de l'utilisateur si connecté, sinon null
-
-                // Ajouter les options au select
-                for (let i = 1; i < rows.length; i++) {
-                    const columns = rows[i].split(",");
-
-                    if (columns[1]) {  // Vérifier si la colonne 2 existe (ville)
-                        let option = document.createElement('option');
-                        option.value = columns[1].trim(); // Retirer les espaces inutiles
-                        option.textContent = columns[1].trim().slice(1, -1); // Supposer qu'il y a des guillemets à enlever
-
-                        // Vérifier si c'est la ville de l'utilisateur
-                        if (option.value === villeUtilisateur) {
-                            option.selected = true;  // Pré-sélectionner l'option
-                        }
-                        selectElement.appendChild(option);
-                    }
-                }
-
-                // Initialiser Tom Select une fois que les options sont ajoutées
-                new TomSelect(selectElement, {
-                    create: false, // Empêcher la création de nouvelles options
-                    sortField: {
-                        field: "text",
-                        direction: "asc"
-                    }
-                });
-
-            } catch (error) {
-                console.error('Erreur lors du chargement des villes :', error);
-            }
-        }
-
-
-        // Charger les villes une fois que le DOM est prêt
-        document.addEventListener('DOMContentLoaded', chargerVilles);
-
-        chagerToutesLesVilles(24);
 
     </script>
     <script async defer

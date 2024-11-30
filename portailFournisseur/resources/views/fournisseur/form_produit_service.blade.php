@@ -6,7 +6,7 @@
     <!-- service offerts -->
     <div class="container mx-auto mt-6">
         <form action="{{ route('store_service') }}" method="post"
-              class=" bg-white shadow-lg rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl">
+              class=" bg-white rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl">
             @csrf
             <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Services et Licences</h1>
             <div class="grid grid-cols-2 gap-6">
@@ -113,8 +113,8 @@
                 </button>
             </div>
         </form>
-
     </div>
+    @include('partials/footer')
 @endsection
 
 @section('scripts')
