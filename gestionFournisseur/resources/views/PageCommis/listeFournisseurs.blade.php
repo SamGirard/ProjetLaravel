@@ -815,9 +815,7 @@
                 populateInputs();
             };
 
-            
-
-            $('#Accepter').prop('checked', true);
+            $('#Acceptée').prop('checked', true);
 
             filterFournisseurs();
 
