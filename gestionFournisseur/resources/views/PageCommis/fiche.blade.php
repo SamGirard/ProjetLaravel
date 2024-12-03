@@ -1573,11 +1573,13 @@
 
                     <div class="grid grid-cols-2">
                         <fieldset class="border-2 border-blue-600 rounded-lg p-4 col-span-1">
-                        <div class="text-right">
-                            <button data-modal-target="brochure-modal" data-modal-toggle="brochure-modal" class="text-blue-600 hover:text-blue-900" type="button">
-                                <i class="text-xl fa-regular fa-pen-to-square" aria-hidden="true"></i>
-                            </button>
-                        </div>
+                        @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
+                            <div class="text-right">
+                                <button data-modal-target="brochure-modal" data-modal-toggle="brochure-modal" class="text-blue-600 hover:text-blue-900" type="button">
+                                    <i class="text-xl fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        @endif
                         <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Brochures et cartes d'affaire</legend>
                         <p class="text-gray-800">
                         <ul>
@@ -1629,11 +1631,13 @@
                         <div>
                         <fieldset class="border-2 border-blue-600 rounded-lg p-4 col-span-2 ml-2">
                             <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Finances</legend>
-                            <div class="text-right">
-                                <butto data-modal-target="finance-modal" data-modal-toggle="finance-modal" class="text-blue-600 hover:text-blue-900" type="button">
-                                    <i class="text-xl fa-regular fa-pen-to-square" aria-hidden="true"></i>
-                                </button>
-                            </div>
+                            @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
+                                <div class="text-right">
+                                    <butto data-modal-target="finance-modal" data-modal-toggle="finance-modal" class="text-blue-600 hover:text-blue-900" type="button">
+                                        <i class="text-xl fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            @endif
                             @if($fournisseur)
                                 <p><span>TPS</span> : {{$fournisseur->numTPS}}</p>
                                 <p class="mb-2"><span>TVQ</span> : {{$fournisseur->numTVQ}}</p>
@@ -1775,7 +1779,7 @@
                             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                        Brochures et carte d'affaires
+                                        et carte d'affaires
                                     </h3>
                                     <button type="button" id="fermer" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="brochure-modal">
                                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
