@@ -4,7 +4,7 @@
 
     <div class="mx-10">
 
-        <form method="POST" action="{{ route('login') }}" class="border border-gray-200 rounded-lg p-6 bg-gray-50 mt-10 mb-2 mx-10">
+        <form method="POST" action="{{ route('login.store') }}" class="border border-gray-200 rounded-lg p-6 bg-gray-50 mt-10 mb-2 mx-10">
             @csrf
             <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Connexion</h1>
 

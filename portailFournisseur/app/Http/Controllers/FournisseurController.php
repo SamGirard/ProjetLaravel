@@ -274,7 +274,7 @@ class FournisseurController extends Controller
     public function store_brochure(Request $request)
     {
         $request->validate([
-            'files_brochure.*' => 'required|file|mimes:pdf,jpg,png,docx|max:' . Parametre::first()->tailleMaxFichiers
+            'files_brochure.*' => 'required|file|mimes:pdf,jpg,png,docx|max:' . Parametre::first()->tailleMaxFichiers*1025
         ]);
 
         if ($request->hasFile('files_brochure')) {
