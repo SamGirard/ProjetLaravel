@@ -88,7 +88,7 @@
                     <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-300 group-hover:border-gray-400">
                         <span class="text-gray-500">05</span>
                     </span>
-                    <span class="ml-4 text-sm font-medium text-gray-500 group-hover:text-gray-900">Brochure s et Finances</span>
+                    <span class="ml-4 text-sm font-medium text-gray-500 group-hover:text-gray-900">Brochures</span>
                 </span>
             </a>
         </li>
