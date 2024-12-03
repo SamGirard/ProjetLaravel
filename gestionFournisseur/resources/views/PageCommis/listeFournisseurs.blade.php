@@ -463,10 +463,10 @@
                         fournisseurs.sort((a, b) => getEtatDemande(b).localeCompare(getEtatDemande(a)));
                         filteredFournisseurs.sort((a, b) => getEtatDemande(b).localeCompare(getEtatDemande(a)));
                         break;
-                    case 'Fournisseurs-asc':
+                    case 'Fournisseur-asc':
                         sortSuppliers('nomEntreprise', 'asc');
                         break;
-                    case 'Fournisseurs-desc':
+                    case 'Fournisseur-desc':
                         sortSuppliers('nomEntreprise', 'desc');
                         break;
                     case 'Ville-asc':
