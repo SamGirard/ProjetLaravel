@@ -19,7 +19,7 @@ return new class extends Migration
             $table->json('categorie_generale');
             $table->json('categorie_specialise');
             $table->json('produit_services');
-            $table->string('details',500);
+            $table->text('details');
             $table->unsignedBigInteger('fournisseur_id');
             $table->foreign('fournisseur_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

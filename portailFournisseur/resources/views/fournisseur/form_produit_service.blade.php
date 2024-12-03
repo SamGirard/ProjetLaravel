@@ -19,7 +19,7 @@
                         <input placeholder="Rechercher un service" id="search_service" type="text"
                                class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 mb-2 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                         <div id="spinner_service" class="hidden animate-spin rounded-full h-6 w-6 border-t-4 border-blue-500"></div>
-                        <select multiple id="services" name="services[]"
+                        <select required multiple id="services" name="services[]"
                                 class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                             <option value="">Selectionner un service</option>
                         </select>

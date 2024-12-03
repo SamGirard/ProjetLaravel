@@ -4,9 +4,6 @@ use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('ajouter_identification', [FournisseurController::class, 'create_identification'])->name('create_identification');
 Route::post('ajouter_identification', [FournisseurController::class, 'store_identification'])->name('store_identification');
