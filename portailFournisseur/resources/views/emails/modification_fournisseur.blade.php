@@ -7,10 +7,10 @@
 </head>
 <body>
 <h2></h2>
-<p>Réception d'une fiche fournisseur :</p>
+<p>Modification d'une fiche fournisseur :</p>
 <ul>
-    <li><strong>Nom</strong> : {{ $_ficherFournisseur['nom'] }}</li>
-    <li><strong>Message</strong> : {{ $_ficherFournisseur['message'] }}</li>
+    <li><strong>Message</strong> : {{ $_data['nom'] }} a modifié sa fiche </li>
+    <li><strong>Message</strong> : {{ $_data['message'] }} </li>
 </ul>
 </body>
 </html>

@@ -3,15 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Mail\DemandeFournisseur;
+use App\Mail\ModificationFournisseur;
 use App\Models\Brochure;
 use App\Models\CategorieService;
 use App\Models\Contact;
 use App\Models\Coordonnee;
 use App\Models\DonneesServices;
+use App\Models\Licence;
+use App\Models\Parametre;
 use App\Models\Service;
 use App\Models\User;
+use GuzzleHttp\Client;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -31,12 +36,6 @@ class FournisseurController extends Controller
         return view('pageTest.test', compact('fournisseurs'));
     }
 
-    public function show(Fournisseur $fournisseur)
-    {
-        $infosRbq = $fournisseur->infosRbq;
-        return view('pageTest.show', compact('fournisseur', 'infosRbq'));
-
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -63,7 +62,7 @@ class FournisseurController extends Controller
     public function create_service(Request $request)
     {
         if ($request->session()->has('form_identification')) {
-            $categorie_services = CategorieService::all();
+            $categorie_services = Licence::all();
 
             return view('fournisseur/form_produit_service', compact('categorie_services'));
         } else
@@ -145,12 +144,26 @@ class FournisseurController extends Controller
         return redirect()->route('create_coordonnee');
     }
 
+    public function fetchAllVille()
+    {
+        $client = new Client([
+            'verify' => false,
+        ]);
+        $sql = 'https://donneesquebec.ca/recherche/api/action/datastore_search_sql?sql=SELECT DISTINCT "munnom", "regadm" FROM "19385b4e-5503-4330-9e59-f998f5918363"';
+
+        $response = $client->request('GET', $sql);
+        $data = json_decode($response->getBody()->getContents());
+
+        return $data;
+    }
+
     public function create_coordonnee(Request $request)
     {
         $provinces = ['Québec', 'Ontario', 'Alberta', 'Manitoba', 'Saskatchewan', 'Colombie-Britannique', 'Nunavut', 'Territoire du Nort-Ouest', 'Yukon', 'Île-du-Prince-Édouard', 'Nouveau-Brunswick', 'Nouvelle-Écosse', 'Terre-Neuve-et-Labrador'];
+        $villes = $this->fetchAllVille()->result->records;
 
-        if ($request->session()->has('form_service'))
-            return view('fournisseur/form_coordonnee', compact('provinces'));
+        if ($request->session()->has('form_service') || auth::user())
+            return view('fournisseur/form_coordonnee', compact('provinces','villes'));
         else
             return redirect()->route('create_identification');
 
@@ -175,16 +188,21 @@ class FournisseurController extends Controller
             'poste.*' => ['nullable', 'max_digits:6', 'numeric']
 
         ]);
-
-        $request->session()->put('form_coordonnee', $request->all());
-
-        return redirect()->route('create_contact');
+        if (auth()->check()) {
+            Mail::to(Parametre::first()->courrielAppro)->send(
+                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' =>"Modification de la fiche"])
+            );
+            return redirect()->route('dashboard')->with(['status' => 'coordonnées modifiées']);
+        } else {
+            $request->session()->put('form_coordonnee', $request->all());
+            return redirect()->route('create_contact');
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store_contact(Request $request)
+    public function store_contact(Request $request, int $id=null)
     {
 
         $validated = $request->validate([
@@ -196,19 +214,54 @@ class FournisseurController extends Controller
             'telephone_contact' => ['required', 'numeric', 'regex:/^(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/'],
             'poste_contact' => ['nullable', 'max_digits:6', 'numeric'],
         ]);
-        $request->session()->put('form_contact', $request->all());
+        if (auth()->user()) {
+            if ($request->isMethod('post')) {
+                $contact = new Contact();
+                $contact->nom = $request->input('nom_contact');
+                $contact->prenom = $request->input('prenom_contact');
+                $contact->courriel = $request->input('email_contact');
+                $contact->fonction = $request->input('fonction_contact');
+                $contact->nom = $request->input('nom_contact');
+                $contact->typeNumTelephone = $request->input('type_telephone_contact');
+                $contact->numTelephone = $request->input('telephone_contact');
+                $contact->poste = $request->input('poste_contact');
+                $contact->fournisseur_id = auth()->user()->id;
+                $contact->save();
+            } else if ($request->isMethod('put') && $id != null) {
+                $contact = Contact::findOrFail($id);
+                $contact->update([
+                    'nom' => $request->input('nom_contact'),
+                    'prenom' => $request->input('prenom_contact'),
+                    'courriel' => $request->input('email_contact'),
+                    'fonction' => $request->input('fonction_contact'),
+                    'typeNumTelephone' => $request->input('type_telephone_contact'),
+                    'numTelephone' => $request->input('telephone_contact'),
+                    'poste' => $request->input('poste_contact'),
+                    'fournisseur_id' => auth()->user()->id
+                ]);
+            }
 
-        return redirect()->route('create_brochure');
+            Mail::to(Parametre::first()->courrielAppro)->send(
+                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise,  'message' =>"Modification de la fiche"])
+            );
+            return redirect()->route('dashboard')->with(['ajouter_contact' => 'Contact mis à jour avec succès']);
+        } else {
+
+            $request->session()->put('form_contact', $request->all());
+            return redirect()->route('create_brochure');
+        }
     }
 
-    public function create_contact(Request $request)
+    public function create_contact(Request $request, int $id=null)
     {
-        if ($request->session()->has('form_coordonnee'))
-            return view('fournisseur./form_contact');
-        else
+        if ($request->session()->has('form_coordonnee') || auth()->check()) {
+            $contact = null;
+            if (auth()->check() && $id != null)
+                $contact = Contact::findOrFail($id);
+            return view('fournisseur/form_contact')->with('contact', $contact);
+        } else
             return redirect() > route('create_identification');
     }
-
 
     public function create_brochure(Request $request)
     {
@@ -221,7 +274,7 @@ class FournisseurController extends Controller
     public function store_brochure(Request $request)
     {
         $request->validate([
-            'files_brochure.*' => 'required|file|mimes:pdf,jpg,png,docx|max:2048'
+            'files_brochure.*' => 'required|file|mimes:pdf,jpg,png,docx|max:' . Parametre::first()->tailleMaxFichiers
         ]);
 
         if ($request->hasFile('files_brochure')) {
@@ -240,23 +293,22 @@ class FournisseurController extends Controller
                 $user->poste = $form_coordonne['poste'];
                 $user->typeNumTelephone = $form_coordonne['type_telephone'];
                 $user->password = Hash::make($form_identification['password']);
-                $user->save();
 
+
+                $user->numCivique = $form_coordonne['numero_civique'];
+                $user->rue = $form_coordonne['rue'];
+                $user->bureau = $form_coordonne['bureau'];
+                $user->codePostal = $form_coordonne['code_postal'];
+                $user->ville = $form_coordonne['ville'];
+                $user->regionAdministrative = $form_coordonne['region_administrative'];
+                $user->code_administratif = $form_coordonne['code_administratif'];
+                $user->siteInternet = $form_coordonne['site_internet'];
+
+                $user->save();
                 event(new Registered($user));
 
-                $coordonne = new Coordonnee();
-                $coordonne->numCivique = $form_coordonne['numero_civique'];
-                $coordonne->rue = $form_coordonne['rue'];
-                $coordonne->bureau = $form_coordonne['bureau'];
-                $coordonne->codePostal = $form_coordonne['code_postal'];
-                $coordonne->ville = $form_coordonne['ville'];
-                $coordonne->regionAdministrative = $form_coordonne['region_administrative'];
-                $coordonne->code_administratif = $form_coordonne['code_administratif'];
-                $coordonne->siteInternet = $form_coordonne['site_internet'];
-                $coordonne->user_id = $user->id;
-                $coordonne->save();
-
                 $contact = new Contact();
+
                 $contact->nom = $form_contact['nom_contact'];
                 $contact->prenom = $form_contact['prenom_contact'];
                 $contact->courriel = $form_contact['email_contact'];
@@ -265,7 +317,7 @@ class FournisseurController extends Controller
                 $contact->typeNumTelephone = $form_contact['type_telephone_contact'];
                 $contact->numTelephone = $form_contact['telephone_contact'];
                 $contact->poste = $form_contact['poste_contact'];
-                $contact->user_id = $user->id;
+                $contact->fournisseur_id = $user->id;
                 $contact->save();
 
                 $service = new Service();
@@ -276,28 +328,30 @@ class FournisseurController extends Controller
                 $service->categorie_specialise = $form_service['categorie_specialise'];
                 $service->produit_services = $form_service['services'];
                 $service->details = $form_service['details'];
-                $service->user_id = $user->id;
+                $service->fournisseur_id = $user->id;
                 $service->save();
 
                 foreach ($request->file('files_brochure') as $file) {
                     $path = $file->store('public/brochures');
                     $filename = basename($path);
                     $brochure = new Brochure();
-                    $brochure->fichier = $filename;
-                    $brochure->user_id = $user->id;
+                    $brochure->nom = $filename;
+                    $brochure->type = $file->getClientOriginalName();
+                    $brochure->fournisseur_id = $user->id;
                     $brochure->save();
                 }
                 Auth::login($user);
 
-                $form_identification['message']= "message de reception de fiche fournisseur";
-                Mail::to($form_identification['email'])->send(new DemandeFournisseur($form_identification));
+                Mail::to([$form_identification['email'], Parametre::first()->courrielAppro])->send(
+                    new DemandeFournisseur(['nom' => $form_identification['nom'], 'message' =>"Reception d'une demande"])
+                );
 
                 session()->forget(['form_identification', 'form_identification', 'form_service', 'form_contact']);
                 return redirect()->route('dashboard')->with('enregistrement_compte', 'Votre compte a bien été créé!');
             } else
                 dd('aucune donnees');
         } else
-            dd('aucun fichiere');
+            dd('aucun fichier');
 
     }
 

@@ -47,19 +47,15 @@ class User extends Authenticatable
 
     public function brochures()
     {
-        return $this->hasMany(Brochure::class);
+        return $this->hasMany(Brochure::class,'fournisseur_id');
     }
 
     public function contacts()
     {
-        return $this->hasMany(Contact::class);
+        return $this->hasMany(Contact::class,'fournisseur_id');
     }
     public function service()
     {
-        return $this->hasOne(Service::class);
-    }
-    public function coordonnee()
-    {
-        return $this->hasOne(Coordonnee::class);
+        return $this->hasOne(Service::class,'fournisseur_id');
     }
 }

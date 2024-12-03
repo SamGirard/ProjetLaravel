@@ -5,7 +5,7 @@
 
     <div class="container mx-auto mt-6">
         <form action="{{ route('store_brochure') }}" method="post"
-              class=" bg-white shadow-lg rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl" enctype="multipart/form-data">
+              class=" bg-white rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl" enctype="multipart/form-data">
             @csrf
             <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Brochures et cartes
                 d'affairess</h1>
@@ -36,59 +36,6 @@
 
                     </fieldset>
                 </div>
-
-                <!-- Finances -->
-                <!--   <fieldset class="border border-gray-300 rounded-lg p-6 bg-gray-50">
-                       <legend class="text-lg font-semibold text-gray-700 mb-4">Finances</legend>
-                       <div class="mb-4 flex space-x-4">
-                           <div class="flex-grow">
-                               <label for="num_tps" class="block text-gray-600 text-sm font-bold mb-2">Numéro de TPS</label>
-                               <input required id="num_tps" name="num_tps" type="text"
-                                      class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
-                           </div>
-                       </div>
-
-                       <div class="mb-4 flex space-x-4">
-                           <div class="flex-grow">
-                               <label for="num_tvq" class="block text-gray-600 text-sm font-bold mb-2">Numéro de TVQ</label>
-                               <input required id="num_tvq" name="num_tvq" type="text"
-                                      class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
-                           </div>
-                       </div>
-
-                       <div class="mb-4">
-                           <label for="condition_paiement" class="block text-gray-600 text-sm font-bold mb-2">Conditions de paiement</label>
-                           <select id="condition_paiement" name="condition_paiement"
-                                   class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
-                               <option value="Constructeur-proprietaire">Constructeur-proprietaire</option>
-                           </select>
-                       </div>
-
-                       <fieldset class="border border-gray-200 rounded-lg p-6">
-                           <legend class="font-semibold text-gray-800 mb-4">Devise</legend>
-                           <div class="flex items-center mb-4">
-                               <input  id="cad" type="radio" value="cad" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                               <label for="cad" class="ms-2 block text-gray-600 text-sm font-bold">CAD-Dollar canaadien</label>
-                           </div>
-                           <div class="flex items-center">
-                               <input  checked id="usd" type="radio" value="usd" name="devise" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                               <label for="usd" class="ms-2 block text-gray-600 text-sm font-bold">USD-Dollar des États-unis</label>
-                           </div>
-                       </fieldset>
-
-                       <fieldset class="border border-gray-200 rounded-lg p-6">
-                           <legend class="font-semibold text-gray-800 mb-4">Mode de communication</legend>
-                           <div class="flex items-center mb-4">
-                               <input  id="courriel" type="radio" value="courriel" name="courriel" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                               <label for="courriel" class="ms-2 block text-gray-600 text-sm font-bold">Courriel</label>
-                           </div>
-                           <div class="flex items-center">
-                               <input  checked id="courrier_regulier" type="radio" value="courrier_regulier" name="courrier_regulier" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                               <label for="courrier_regulier" class="ms-2 block text-gray-600 text-sm font-bold">Courrier régulier</label>
-                           </div>
-                       </fieldset>
-
-                   </fieldset>-->
             </div>
 
             <!-- Boutons -->
@@ -100,8 +47,8 @@
                 </button>
             </div>
         </form>
-
     </div>
+    @include('partials/footer')
 @endsection
 
 @section('scripts')

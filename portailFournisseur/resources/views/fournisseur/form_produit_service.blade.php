@@ -6,7 +6,7 @@
     <!-- service offerts -->
     <div class="container mx-auto mt-6">
         <form action="{{ route('store_service') }}" method="post"
-              class=" bg-white shadow-lg rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl">
+              class=" bg-white rounded-lg px-8 py-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-2xl">
             @csrf
             <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-gray-300 pb-4">Services et Licences</h1>
             <div class="grid grid-cols-2 gap-6">
@@ -19,7 +19,7 @@
                         <input placeholder="Rechercher un service" id="search_service" type="text"
                                class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 mb-2 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                         <div id="spinner_service" class="hidden animate-spin rounded-full h-6 w-6 border-t-4 border-blue-500"></div>
-                        <select multiple id="services" name="services[]"
+                        <select required multiple id="services" name="services[]"
                                 class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                             <option value="">Selectionner un service</option>
                         </select>
@@ -48,6 +48,9 @@
                                    class="block text-gray-600 text-sm font-bold mb-2">Statut</label>
                             <select id="statut_licence_rbq" name="statut_licence_rbq"
                                     class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
+                                <option value="Valide">Valide</option>
+                                <option value="Valide avec restriction">Valide avec restriction</option>
+                                <option value="Non valide">Non valide</option>
                             </select>
                         </div>
                     </div>
@@ -73,9 +76,9 @@
                     <select multiple id="categorie_generale" name="categorie_generale[]"
                             class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                         @foreach($categorie_services as $categorie_service)
-                            @if($categorie_service['type'] == 'Général')
+                            @if($categorie_service['Categorie'] == 1)
                                 <option
-                                    value="{{ $categorie_service['id'] }}">{{ $categorie_service['code'] }} {{ $categorie_service['nom'] }}</option>
+                                    value="{{ $categorie_service['id'] }}">{{ $categorie_service['Numéro'] }} {{ $categorie_service['titre'] }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -87,9 +90,9 @@
                     <select multiple id="categorie_specialise" name="categorie_specialise[]"
                             class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400">
                         @foreach($categorie_services as $categorie_service)
-                            @if($categorie_service['type'] == 'Spécialisé')
+                            @if($categorie_service['Categorie'] == 2 or $categorie_service['Categorie'] == 3)
                                 <option
-                                    value="{{ $categorie_service['id'] }}">{{ $categorie_service['code'] }} {{ $categorie_service['nom'] }}</option>
+                                    value="{{ $categorie_service['id'] }}">{{ $categorie_service['Numéro'] }} {{ $categorie_service['titre'] }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -110,8 +113,8 @@
                 </button>
             </div>
         </form>
-
     </div>
+    @include('partials/footer')
 @endsection
 
 @section('scripts')

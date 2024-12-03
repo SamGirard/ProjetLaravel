@@ -3,11 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Mail\ModificationFournisseur;
+use App\Models\Brochure;
+use App\Models\Contact;
+use App\Models\Parametre;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
+use function Webmozart\Assert\Tests\StaticAnalysis\email;
 
 class ProfileController extends Controller
 {
@@ -42,10 +50,11 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
+        $request->validate([
             'password' => ['required', 'current_password'],
         ]);
 
+        $this->supprimerBrochures();
         $user = $request->user();
 
         Auth::logout();
@@ -55,6 +64,74 @@ class ProfileController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        Mail::to([Parametre::first()->courrielAppro, auth()->user()->email])->send(
+            new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' =>"Modification de la fiche"])
+        );
+        return redirect()->route('login');
+    }
+
+    private function supprimerBrochures()
+    {
+        foreach (auth()->user()->brochures as $brochure) {
+           // $brochure = Brochure::find($id);
+            if ($brochure) {
+                // Supprimer le fichier du stockage
+                $filePath = 'public/brochures/' . $brochure->nom;
+                if (Storage::exists($filePath)) {
+                    Storage::delete($filePath);
+                }
+                $brochure->delete();
+            }
+        }
+    }
+
+    public function create_contact()
+    {
+        return view('profile.ajouter_contact');
+    }
+
+    public function create_finance()
+    {
+        return view('profile.ajouter_finances');
+    }
+
+    public function store_finance(Request $request)
+    {
+        $validated = $request->validate([
+            'num_tps' => 'required',
+            'num_tvq' => 'required',
+            'condition_paiement' => 'required',
+            'devise' => 'required',
+            'mode_communication' => 'required'
+        ]);
+
+        auth()->user()->numTPS = $request->input('num_tps');
+        auth()->user()->numTVQ = $request->input('num_tvq');
+        auth()->user()->conditionPaiement = $request->input('condition_paiement');
+        auth()->user()->modeCommunication = $request->input('mode_communication');
+        auth()->user()->devise = $request->input('devise');
+        auth()->user()->save();
+
+        Mail::to(Parametre::first()->courrielAppro)->send(
+            new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' =>"Modification de la fiche"])
+        );
+        return redirect()->route('dashboard')->with(['ajouter_finance' => 'données de finances ajoutées!']);
+    }
+
+    public function destroyContact($id)
+    {
+        $contact = Contact::find($id);
+        if ($contact) {
+            $contact->delete();
+            Mail::to(Parametre::first()->courrielAppro)->send(
+                new ModificationFournisseur(['nom' => auth()->user()->nomEntreprise, 'message' =>"Modification de la fiche"])
+            );
+            return redirect()->route('dashboard')->with(['supprimer_contact' => 'contact supprimé']);
+        }
+    }
+
+    public function create_parametre()
+    {
+        return view('profile.parametres');
     }
 }
