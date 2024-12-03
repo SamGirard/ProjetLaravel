@@ -182,13 +182,13 @@
                                     </div>
                                     <div>
                                         <label for="nomEntreprise" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom de l'entreprise</label>
-                                        <input type="text" name="nomEntreprise" id="nomEntreprise" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->nomEntreprise }}" value="{{ $fournisseur->nomEntreprise }}" required />
+                                        <input type="text" name="nomEntreprise" id="nomEntreprise" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->nomEntreprise }}" value="{{ $fournisseur->nomEntreprise }}"  />
                                         <p id="nomErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un nom.</p>
                                     </div>
                                 </div>
                                 <div class="mb-6">
                                     <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Adresse courriel</label>
-                                    <input type="email" id="email" name="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->email }}" value="{{ $fournisseur->email }}" required />
+                                    <input type="email" id="email" name="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->email }}" value="{{ $fournisseur->email }}"  />
                                     <p id="emailErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Le courriel est invalide.</p>
                                 </div> 
                             </div>
@@ -334,22 +334,22 @@
                                                     <div class="contact-accordion-grid grid gap-6 mb-6 md:grid-cols-2">
                                                         <div>
                                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom</label>
-                                                            <input type="text" id="nom-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->nom }}" value="{{ $contact->nom }}" required />
+                                                            <input type="text" id="nom-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->nom }}" value="{{ $contact->nom }}"  />
                                                             <p id="nom-contact-error-{{ $contact->id }}" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un nom valide</p>
                                                         </div>
                                                         <div>
                                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Prénom</label>
-                                                            <input type="text" id="prenom-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->prenom }}" value="{{ $contact->prenom }}" required />
+                                                            <input type="text" id="prenom-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->prenom }}" value="{{ $contact->prenom }}"  />
                                                             <p id="prenom-contact-error-{{ $contact->id }}" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un prénom valide</p>
                                                         </div>
                                                         <div>
                                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fonction</label>
-                                                            <input type="text" id="fonction-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->fonction }}" value="{{ $contact->fonction }}" required />
+                                                            <input type="text" id="fonction-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->fonction }}" value="{{ $contact->fonction }}"  />
                                                             <p id="fonction-contact-error-{{ $contact->id }}" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer une fonction valide</p>
                                                         </div>  
                                                         <div>
                                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro de téléphone</label>
-                                                            <input type="text" id="numTelephone-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->numTelephone }}" value="{{ $contact->numTelephone }}" required />
+                                                            <input type="text" id="numTelephone-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->numTelephone }}" value="{{ $contact->numTelephone }}"  />
                                                             <p id="numTelephone-contact-error-{{ $contact->id }}" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de téléphone valide</p>
                                                         </div>
                                                         <div>
@@ -362,13 +362,13 @@
                                                         </div>
                                                         <div>
                                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Poste</label>
-                                                            <input type="text" id="poste-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->poste }}" value="{{ $contact->poste }}"  required />
+                                                            <input type="text" id="poste-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->poste }}" value="{{ $contact->poste }}"   />
                                                             <p id="poste-contact-error-{{ $contact->id }}" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un poste valide</p>
                                                         </div>
                                                     </div>
                                                     <div class="mb-6">
                                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Courriel</label>
-                                                        <input type="email" id="courriel-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->courriel }}" value="{{ $contact->courriel }}" required />
+                                                        <input type="email" id="courriel-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->courriel }}" value="{{ $contact->courriel }}"  />
                                                         <p id="courriel-contact-error-{{ $contact->id }}" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un courriel valide</p>
                                                     </div> 
                                                     <button id="delete-contact-{{ $contact->id }}" type="button" class="delete-contact-btn text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-contact-id="{{ $contact->id }}">
@@ -445,22 +445,22 @@
                                         <div class="contact-accordion-grid grid gap-6 mb-6 md:grid-cols-2">
                                             <div>
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom</label>
-                                                <input type="text" id="nom-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un nom..." required />
+                                                <input type="text" id="nom-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un nom..."  />
                                                 <p id="nom-contact-error-${contact.id }" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un nom valide</p>
                                             </div>
                                             <div>
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Prénom</label>
-                                                <input type="text" id="prenom-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un prénom..." required />
+                                                <input type="text" id="prenom-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un prénom..."  />
                                                 <p id="prenom-contact-error-${contact.id }" class="contact-error mt-2 hidden text-sm text-red-600 dark:text-red-500">Veuillez entrer un prénom valide</p>
                                             </div>
                                             <div>
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fonction</label>
-                                                <input type="text" id="fonction-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer une fonction..." required />
+                                                <input type="text" id="fonction-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer une fonction..."  />
                                                 <p id="fonction-contact-error-${contact.id }" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer une fonction valide</p>
                                             </div>  
                                             <div>
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro de téléphone</label>
-                                                <input type="text" id="numTelephone-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un numéro de téléphone..." required />
+                                                <input type="text" id="numTelephone-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un numéro de téléphone..."  />
                                                 <p id="numTelephone-contact-error-${contact.id }" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de téléphone valide</p>
                                             </div>
                                             <div>
@@ -473,13 +473,13 @@
                                             </div>
                                             <div>
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Poste</label>
-                                                <input type="text" id="poste-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer le poste du numéro..." required />
+                                                <input type="text" id="poste-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer le poste du numéro..."  />
                                                 <p id="poste-contact-error-${contact.id }" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un poste valide</p>
                                             </div>
                                         </div>
                                         <div class="mb-6">
                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Courriel</label>
-                                            <input type="email" id="courriel-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un courriel..." required />
+                                            <input type="email" id="courriel-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un courriel..."  />
                                             <p id="courriel-contact-error-${contact.id }" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un courriel valide</p>
                                         </div> 
                                         <button id="delete-contact-${contact.id}" type="button" class="delete-contact-btn text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-contact-id="${contact.id}">
@@ -538,22 +538,22 @@
                                         <div class="contact-accordion-grid grid gap-6 mb-6 md:grid-cols-2">
                                             <div>
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom</label>
-                                                <input type="text" id="nom-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un nom..." required value="${contact.nom}" />
+                                                <input type="text" id="nom-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un nom..."  value="${contact.nom}" />
                                                 <p id="nom-contact-error-${contact.id }" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un nom valide</p>
                                             </div>
                                             <div>
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Prénom</label>
-                                                <input type="text" id="prenom-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un prénom..." required  value="${contact.prenom}" />
+                                                <input type="text" id="prenom-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un prénom..."   value="${contact.prenom}" />
                                                 <p id="prenom-contact-error-${contact.id }" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un prénom valide</p>
                                             </div>
                                             <div>
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fonction</label>
-                                                <input type="text" id="fonction-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer une fonction..."  value="${contact.fonction}" required />
+                                                <input type="text" id="fonction-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer une fonction..."  value="${contact.fonction}"  />
                                                 <p id="fonction-contact-error-${contact.id }" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer une fonction valide</p>
                                             </div>  
                                             <div>
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro de téléphone</label>
-                                                <input type="text" id="numTelephone-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un numéro de téléphone..." required  value="${contact.numTelephone}" />
+                                                <input type="text" id="numTelephone-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un numéro de téléphone..."   value="${contact.numTelephone}" />
                                                 <p id="numTelephone-contact-error-${contact.id }" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de téléphone valide</p>
                                             </div>
                                             <div>
@@ -566,13 +566,13 @@
                                             </div>
                                             <div>
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Poste</label>
-                                                <input type="text" id="poste-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer le poste du numéro..." required  value="${contact.poste}" />
+                                                <input type="text" id="poste-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer le poste du numéro..."   value="${contact.poste}" />
                                                 <p id="poste-contact-error-${contact.id }" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un poste valide</p>
                                             </div>
                                         </div>
                                         <div class="mb-6">
                                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Courriel</label>
-                                            <input type="email" id="courriel-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un courriel..." required  value="${contact.courriel}"/>
+                                            <input type="email" id="courriel-contact-${contact.id}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez entrer un courriel..."   value="${contact.courriel}"/>
                                             <p id="courriel-contact-error-${contact.id }" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un courriel valide</p>
                                         </div> 
                                         <button id="delete-contact-${contact.id}" type="button" class="delete-contact-btn text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-contact-id="${contact.id}">
@@ -852,17 +852,17 @@
                                         </div>
                                         <div>
                                             <label for="rue" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rue</label>
-                                            <input type="text" name="rue" id="rue" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->rue }}" value="{{ $fournisseur->rue }}" required />
+                                            <input type="text" name="rue" id="rue" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->rue }}" value="{{ $fournisseur->rue }}"  />
                                             <p id="rueErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer une rue valide.</p>
                                         </div>
                                         <div>
                                             <label for="ville" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ville</label>
-                                            <input type="text" name="ville" id="ville" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->ville }}" value="{{ $fournisseur->ville }}" required />
+                                            <input type="text" name="ville" id="ville" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->ville }}" value="{{ $fournisseur->ville }}"  />
                                             <p id="villeErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer une ville valide.</p>
                                         </div>
                                         <div>
                                             <label for="province" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Province</label>
-                                            <input type="text" name="province" id="province" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->province }}" value="{{ $fournisseur->province }}" required />
+                                            <input type="text" name="province" id="province" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->province }}" value="{{ $fournisseur->province }}"  />
                                             <p id="provinceErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer une province valide.</p>
                                         </div>
                                         <div>
@@ -872,12 +872,12 @@
                                         </div>
                                         <div>
                                             <label for="code_administratif" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code Administratif</label>
-                                            <input type="text" name="code_administratif" id="code_administratif" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->code_administratif }}" value="{{ $fournisseur->code_administratif }}" required />
+                                            <input type="text" name="code_administratif" id="code_administratif" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->code_administratif }}" value="{{ $fournisseur->code_administratif }}"  />
                                             <p id="code_administratifErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un code administraif valide.</p>
                                         </div>
                                         <div>
                                             <label for="codePostal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code postal</label>
-                                            <input type="text" name="codePostal" id="codePostal" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->codePostal }}" value="{{ $fournisseur->codePostal }}" required />
+                                            <input type="text" name="codePostal" id="codePostal" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $fournisseur->codePostal }}" value="{{ $fournisseur->codePostal }}"  />
                                             <p id="codePostalErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un code postal valide.</p>
                                         </div>
                                         <div>
@@ -927,7 +927,7 @@
                                                         class="numTelephone bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="{{ $telephoneNumbers[$i] }}" 
                                                         value="{{ $telephoneNumbers[$i] }}"
-                                                        required 
+                                                         
                                                     />
                                                 </div>
 
@@ -944,7 +944,7 @@
                                                         class="poste bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="{{ $poste[$i] }}" 
                                                         value="{{ $poste[$i] }}"
-                                                        required 
+                                                         
                                                     />
                                                 </div>
 
@@ -1111,7 +1111,7 @@
                                         id="numTelephone-contact-{{ $fournisseur->id }}-${newIndex }" 
                                         class="numTelephone bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Entrez le numéro" 
-                                        required 
+                                         
                                     />
                                 </div>
 
@@ -1124,7 +1124,7 @@
                                         id="poste-contact-{{ $fournisseur->id }}-${newIndex }" 
                                         class="poste bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Entrez le poste"  
-                                        required 
+                                         
                                     />
                                 </div>
 

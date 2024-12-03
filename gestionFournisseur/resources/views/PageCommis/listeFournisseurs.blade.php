@@ -463,10 +463,10 @@
                         fournisseurs.sort((a, b) => getEtatDemande(b).localeCompare(getEtatDemande(a)));
                         filteredFournisseurs.sort((a, b) => getEtatDemande(b).localeCompare(getEtatDemande(a)));
                         break;
-                    case 'Fournisseurs-asc':
+                    case 'Fournisseur-asc':
                         sortSuppliers('nomEntreprise', 'asc');
                         break;
-                    case 'Fournisseurs-desc':
+                    case 'Fournisseur-desc':
                         sortSuppliers('nomEntreprise', 'desc');
                         break;
                     case 'Ville-asc':
@@ -815,16 +815,25 @@
                 populateInputs();
             };
 
-            $('#Accepter').prop('checked', true);
+            $('#Acceptée').prop('checked', true);
 
             filterFournisseurs();
 
-            $('#searchCity').on('input', filterCities(checkedCities));
-            $('#searchRegion').on('input', loadRegions(checkedRegions));
-            $('#searchSegment').on('input', loadUnspsc(checkedCommodities));
-            $('#searchCategorie').on('input', loadCategorie(checkedLicences));
+            $('#searchCity').on('input', function () {
+                filterCities(checkedCities);
+            });
+            $('#searchRegion').on('input', function () {
+                loadRegions(checkedRegions);
+            });
+            $('#searchSegment').on('input', function () {
+                loadUnspsc(checkedCommodities);
+            });
+            $('#searchCategorie').on('input', function () {
+                loadCategorie(checkedLicences);
+            });
             $('#table-search').on('input', filterFournisseurs);
         });
+
 
     </script>
 
