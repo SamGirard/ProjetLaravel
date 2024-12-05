@@ -1,11 +1,15 @@
-function filterCities(checkedCities) {
+function filterCities(checkedCities, checkedRegions) {
     let cityItems = [];
     let searchQuery = $('#searchCity').val().trim().toLowerCase();
     let regex = new RegExp(searchQuery, 'i');
     let cityList = $('#city-list');
 
+    console.log(regionCityList)
+    console.log(checkedRegions)
+
     $.each(cachedCities, function (index, city) {
-        if (searchQuery === "" || regex.test(city)) {
+        if ((searchQuery === "" || regex.test(city)) && 
+        (Object.values(checkedRegions).includes(true) === false || regionCityList.some(r => r.city === city && checkedRegions[r.region]))) {
             let isChecked = checkedCities["city-" + city] ? 'checked' : '';
             cityItems.push(`
             <li>
