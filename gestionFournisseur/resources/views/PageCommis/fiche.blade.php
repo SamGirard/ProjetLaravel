@@ -367,8 +367,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="mb-6">
-                                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Courriel</label>
-                                                        <input type="email" id="courriel-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->courriel }}" value="{{ $contact->courriel }}"  />
+                                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="courriel-contact-{{ $contact->id }}">Courriel</label>
+                                                        <input type="text" name="courriel-contact-{{ $contact->id }}" id="courriel-contact-{{ $contact->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $contact->courriel }}" value="{{ $contact->courriel }}"  />
                                                         <p id="courriel-contact-error-{{ $contact->id }}" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un courriel valide</p>
                                                     </div> 
                                                     <button id="delete-contact-{{ $contact->id }}" type="button" class="delete-contact-btn text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-contact-id="{{ $contact->id }}">
@@ -993,17 +993,12 @@
                     var isCodeAdministratifValid = true;
 
                     function validateType(selectElement) {
-                        const validValues = ["Bureau", "Télécopieur", "Cellulaire"];
-                        if (!validValues.includes(selectElement.value)) {
-                            $('#' + selectElement.id + '-error').removeClass('hidden');
-                            return false;
-                        } else {
-                            $('#' + selectElement.id + '-error').addClass('hidden');
-                            return true;
-                        }
+                        return true;
+                  
                     }
 
                     function validateNumero(inputElement) {
+                        return true;
                         const regex = /^\d{3}-\d{3}-\d{4}$|^\d{10}$/;
                         if (!regex.test(inputElement.value)) {
                             $('#' + inputElement.id + '-error').removeClass('hidden');
@@ -1029,9 +1024,9 @@
                         let allValid = true;
 
                         document.querySelectorAll('.typeNumTelephone').forEach(select => {
-                            if (!validateType(select)) {
-                                allValid = false;
-                            }
+                            allValid = true;
+                            
+                        
                         });
 
                         document.querySelectorAll('.numTelephone').forEach(input => {

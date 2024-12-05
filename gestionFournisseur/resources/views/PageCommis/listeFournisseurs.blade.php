@@ -807,7 +807,7 @@
             function populateInputs() {
                 const filteredFournisseur = document.getElementById('filteredFournisseurs');
                 const checkedFournisseur = document.getElementById('checkedFournisseurs');
-                filteredFournisseur.value = JSON.stringify(filteredFournisseurs);
+                filteredFournisseur.value = JSON.stringify([]);
                 checkedFournisseur.value = checkedFournisseurs;
             }
 

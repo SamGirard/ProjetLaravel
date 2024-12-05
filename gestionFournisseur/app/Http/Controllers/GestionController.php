@@ -83,7 +83,6 @@ class GestionController extends Controller
         $users = User::whereIn('id', $ids)->get();
     
         $filteredFournisseurs = json_decode($request->input('filteredFournisseurs', '[]'), true);
-        dd($filteredFournisseurs);
         $fournisseurs = !empty($users) ? $users->toArray() : $filteredFournisseurs;
     
         if (empty($fournisseurs)) {
