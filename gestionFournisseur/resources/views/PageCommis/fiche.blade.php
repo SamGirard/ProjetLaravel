@@ -963,7 +963,7 @@
                                                 Type de numéro invalide. Choisissez Bureau, Télécopieur ou Cellulaire.
                                             </p>
                                             <p id="numTelephone-contact-{{ $fournisseur->id }}-{{ $i }}-error" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">
-                                                Numéro de téléphone invalide. Format attendu: ###-###-####.
+                                                Numéro de téléphone invalide. Format attendu: ##########.
                                             </p>
                                             <p id="poste-contact-{{ $fournisseur->id }}-{{ $i }}-error" class="contact-error hidden mt-2 text-sm text-red-600 dark:text-red-500">
                                                 Poste invalide. Maximum 6 chiffres numériques uniquement.
@@ -992,14 +992,19 @@
                     var isRegionAdministrativeValid = true;
                     var isCodeAdministratifValid = true;
 
-                    function validateType(selectElement) {
-                        return true;
-                  
+                    function validateTypeTelephone(selectElement) {
+                        const validValues = ["Bureau", "Télécopieur", "Cellulaire"];
+                        if (!validValues.includes(selectElement.value)) {
+                            $('#' + selectElement.id + '-error').removeClass('hidden');
+                            return false;
+                        } else {
+                            $('#' + selectElement.id + '-error').addClass('hidden');
+                            return true;
+                        }
                     }
 
                     function validateNumero(inputElement) {
-                        return true;
-                        const regex = /^\d{3}-\d{3}-\d{4}$|^\d{10}$/;
+                        const regex = /^\d{10}$/;
                         if (!regex.test(inputElement.value)) {
                             $('#' + inputElement.id + '-error').removeClass('hidden');
                             return false;
@@ -1024,9 +1029,9 @@
                         let allValid = true;
 
                         document.querySelectorAll('.typeNumTelephone').forEach(select => {
-                            allValid = true;
-                            
-                        
+                            if (!validateTypeTelephone(select)) {
+                                allValid = false;
+                            }
                         });
 
                         document.querySelectorAll('.numTelephone').forEach(input => {
@@ -1046,7 +1051,7 @@
 
                     function attachValidation() {
                         document.querySelectorAll('.typeNumTelephone').forEach(select => {
-                            select.addEventListener('input', () => validateType(select));
+                            select.addEventListener('input', () => validateTypeTelephone(select));
                             select.addEventListener('input', () => checkAdressFormValidity());
                         });
 
@@ -1303,7 +1308,7 @@
                             const typeNumTelephoneArray = JSON.parse(typeNumTelephoneValue);
                             const numeroTelephoneArray = JSON.parse(numeroTelephoneValue);
                             const posteArray = JSON.parse(posteValue);
-                            console.log(posteValue)
+
                             typeNumTelephoneArray.forEach((type, index) => {
                                 let icon = '';
                                 if (type === "Telecopieur") {
@@ -1314,11 +1319,17 @@
                                     icon = '<i class="fa-solid fa-desktop mr-2"></i>';
                                 }
 
-                                const telephoneText = numeroTelephoneArray[index] + (posteArray[index] ? ' #' + posteArray[index] : '');
+                                const telephoneText = formatPhoneNumber(numeroTelephoneArray[index])  + (posteArray[index] ? ' #' + posteArray[index] : '');
                                 telephoneDisplay.innerHTML += `<p class="text-gray-800 my-1">${icon} ${telephoneText}</p>`;
                             });
                         }
                     });
+
+                    function formatPhoneNumber(phoneNumber) {
+                        phoneNumber = phoneNumber.toString();
+
+                        return phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+                    }
                     
                     document.getElementById('cancel-adresse').addEventListener('click', function(event) {
                         document.getElementById('numCivique').value = document.getElementById('adresseDisplay').textContent.split(',')[0];
@@ -1448,7 +1459,7 @@
                                         @endforeach
                                     </ul>
                                     <label for="details"><h4 class="font-semibold text-gray-700 mb-0 pb-0">Détails</h4></label>
-                                    <textarea id="details" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez écrire les détails...">{{ $service->details }}</textarea>
+                                    <textarea id="details" name="details" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuillez écrire les détails...">{{ $service->details }}</textarea>
                                 </div>
                                 <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                                     <button data-modal-hide="produits-modal" id="save-produits" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
