@@ -34,7 +34,7 @@
                         @endif
                     </ul>
                     <div class="flex space-x-4">
-                        <button class="bg-blue-500 px-4 py-2 rounded-lg text-white hover:bg-blue-500" type="submit">
+                        <button class="bg-blue-500 px-4 py-2 rounded-lg text-white hover:bg-blue-500" type="submit" id="boutonEnregistrer">
                             Enregistrer
                         </button>  
                         <a class="bg-blue-500 px-4 py-2 rounded-lg text-white hover:bg-blue-500" href="{{ route('employes.create')}}">Ajouter</a>

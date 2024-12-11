@@ -79,33 +79,48 @@ checkboxes.forEach(checkbox => {
 });
 
 //faire en sorte qu'il y ai toujours 2 admin et 1 responsable
-document.addEventListener("DOMContentLoaded", function(){
-    
-    let roleSelect = document.querySelectorAll('select[id="roleSelect"]');
+document.addEventListener("DOMContentLoaded", function () {
+    let roleSelects = document.querySelectorAll('select[id="roleSelect"]');
+    let btnEnregistrer = document.getElementById("boutonEnregistrer");
 
-    let nbrAdmin = 0;
-    let nbrResponsable = 0;
+    function verifierRoles() {
+        let nbrAdmin = 0;
+        let nbrResponsable = 0;
 
-    roleSelect.forEach(select => {
-        let roleChoisi = select.value;
+        roleSelects.forEach(select => {
+            let roleChoisi = select.value;
 
-        if(roleChoisi == "Administrateur"){
-            nbrAdmin ++;
-        }
-        else if (roleChoisi == "Responsable"){
-            nbrResponsable ++;
-        }
-
-        roleSelect.forEach(select => {
-            if (nbrAdmin <= 2 && select.value == "Administrateur") {
-                select.disabled = true; // Désactive les rôles qui ne sont pas Administrateur si le nombre d'admins est <= 2
-            } else if (nbrResponsable <= 1 && select.value == "Responsable") {
-                select.disabled = true; // Désactive les rôles qui ne sont pas Responsable si le nombre de responsables est <= 1
-            } else {
-                select.disabled = false; // Réactive uniquement si aucune des conditions ne s'applique
+            if (roleChoisi === "Administrateur") {
+                nbrAdmin++;
+            } else if (roleChoisi === "Responsable") {
+                nbrResponsable++;
             }
         });
+
+        roleSelects.forEach(select => {
+            if (nbrAdmin <= 2 && select.value === "Administrateur") {
+                select.disabled = true;
+                btnEnregistrer.disabled = true;
+                btnEnregistrer.style.opacity = 0.5;
+            } else if (nbrResponsable <= 1 && select.value === "Responsable") {
+                select.disabled = true;
+                btnEnregistrer.disabled = true;
+                btnEnregistrer.style.opacity = 0.5;
+            } else {
+                select.disabled = false;
+                btnEnregistrer.disabled = false;
+                btnEnregistrer.style.opacity = 1;
+            }
+        });
+    }
+
+    // Ajouter un écouteur d'événement pour chaque <select>
+    roleSelects.forEach(select => {
+        select.addEventListener("change", verifierRoles);
     });
+
+    // Vérifier les rôles au chargement de la page
+    verifierRoles();
 });
 
 
