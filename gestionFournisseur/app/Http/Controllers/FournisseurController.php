@@ -62,8 +62,8 @@ class FournisseurController extends Controller
 
             $fournisseur->neq = $request->neq;
             $fournisseur->nomEntreprise = $request->nomEntreprise;
-            //$fournisseur->typeNumTelephone = $request->typeNumTelephoneTest;
-            //$fournisseur->numeroTelephone = $request->numeroTelephoneTest;
+            $fournisseur->typeNumTelephone = $request->typeNumTelephoneTest;
+            $fournisseur->numeroTelephone = $request->numeroTelephoneTest;
             $fournisseur->poste = $request->posteTest;
             $fournisseur->email = $request->email; 
             $fournisseur->etatDemande = $request->etatDemande;
@@ -150,6 +150,7 @@ class FournisseurController extends Controller
 
             if ($services) {
                 $services->produit_services = $request->produit_services;
+                $services->details = $request->details;
                 $services->save();
             } else {
                 return response()->json(['message' => 'Service not found'], 404);

@@ -75,15 +75,12 @@ class GestionController extends Controller
         $ids = [];
     
         foreach ($elements as $index => $value) {
-            if ($value === 'true') {
+            if (trim($value, '[]') === 'true') {
                 $ids[] = $index + 1;
             }
         }
     
-        $users = User::whereIn('id', $ids)->get();
-    
-        $filteredFournisseurs = json_decode($request->input('filteredFournisseurs', '[]'), true);
-        $fournisseurs = !empty($users) ? $users->toArray() : $filteredFournisseurs;
+        $fournisseurs = User::whereIn('id', $ids)->get()->toArray();
     
         if (empty($fournisseurs)) {
             return response()->json(['error' => 'No fournisseurs to export.'], 400);
