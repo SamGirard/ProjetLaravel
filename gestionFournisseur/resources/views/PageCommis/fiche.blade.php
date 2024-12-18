@@ -1472,10 +1472,13 @@
 
                     <script>
                         $(document).ready(function () {
-                            const $productListModal = $('#product-list-modal');
-                            const $addProductBtn = $('#add-produits');
-                            const $cancelProductBtn = $('#cancel-produits');
-                            const $saveProductBtn = $('#save-produits');
+                            const $productListModal = $('#product-list-modal');//
+
+                            const $addProductBtn = $('#add-produits');//
+
+                            const $cancelProductBtn = $('#cancel-produits');//
+                            const $saveProductBtn = $('#save-produits');//
+
                             const $detailsTextareaModal = $('#details');
                             const $produitServicesInput = $('#produit_services');
 
@@ -1964,6 +1967,294 @@
 
                         
                     </script>
+
+                    <fieldset class="border-2 border-blue-600 rounded-lg p-4">
+                        <legend class="text-lg font-semibold text-blue-600 bg-white px-2">Informations RBQ</legend>
+                        <div class="text-right">
+                        @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
+                            <button data-modal-target="rbq-modal" data-modal-toggle="rbq-modal" class="text-blue-600 hover:text-blue-900" type="button">
+                                <i class="text-xl fa-regular fa-pen-to-square"></i>
+                            </button>
+                        @endif
+                        </div>
+
+                        @foreach($services as $service)
+                            <p>RBQ : {{$service->rbq}}</p>
+                            <p>Statut : {{$service->statut}}</p>
+                            <p>Type Licence : {{$service->type_licence}}</p>
+                            <br>
+
+                            @php
+                                $categoriesGenerales = [];
+                                $categoriesSpecialisees = [];
+
+                                // Décoder la colonne 'categorie_generale' en tableau PHP
+                                $categorieGenerale = json_decode($service->categorie_generale, true);
+                                if (is_array($categorieGenerale)) {
+                                    foreach ($categorieGenerale as $catGene) {
+                                        $valeurs = explode('/', $catGene);
+
+                                        $categorie = $valeurs[0] ?? '';
+                                        $sousCategorie = $valeurs[1] ?? '';
+                                        $element = $valeurs[2] ?? '';
+                                        $sousElement = $valeurs[3] ?? '';
+
+                                        if (!isset($categoriesGenerales[$categorie])) {
+                                            $categoriesGenerales[$categorie] = [];
+                                        }
+                                        if (!isset($categoriesGenerales[$categorie][$sousCategorie])) {
+                                            $categoriesGenerales[$categorie][$sousCategorie] = [];
+                                        }
+                                        $categoriesGenerales[$categorie][$sousCategorie][] = [$element, $sousElement];
+                                    }
+                                }
+
+                                // Décoder la colonne 'categorie_specialise' en tableau PHP
+                                $categorieSpecialise = json_decode($service->categorie_specialise, true);
+                                if (is_array($categorieSpecialise)) {
+                                    foreach ($categorieSpecialise as $catSpec) {
+                                        $valeurs = explode('/', $catSpec);
+
+                                        $categorie = $valeurs[0] ?? '';
+                                        $sousCategorie = $valeurs[1] ?? '';
+                                        $element = $valeurs[2] ?? '';
+                                        $sousElement = $valeurs[3] ?? '';
+
+                                        if (!isset($categoriesSpecialisees[$categorie])) {
+                                            $categoriesSpecialisees[$categorie] = [];
+                                        }
+                                        if (!isset($categoriesSpecialisees[$categorie][$sousCategorie])) {
+                                            $categoriesSpecialisees[$categorie][$sousCategorie] = [];
+                                        }
+                                        $categoriesSpecialisees[$categorie][$sousCategorie][] = [$element, $sousElement];
+                                    }
+                                }
+                            @endphp
+
+                            {{-- Affichage des catégories générales --}}
+                            <h4>Catégories générales :</h4>
+                            <ul>
+                                @foreach($categoriesGenerales as $categorie => $sousCategories)
+                                    <li>
+                                        <strong>{{ $categorie }}</strong>
+                                        <ul>
+                                            @foreach($sousCategories as $sousCategorie => $elements)
+                                                <li>
+                                                    {{ $sousCategorie }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endforeach
+                            </ul>
+                            <br>
+                            {{-- Affichage des catégories spécialisées --}}
+                            <h4>Catégories spécialisées :</h4>
+                            <ul>
+                                @foreach($categoriesSpecialisees as $categorie => $sousCategories)
+                                    <li>
+                                        <strong>{{ $categorie }}</strong>
+                                        <ul>
+                                            @foreach($sousCategories as $sousCategorie => $elements)
+                                                <li>
+                                                    {{ $sousCategorie }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endforeach
+                    </fieldset>
+
+                    <div id="rbq-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative p-4 w-full max-w-2xl max-h-full">
+                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                        Informations RBQ
+                                    </h3>
+                                    <button type="button" id="fermer" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="rbq-modal">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                <div class="p-4 md:p-5 space-y-4" id="mainDiv">
+                                    <div class="grid gap-6 mb-6 md:grid-cols-1">
+                                        <div>
+                                            <label for="rbq" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro RBQ</label>
+                                            <input type="text" name="rbq" id="rbq" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $service->rbq }}" value="{{ $service->rbq }}" />
+                                            <p id="rbqErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de RBQ valide.</p>
+                                        </div>
+                                        <div>
+                                            <label for="statutLicence" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Statut de licence</label>
+                                            <select type="text" name="statutLicence" id="statutLicence" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $service->statut }}" value="{{ $service->statut }}">
+                                                <option value="Valide">Valide</option>
+                                                <option value="ValideAvecRestriction">Valide avec restriction</option>
+                                                <option value="NonValide">Non valide</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="typeLicence" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type de licence</label>
+                                            <select type="text" name="typeLicence" id="typeLicence" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $service->type_licence }}" value="{{ $service->type_licence }}">
+                                                <option value="Entrepreneur">Entrepreneur</option>
+                                                <option value="Construteur">Construteur</option>
+                                                <option value="Propriétaire">Propriétaire</option>
+                                            </select>
+                                        </div>
+                                        <div class="p-4 md:p-5 space-y-4">
+                                    <h4 class="font-semibold text-gray-700">Catégories Générale</h4>
+                                    <ul id="cateGeneral-list-modal" class="space-y-3">
+                                    <ul>
+                                        @foreach($categoriesGenerales as $categorie => $sousCategories)
+                                            <li data-category="{{ $categorie }}" class="flex items-center justify-between">
+                                                <strong>{{ $categorie }}</strong>
+                                                <button class="delete-produit">
+                                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                    </svg>
+                                                </button>
+                                            </li>
+                                        @endforeach
+                                        </ul>
+                                        </ul>
+                                    <h4 class="font-semibold text-gray-700">Categories Spécialisé</h4>
+                                    <ul id="cateSpecial-list-modal" class="space-y-3">
+                                    <ul>
+                                        @foreach($categoriesSpecialisees as $categorie => $sousCategories)
+                                            <li data-category="{{ $categorie }}" class="flex items-center justify-between">
+                                                <strong>{{ $categorie }}</strong>
+                                                <button class="delete-produit">
+                                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                    </svg>
+                                                </button>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                    </ul>
+                                </div>
+                                </div>                            
+                                </div>
+                                <div id="resultat" class="px-4">
+                                </div>
+                                <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                    <button data-modal-hide="rbq-modal" id="save-rbq" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
+                                    <button type="button" id="add-cateGeneral" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 ml-2.5 py-2.5 text-center">Ajouter une catégorie général</button>
+                                    <button type="button" id="add-cateSpecial" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 ml-2.5 py-2.5 text-center">Ajouter une catégorie spécialisé</button>
+                                    <button data-modal-hide="rqb-modal" id="cancel-rbq" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Annuler</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        $(document).ready(function () {
+                            const $cateSpecialListModal = $('#cateSpecial-list-modal');
+                            const $cateGeneralListModal = $('#cateGeneral-list-modal');
+
+                            const $addCateGeneralBtn = $('#add-cateGeneral');
+                            const $addCateSpecialBtn = $('#add-cateSpecial');
+
+                            const $cancelRbqBtn = $('#cancel-rbq');
+                            const $saveRbqBtn = $('#save-rbq');
+
+                            let initialCateGeneralListModal = $cateGeneralListModal.html();
+                            let initialCateSpecialListModal = $cateSpecialListModal.html();
+
+                            function updateProduitServices() {
+                                let remainingServices = [];
+                                
+                                $cateSpecialListModal.find('li[data-category]').each(function () {
+                                    const category = $(this).data('category');
+
+                                    remainingServices.push(element);
+                                });
+                            }
+
+                            $cateGeneralListModal.on('click', '.delete-produit', function () {
+                                const $cateItem = $(this).closest('li');
+
+                                $cateItem.remove();
+                            });
+
+                            $cancelRbqBtn.on('click', function () {
+                                $cateGeneralListModal.html(initialCateGeneralListModal);
+                                $cateSpecialListModal.html(initialCateSpecialListModal);
+                            });
+
+                            $saveRbqBtn.on('click', function () {
+                                initialCateGeneralListModal = $cateGeneralListModal.html();
+                                initialCateSpecialListModal = $cateSpecialListModal.html();
+
+                                $produitsListFieldset.empty();
+
+                                $cateGeneralListModal.find('li[data-category]').each(function () {
+                                    const $categoryItem = $(this);
+                                    const category = $categoryItem.data('category');
+                                    const $categoryUl = $('<ul></ul>');
+                                    const $categoryLi = $('<li></li>').text(category);
+                                    $categoryUl.append($categoryLi);
+
+                                    $categoryItem.find('li[data-subcategory]').each(function () {
+                                        const $subCategoryItem = $(this);
+                                        const subCategory = $subCategoryItem.data('subcategory');
+                                        const $subCategoryUl = $('<ul></ul>').addClass('ml-3');
+                                        const $subCategoryLi = $('<li></li>').text(subCategory);
+                                        $subCategoryUl.append($subCategoryLi);
+
+                                        const $elementsUl = $('<ul></ul>').addClass('ml-6');
+                                        $subCategoryItem.find('li[data-element]').each(function () {
+                                            const $elementItem = $(this);
+                                            const element = $elementItem.data('element');
+                                            const subElement = $elementItem.data('sub-element');
+                                            const $elementLi = $('<li></li>').text(`${element} - ${subElement}`);
+                                            $elementsUl.append($elementLi);
+                                        });
+
+                                        $categoryUl.append($subCategoryUl);
+                                    });
+
+                                    $produitsListFieldset.append($categoryUl);
+                                });
+
+                                $cateSpecialListModal.find('li[data-category]').each(function () {
+                                    const $categoryItem = $(this);
+                                    const category = $categoryItem.data('category');
+                                    const $categoryUl = $('<ul></ul>');
+                                    const $categoryLi = $('<li></li>').text(category);
+                                    $categoryUl.append($categoryLi);
+
+                                    $categoryItem.find('li[data-subcategory]').each(function () {
+                                        const $subCategoryItem = $(this);
+                                        const subCategory = $subCategoryItem.data('subcategory');
+                                        const $subCategoryUl = $('<ul></ul>').addClass('ml-3');
+                                        const $subCategoryLi = $('<li></li>').text(subCategory);
+                                        $subCategoryUl.append($subCategoryLi);
+
+                                        const $elementsUl = $('<ul></ul>').addClass('ml-6');
+                                        $subCategoryItem.find('li[data-element]').each(function () {
+                                            const $elementItem = $(this);
+                                            const element = $elementItem.data('element');
+                                            const subElement = $elementItem.data('sub-element');
+                                            const $elementLi = $('<li></li>').text(`${element} - ${subElement}`);
+                                            $elementsUl.append($elementLi);
+                                        });
+
+                                        $categoryUl.append($subCategoryUl);
+                                    });
+
+                                    $produitsListFieldset.append($categoryUl);
+                                });
+
+
+                                updateProduitServices();
+                            });
+                        });
+                    </script>
+
 
                     @if(Auth::check() && (Auth::user()->role == 'Responsable' || Auth::user()->role == 'Administrateur'))
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none mt-2">Enregistrer</button>
