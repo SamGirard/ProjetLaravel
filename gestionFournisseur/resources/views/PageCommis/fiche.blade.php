@@ -1435,7 +1435,7 @@
                                         @foreach($categories as $categorie => $sousCategories)
                                             <li data-category="{{ $categorie }}">
                                                 <strong>{{ $categorie }}</strong>
-                                                <ul class="ml-4 space-y-2">
+                                                <ul id="categorieUl" class="ml-4 space-y-2">
                                                     @foreach($sousCategories as $sousCategorie => $elements)
                                                         <li data-subcategory="{{ $sousCategorie }}">
                                                             <strong>{{ $sousCategorie }}</strong>
@@ -1463,7 +1463,28 @@
                                 </div>
                                 <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                                     <button data-modal-hide="produits-modal" id="save-produits" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continuer les modifications</button>
-                                    <button type="button" id="add-produits" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 ml-2.5 py-2.5 text-center">Ajouter un produit / service</button>
+                                    <button type="button" id="add-produits" data-dropdown-toggle="dropdownProduits" data-dropdown-placement="bottom" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 ml-2.5 py-2.5 text-center">Ajouter un produit / service</button>
+                                    <div id="dropdownProduits" class="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
+                                        <div class="p-3">
+                                            <label for="input-group-search" class="sr-only">Search</label>
+                                            <div class="relative">
+                                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                                    </svg>
+                                                </div>
+                                                <input type="text" id="input-group-search" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search user">
+                                            </div>
+                                        </div>
+                                        <ul id="produits-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownProduitsButton">
+                                        </ul>
+                                        <a id="confirm-add-produits" class="flex items-center p-3 text-sm font-medium text-green-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-500 hover:underline cursor-pointer">
+                                            <svg class="w-6 h-6 text-green-600 dark:text-white pr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v14m-8-7h2m0 0h2m-2 0v2m0-2v-2m12 1h-6m6 4h-6M4 19h16c.5523 0 1-.4477 1-1V6c0-.55228-.4477-1-1-1H4c-.55228 0-1 .44772-1 1v12c0 .5523.44772 1 1 1Z"/>
+                                            </svg>
+                                            Ajouter
+                                        </a>
+                                    </div>
                                     <button data-modal-hide="produits-modal" id="cancel-produits" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Annuler</button>
                                 </div>
                             </div>
@@ -1482,6 +1503,126 @@
                             const $detailsTextareaModal = $('#details');
                             const $produitServicesInput = $('#produit_services');
 
+                            let offsetProduit = 0;
+                            const limitProduit = 100;
+                            let cachedProduit = [];
+                            let selectedProducts = [];
+                            let debounceTimerProduit;
+
+                            $('#input-group-search').on('keyup', function() {
+                                const searchQuery = $(this).val();
+
+                                clearTimeout(debounceTimerProduit);
+
+                                debounceTimerProduit = setTimeout(() => {
+                                    offsetProduit = 0;
+                                    fetchProducts(false, searchQuery);
+                                }, 300);
+                            });
+
+                            function fetchProducts(loadMore = false, searchQuery = '') {
+                                $.ajax({
+                                    url: `/fetchServices?offset=${offsetProduit}&limit=${limitProduit}&search=${searchQuery}`,
+                                    method: 'GET',
+                                    success: function(response) {
+
+                                        if (loadMore) {
+                                            cachedProduit = [...cachedProduit, ...response];
+                                        } else {
+                                            cachedProduit = response;
+                                            $('#produits-list').empty();
+                                        }
+
+                                        response.forEach(function(product) {
+                                            const value = `${product.categorie}/${product.description_categorie}/${product.code_unspsc}/${product.description_unspsc}`;
+                                            const listItem = `
+                                                <li>
+                                                    <div class="flex items-center ps-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                        <input id="product-${product.code_unspsc}" type="checkbox" value="${value}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                                        <label for="product-${product.code_unspsc}" class="w-full py-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${product.description_unspsc}</label>
+                                                    </div>
+                                                </li>
+                                            `;
+                                            $('#produits-list').append(listItem);
+
+                                            if (selectedProducts.includes(value)) {
+                                                $(`#product-${product.code_unspsc}`).prop('checked', true);
+                                            }
+
+                                            $(`#product-${product.code_unspsc}`).on('change', function() {
+                                                if (this.checked) {
+                                                    selectedProducts.push(value);
+                                                } else {
+                                                    selectedProducts = selectedProducts.filter(code => code !== value);
+                                                }
+                                            });
+                                        });
+
+                                        offsetProduit += limitProduit;
+                                    }
+                                });
+                            }
+
+                            fetchProducts(false, '');
+
+                            $('#produits-list').on('scroll', function() {
+                                if ($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+                                    const searchQuery = $('#input-group-search').val();
+                                    fetchProducts(true, searchQuery);
+                                }
+                            });
+
+                            $('#confirm-add-produits').on('click', function () {
+                                selectedProducts.forEach(function (product) {
+                                    const [element, subElement, name, description] = product.split('/');
+                                    let elementGroup = $(`#product-list-modal [data-category="${element}"]`);
+
+                                    if (elementGroup.length === 0) {
+                                        elementGroup = $(`
+                                            <li data-category="${element}">
+                                                <strong>${element}</strong>
+                                                <ul id="categorieUl" class="ml-4 space-y-2"></ul>
+                                            </li>
+                                        `);
+
+                                        $('#product-list-modal').append(elementGroup);
+                                    }
+
+                                    let subElementGroup = elementGroup.find(`[data-subcategory="${subElement}"]`);
+
+                                    if (subElementGroup.length === 0) {
+                                        subElementGroup = $(`
+                                            <li data-subcategory="${subElement}">
+                                                <strong>${subElement}</strong>
+                                                <ul class="ml-6 space-y-1"></ul>
+                                            </li>
+                                        `);
+
+                                        elementGroup.find('#categorieUl').append(subElementGroup);
+                                    }
+
+                                    const itemExists = subElementGroup.find(`[data-element="${name}"][data-sub-element="${description}"]`).length > 0;
+
+                                    if (!itemExists) {
+                                        const listItem = `
+                                            <li class="flex items-center justify-between" data-element="${name}" data-sub-element="${description}">
+                                                <span>${name} - ${description}</span>
+                                                <button class="delete-produit">
+                                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                    </svg>
+                                                </button>
+                                            </li>
+                                        `;
+
+                                        subElementGroup.find('ul').append(listItem);
+                                    }
+                                });
+
+                                selectedProducts = [];
+                                $('#produits-list input[type="checkbox"]').prop('checked', false);
+                            });
+
                             let initialproductListModal = $productListModal.html();
                             let initialDetailsModal = $detailsTextareaModal.val();
 
@@ -1498,17 +1639,14 @@
 
                                         $(this).find('li[data-element]').each(function () {
                                             const element = $(this).data('element');
+                                            const subElement = $(this).data('subElement');
 
-                                            remainingServices.push(element);
+                                            remainingServices.push(category + "/" + subCategory + "/" + element + "/" + subElement);
                                         });
                                     });
                                 });
 
-                                produitServices = produitServices.filter(service => 
-                                    remainingServices.some(id => service.includes(id.toString()))
-                                );
-
-                                $produitServicesInput.val(JSON.stringify(produitServices));
+                                $produitServicesInput.val(JSON.stringify(remainingServices));
                             }
 
                             $productListModal.on('click', '.delete-produit', function () {
@@ -1528,6 +1666,8 @@
                             });
 
                             $cancelProductBtn.on('click', function () {
+                                selectedProducts = [];
+                                $('#produits-list input[type="checkbox"]').prop('checked', false);
                                 $productListModal.html(initialproductListModal);
                                 $detailsTextareaModal.val(initialDetailsModal);
                                 produitServices = JSON.parse($produitServicesInput.val() || '[]');
