@@ -151,6 +151,13 @@ class FournisseurController extends Controller
             if ($services) {
                 $services->produit_services = $request->produit_services;
                 $services->details = $request->details;
+                $services->rbq = $request->rbq;
+                $services->statut = $request->statut; 
+                $services->type_licence = $request->type_licence;
+
+                $services->categorie_generale = json_encode($request->categorie_generale);
+                $services->categorie_specialise = json_encode($request->categorie_specialise);
+
                 $services->save();
             } else {
                 return response()->json(['message' => 'Service not found'], 404);

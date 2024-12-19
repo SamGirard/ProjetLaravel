@@ -2229,16 +2229,16 @@
                                             <p id="rbqErrorMessage" class="hidden mt-2 text-sm text-red-600 dark:text-red-500">Veuillez entrer un numéro de RBQ valide.</p>
                                         </div>
                                         <div>
-                                            <label for="statutLicence" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Statut de licence</label>
-                                            <select type="text" name="statutLicence" id="statutLicence" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $service->statut }}" value="{{ $service->statut }}">
+                                            <label for="statut" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Statut de licence</label>
+                                            <select type="text" name="statut" id="statutLicence" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $service->statut }}" value="{{ $service->statut }}">
                                                 <option value="Valide">Valide</option>
-                                                <option value="ValideAvecRestriction">Valide avec restriction</option>
-                                                <option value="NonValide">Non valide</option>
+                                                <option value="Valide avec restriction">Valide avec restriction</option>
+                                                <option value="Non valide">Non valide</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label for="typeLicence" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type de licence</label>
-                                            <select type="text" name="typeLicence" id="typeLicence" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $service->type_licence }}" value="{{ $service->type_licence }}">
+                                            <label for="type_licence" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type de licence</label>
+                                            <select type="text" name="type_licence" id="typeLicence" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $service->type_licence }}" value="{{ $service->type_licence }}">
                                                 <option value="Entrepreneur">Entrepreneur</option>
                                                 <option value="Construteur">Construteur</option>
                                                 <option value="Propriétaire">Propriétaire</option>
@@ -2310,7 +2310,7 @@
                                 $cateSpecialListModal.find('li[data-category]').each(function () {
                                     const category = $(this).data('category');
 
-                                    remainingServices.push(element);
+                                    remainingServices.push(category);
                                 });
                             }
 
@@ -2326,71 +2326,47 @@
                             });
 
                             $saveRbqBtn.on('click', function () {
-                                initialCateGeneralListModal = $cateGeneralListModal.html();
-                                initialCateSpecialListModal = $cateSpecialListModal.html();
-
-                                $produitsListFieldset.empty();
-
+                                // Mettre à jour les catégories affichées sur la page
+                                const categoriesGenerales = [];
                                 $cateGeneralListModal.find('li[data-category]').each(function () {
-                                    const $categoryItem = $(this);
-                                    const category = $categoryItem.data('category');
-                                    const $categoryUl = $('<ul></ul>');
-                                    const $categoryLi = $('<li></li>').text(category);
-                                    $categoryUl.append($categoryLi);
-
-                                    $categoryItem.find('li[data-subcategory]').each(function () {
-                                        const $subCategoryItem = $(this);
-                                        const subCategory = $subCategoryItem.data('subcategory');
-                                        const $subCategoryUl = $('<ul></ul>').addClass('ml-3');
-                                        const $subCategoryLi = $('<li></li>').text(subCategory);
-                                        $subCategoryUl.append($subCategoryLi);
-
-                                        const $elementsUl = $('<ul></ul>').addClass('ml-6');
-                                        $subCategoryItem.find('li[data-element]').each(function () {
-                                            const $elementItem = $(this);
-                                            const element = $elementItem.data('element');
-                                            const subElement = $elementItem.data('sub-element');
-                                            const $elementLi = $('<li></li>').text(`${element} - ${subElement}`);
-                                            $elementsUl.append($elementLi);
-                                        });
-
-                                        $categoryUl.append($subCategoryUl);
-                                    });
-
-                                    $produitsListFieldset.append($categoryUl);
+                                    const category = $(this).data('category');
+                                    categoriesGenerales.push(category);
                                 });
 
+                                const categoriesSpecialisees = [];
                                 $cateSpecialListModal.find('li[data-category]').each(function () {
-                                    const $categoryItem = $(this);
-                                    const category = $categoryItem.data('category');
-                                    const $categoryUl = $('<ul></ul>');
-                                    const $categoryLi = $('<li></li>').text(category);
-                                    $categoryUl.append($categoryLi);
-
-                                    $categoryItem.find('li[data-subcategory]').each(function () {
-                                        const $subCategoryItem = $(this);
-                                        const subCategory = $subCategoryItem.data('subcategory');
-                                        const $subCategoryUl = $('<ul></ul>').addClass('ml-3');
-                                        const $subCategoryLi = $('<li></li>').text(subCategory);
-                                        $subCategoryUl.append($subCategoryLi);
-
-                                        const $elementsUl = $('<ul></ul>').addClass('ml-6');
-                                        $subCategoryItem.find('li[data-element]').each(function () {
-                                            const $elementItem = $(this);
-                                            const element = $elementItem.data('element');
-                                            const subElement = $elementItem.data('sub-element');
-                                            const $elementLi = $('<li></li>').text(`${element} - ${subElement}`);
-                                            $elementsUl.append($elementLi);
-                                        });
-
-                                        $categoryUl.append($subCategoryUl);
-                                    });
-
-                                    $produitsListFieldset.append($categoryUl);
+                                    const category = $(this).data('category');
+                                    categoriesSpecialisees.push(category);
                                 });
 
+                                // Met à jour uniquement l'affichage sans sauvegarder dans la base de données
+                                $('#resultat').html(`
+                                    <h4>Catégories mises à jour temporairement</h4>
+                                    <p>Générales : ${categoriesGenerales.join(', ')}</p>
+                                    <p>Spécialisées : ${categoriesSpecialisees.join(', ')}</p>
+                                `);
 
-                                updateProduitServices();
+                                // Mettre à jour les champs cachés pour la soumission du formulaire principal
+                                $('#categorie_generale').val(JSON.stringify(categoriesGenerales));
+                                $('#categorie_specialise').val(JSON.stringify(categoriesSpecialisees));
+                            });
+
+                            $('#updateFicheForm').on('submit', function () {
+                                // Mettre à jour les champs cachés pour la soumission du formulaire principal
+                                const categoriesGenerales = [];
+                                $cateGeneralListModal.find('li[data-category]').each(function () {
+                                    const category = $(this).data('category');
+                                    categoriesGenerales.push(category);
+                                });
+
+                                const categoriesSpecialisees = [];
+                                $cateSpecialListModal.find('li[data-category]').each(function () {
+                                    const category = $(this).data('category');
+                                    categoriesSpecialisees.push(category);
+                                });
+
+                                $('#categorie_generale').val(JSON.stringify(categoriesGenerales));
+                                $('#categorie_specialise').val(JSON.stringify(categoriesSpecialisees));
                             });
                         });
                     </script>
