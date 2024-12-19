@@ -18,7 +18,7 @@ Route::get('/fournisseurs/{fournisseur}/',
 
 
 //Route de Sam pour les role
-Route::get('/Gestion_des_roles', 
+Route::get('/Gestion_des_roles',
 [EmployeController::class, 'afficherRole'])->name('role')
 ->middleware('CheckRole:Administrateur');
 
@@ -42,13 +42,13 @@ Route::patch('/modifierEmploye',
 
 
 //Route pour le login d'employe
-Route::get('/', 
+Route::get('/',
 [EmployeController::class, 'showLoginForm'])->name('loginEmploye');
 
-Route::post('/loginEmploye', 
+Route::post('/loginEmploye',
 [EmployeController::class, 'login'])->name('loginPost');
 
-Route::post('/logout', 
+Route::post('/logout',
 [EmployeController::class, 'logout'])->name('logout');
 
 //route pour parametre
@@ -56,7 +56,7 @@ Route::get('/parametre',
 [EmployeController::class, 'afficherParametre'])->name('parametre')
 ->middleware('CheckRole:Administrateur');
 
-Route::patch('modifierParametre', 
+Route::patch('modifierParametre',
 [EmployeController::class ,'updateParam'])->name('modifierParam');
 
 //route pour ajouter les role de courriel
@@ -81,10 +81,12 @@ Route::delete('/supprimerRoleCourriel',
 
 //route pour les fournisseurs
 Route::delete('/supprimerFournisseur/{fournisseur}',
-[FournisseurController::class, 'destroyFournisseur'])->name('supprimerFournisseur');
+[FournisseurController::class, 'destroyFournisseur'])->name('supprimerFournisseur')
+->middleware('CheckRole:Administrateur,Responsable');
 
 Route::patch('/fournisseur/{fournisseur}/modifier',
-[FournisseurController::class, 'updateFiche'])->name('updateFiche');
+[FournisseurController::class, 'updateFiche'])->name('updateFiche')
+->middleware('CheckRole:Administrateur,Responsable');
 
 
 //Route des endpoints
@@ -99,7 +101,11 @@ Route::get('/comodity/{class}', [ApiController::class, 'fetchUNSPSCComodity']);
 Route::get('/comoditySearch/{start}/{number}', [ApiController::class, 'fetchUNSPSCComodityFromName']);
 Route::get('/fetchServices', [ApiController::class, 'fetchServices']);
 
-Route::get('/liste', [GestionController::class, 'listeFournisseur'])->name('pageCommis.liste');
-Route::get('/liste-contact', [GestionController::class, 'listeContact'])->name('pageCommis.liste-contact');
-Route::get('/export-fournisseurs', [GestionController::class, 'exportFournisseurs'])->name('export.fournisseurs');
-Route::get('/fournisseur/{fournisseur}', [GestionController::class, 'zoom'])->name('pageCommis.fiche');
+Route::get('/liste', [GestionController::class, 'listeFournisseur'])->name('pageCommis.liste')
+->middleware('CheckRole:Administrateur,Commis,Responsable');
+Route::get('/liste-contact', [GestionController::class, 'listeContact'])->name('pageCommis.liste-contact')
+->middleware('CheckRole:Administrateur,Commis,Responsable');
+Route::get('/export-fournisseurs', [GestionController::class, 'exportFournisseurs'])->name('export.fournisseurs')
+->middleware('CheckRole:Administrateur,Commis,Responsable');
+Route::get('/fournisseur/{fournisseur}', [GestionController::class, 'zoom'])->name('pageCommis.fiche')
+->middleware('CheckRole:Administrateur,Commis,Responsable');
