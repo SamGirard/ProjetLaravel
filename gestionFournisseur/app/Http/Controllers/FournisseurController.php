@@ -105,7 +105,7 @@ class FournisseurController extends Controller
                 Log::debug($e);
             }
                 
-            Mail::to($fournisseur->email)->send(new MailModificationFournisseur($request->nomEntreprise, $request->etatDemande, $etatInitial, $fournisseur->id));
+            //Mail::to($fournisseur->email)->send(new MailModificationFournisseur($request->nomEntreprise, $request->etatDemande, $etatInitial, $fournisseur->id));
 
             if($etatInitial != $request->etatDemande){
                 Mail::to($request->email)->send(new MailChangementEtat($request->etatDemande, $request->email, $fournisseur->id));
@@ -151,12 +151,13 @@ class FournisseurController extends Controller
             if ($services) {
                 $services->produit_services = $request->produit_services;
                 $services->details = $request->details;
+
                 $services->rbq = $request->rbq;
                 $services->statut = $request->statut; 
                 $services->type_licence = $request->type_licence;
 
-                $services->categorie_generale = json_encode($request->categorie_generale);
-                $services->categorie_specialise = json_encode($request->categorie_specialise);
+                //$services->categorie_generale = json_encode($request->categorie_generale);
+                //$services->categorie_specialise = json_encode($request->categorie_specialise);
 
                 $services->save();
             } else {
