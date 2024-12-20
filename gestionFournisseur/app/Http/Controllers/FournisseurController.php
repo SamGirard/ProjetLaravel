@@ -108,7 +108,7 @@ class FournisseurController extends Controller
             //Mail::to($fournisseur->email)->send(new MailModificationFournisseur($request->nomEntreprise, $request->etatDemande, $etatInitial, $fournisseur->id));
 
             if($etatInitial != $request->etatDemande){
-                Mail::to($request->email)->send(new MailChangementEtat($request->etatDemande, $request->email, $fournisseur->id));
+                //Mail::to($request->email)->send(new MailChangementEtat($request->etatDemande, $request->email, $fournisseur->id));
             }
 
             if($request->etatDemande != "Refusé"){
@@ -156,8 +156,8 @@ class FournisseurController extends Controller
                 $services->statut = $request->statut; 
                 $services->type_licence = $request->type_licence;
 
-                //$services->categorie_generale = json_encode($request->categorie_generale);
-                //$services->categorie_specialise = json_encode($request->categorie_specialise);
+                $services->categorie_generale = $request->categorie_generale;
+                $services->categorie_specialise = $request->categorie_specialise;
 
                 $services->save();
             } else {

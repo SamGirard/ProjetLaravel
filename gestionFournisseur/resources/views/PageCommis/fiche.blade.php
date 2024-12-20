@@ -1427,8 +1427,7 @@
                                         <span class="sr-only">Close modal</span>
                                     </button>
                                 </div>
-                                <input type="hidden" name="produit_services" id="produit_services"
-                                        value="{{ $service->produit_services }}">
+                                <input type="hidden" name="produit_services" id="produit_services" value="{{ $service->produit_services }}">
                                 <div class="p-4 md:p-5 space-y-4">
                                     <h4 class="font-semibold text-gray-700">Liste des produits et services</h4>
                                     <ul id="product-list-modal" class="space-y-3">
@@ -2134,18 +2133,11 @@
                                     foreach ($categorieGenerale as $catGene) {
                                         $valeurs = explode('/', $catGene);
 
-                                        $categorie = $valeurs[0] ?? '';
-                                        $sousCategorie = $valeurs[1] ?? '';
-                                        $element = $valeurs[2] ?? '';
-                                        $sousElement = $valeurs[3] ?? '';
+                                        $categorie = $valeurs[0] ?? ''; // On ne prend que la catégorie principale
 
                                         if (!isset($categoriesGenerales[$categorie])) {
-                                            $categoriesGenerales[$categorie] = [];
+                                            $categoriesGenerales[$categorie] = []; // Initialisation de la catégorie principale
                                         }
-                                        if (!isset($categoriesGenerales[$categorie][$sousCategorie])) {
-                                            $categoriesGenerales[$categorie][$sousCategorie] = [];
-                                        }
-                                        $categoriesGenerales[$categorie][$sousCategorie][] = [$element, $sousElement];
                                     }
                                 }
 
@@ -2155,18 +2147,11 @@
                                     foreach ($categorieSpecialise as $catSpec) {
                                         $valeurs = explode('/', $catSpec);
 
-                                        $categorie = $valeurs[0] ?? '';
-                                        $sousCategorie = $valeurs[1] ?? '';
-                                        $element = $valeurs[2] ?? '';
-                                        $sousElement = $valeurs[3] ?? '';
+                                        $categorie = $valeurs[0] ?? ''; // On ne prend que la catégorie principale
 
                                         if (!isset($categoriesSpecialisees[$categorie])) {
-                                            $categoriesSpecialisees[$categorie] = [];
+                                            $categoriesSpecialisees[$categorie] = []; // Initialisation de la catégorie principale
                                         }
-                                        if (!isset($categoriesSpecialisees[$categorie][$sousCategorie])) {
-                                            $categoriesSpecialisees[$categorie][$sousCategorie] = [];
-                                        }
-                                        $categoriesSpecialisees[$categorie][$sousCategorie][] = [$element, $sousElement];
                                     }
                                 }
                             @endphp
@@ -2174,33 +2159,20 @@
                             {{-- Affichage des catégories générales --}}
                             <h4>Catégories générales :</h4>
                             <ul>
-                                @foreach($categoriesGenerales as $categorie => $sousCategories)
-                                    <li>
-                                        <strong>{{ $categorie }}</strong>
-                                        <ul>
-                                            @foreach($sousCategories as $sousCategorie => $elements)
-                                                <li>
-                                                    {{ $sousCategorie }}
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                                @foreach($categoriesGenerales as $categorieG => $sousCategoriesG)
+                                    <li data-category="{{ $categorieG }}">
+                                        <strong>{{ $categorieG }}</strong>
                                     </li>
                                 @endforeach
                             </ul>
                             <br>
+
                             {{-- Affichage des catégories spécialisées --}}
                             <h4>Catégories spécialisées :</h4>
                             <ul>
-                                @foreach($categoriesSpecialisees as $categorie => $sousCategories)
-                                    <li>
-                                        <strong>{{ $categorie }}</strong>
-                                        <ul>
-                                            @foreach($sousCategories as $sousCategorie => $elements)
-                                                <li>
-                                                    {{ $sousCategorie }}
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                                @foreach($categoriesSpecialisees as $categorieS => $sousCategoriesS)
+                                    <li data-category="{{ $categorieS }}">
+                                        <strong>{{ $categorieS }}</strong>
                                     </li>
                                 @endforeach
                             </ul>
@@ -2221,6 +2193,8 @@
                                         <span class="sr-only">Close modal</span>
                                     </button>
                                 </div>
+                                <input type="hidden" name="categorie_generale" id="categorie_generale" value="{{ $service->categorie_generale }}">
+                                <input type="hidden" name="categorie_specialise" id="categorie_specialise" value="{{ $service->categorie_specialise }}">
                                 <div class="p-4 md:p-5 space-y-4" id="mainDiv">
                                     <div class="grid gap-6 mb-6 md:grid-cols-1">
                                         <div>
@@ -2248,9 +2222,19 @@
                                     <h4 class="font-semibold text-gray-700">Catégories Générale</h4>
                                     <ul id="cateGeneral-list-modal" class="space-y-3">
                                     <ul>
-                                        @foreach($categoriesGenerales as $categorie => $sousCategories)
-                                            <li data-category="{{ $categorie }}" class="flex items-center justify-between">
-                                                <strong>{{ $categorie }}</strong>
+                                        @foreach($categoriesGenerales as $categorieG => $sousCategoriesG)
+                                            <li data-category="{{ $categorieG }}" class="flex items-center justify-between">
+                                                <strong>{{ $categorieG }}</strong>
+                                                <button class="delete-produit">
+                                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                    </svg>
+                                                </button>
+                                            </li>
+                                        @endforeach
+                                        @foreach($categoriesSpecialisees as $categorieS => $sousCategoriesS)
+                                            <li data-category="{{ $categorieS }}" class="flex items-center justify-between">
+                                                <strong>{{ $categorieS }}</strong>
                                                 <button class="delete-produit">
                                                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
@@ -2308,6 +2292,7 @@
                                     oldLicence.innerHTML = "Type de licence : " + newLicence;
                                 }
                             }
+
                         $(document).ready(function () {
                             const $cateSpecialListModal = $('#cateSpecial-list-modal');
                             const $cateGeneralListModal = $('#cateGeneral-list-modal');
@@ -2325,15 +2310,23 @@
                                 let remainingServices = [];
                                 
                                 $cateSpecialListModal.find('li[data-category]').each(function () {
-                                    const category = $(this).data('category');
+                                    const categoryS = $(this).data('categoryS');
 
-                                    remainingServices.push(category);
+                                    remainingServices.push(categoryS);
+                                });
+                                $cateGeneralListModal.find('li[data-category]').each(function () {
+                                    const categoryG = $(this).data('categoryG');
+
+                                    remainingServices.push(categoryG);
                                 });
                             }
 
                             $cateGeneralListModal.on('click', '.delete-produit', function () {
                                 const $cateItem = $(this).closest('li');
-
+                                $cateItem.remove();
+                            });
+                            $cateSpecialListModal.on('click', '.delete-produit', function () {
+                                const $cateItem = $(this).closest('li');
                                 $cateItem.remove();
                             });
 
@@ -2343,43 +2336,48 @@
                             });
 
                             $saveRbqBtn.on('click', function () {
-                                // Mettre à jour les catégories affichées sur la page
-                                const categoriesGenerales = [];
-                                $cateGeneralListModal.find('li[data-category]').each(function () {
-                                    const category = $(this).data('category');
-                                    categoriesGenerales.push(category);
-                                });
-
-                                const categoriesSpecialisees = [];
-                                $cateSpecialListModal.find('li[data-category]').each(function () {
-                                    const category = $(this).data('category');
-                                    categoriesSpecialisees.push(category);
-                                });
-
-                                // Met à jour uniquement l'affichage sans sauvegarder dans la base de données
-                                $('#resultat').html(`
-                                    <h4>Catégories mises à jour temporairement</h4>
-                                    <p>Générales : ${categoriesGenerales.join(', ')}</p>
-                                    <p>Spécialisées : ${categoriesSpecialisees.join(', ')}</p>
-                                `);
-
-                                // Mettre à jour les champs cachés pour la soumission du formulaire principal
-                                $('#categorie_generale').val(JSON.stringify(categoriesGenerales));
-                                $('#categorie_specialise').val(JSON.stringify(categoriesSpecialisees));
+                            // Mettre à jour les catégories générales affichées sur la page
+                            const categoriesGenerales = [];
+                            $cateGeneralListModal.find('li[data-category]').each(function () {
+                                const categoryG = $(this).data('category'); // Corrigé pour correspondre à 'data-category'
+                                if (categoryG) { // Vérifie que la catégorie existe
+                                    categoriesGenerales.push(categoryG);
+                                }
                             });
+
+                            // Mettre à jour les catégories spécialisées affichées sur la page
+                            const categoriesSpecialisees = [];
+                            $cateSpecialListModal.find('li[data-category]').each(function () {
+                                const categoryS = $(this).data('category'); // Corrigé pour correspondre à 'data-category'
+                                if (categoryS) { // Vérifie que la catégorie existe
+                                    categoriesSpecialisees.push(categoryS);
+                                }
+                            });
+
+                            // Met à jour uniquement l'affichage sans sauvegarder dans la base de données
+                            $('#resultat').html(`
+                                <h4>Catégories mises à jour temporairement</h4>
+                                <p>Générales : ${categoriesGenerales.join(', ')}</p>
+                                <p>Spécialisées : ${categoriesSpecialisees.join(', ')}</p>
+                            `);
+
+                            // Mettre à jour les champs cachés pour la soumission du formulaire principal
+                            $('#categorie_generale').val(JSON.stringify(categoriesGenerales));
+                            $('#categorie_specialise').val(JSON.stringify(categoriesSpecialisees));
+                        });
 
                             $('#updateFicheForm').on('submit', function () {
                                 // Mettre à jour les champs cachés pour la soumission du formulaire principal
                                 const categoriesGenerales = [];
                                 $cateGeneralListModal.find('li[data-category]').each(function () {
-                                    const category = $(this).data('category');
-                                    categoriesGenerales.push(category);
+                                    const categoryG = $(this).data('categoryG');
+                                    categoriesGenerales.push(categoryG);
                                 });
 
                                 const categoriesSpecialisees = [];
                                 $cateSpecialListModal.find('li[data-category]').each(function () {
-                                    const category = $(this).data('category');
-                                    categoriesSpecialisees.push(category);
+                                    const categoryS = $(this).data('categoryS');
+                                    categoriesSpecialisees.push(categoryS);
                                 });
 
                                 $('#categorie_generale').val(JSON.stringify(categoriesGenerales));
