@@ -2158,24 +2158,28 @@
 
                             {{-- Affichage des catégories générales --}}
                             <h4>Catégories générales :</h4>
-                            <ul>
-                                @foreach($categoriesGenerales as $categorieG => $sousCategoriesG)
-                                    <li data-category="{{ $categorieG }}">
-                                        <strong>{{ $categorieG }}</strong>
-                                    </li>
-                                @endforeach
-                            </ul>
+                            <div id="cateorieGListFieldset">
+                                <ul id="cateGeneralListFieldset">
+                                    @foreach($categoriesGenerales as $categorieG => $sousCategoriesG)
+                                        <li data-category="{{ $categorieG }}">
+                                            <strong>{{ $categorieG }}</strong>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
                             <br>
 
                             {{-- Affichage des catégories spécialisées --}}
                             <h4>Catégories spécialisées :</h4>
-                            <ul>
-                                @foreach($categoriesSpecialisees as $categorieS => $sousCategoriesS)
-                                    <li data-category="{{ $categorieS }}">
-                                        <strong>{{ $categorieS }}</strong>
-                                    </li>
-                                @endforeach
-                            </ul>
+                            <div id="cateorieSListFieldset">
+                                <ul id="cateSpecialiseListFieldset">
+                                    @foreach($categoriesSpecialisees as $categorieS => $sousCategoriesS)
+                                        <li data-category="{{ $categorieS }}">
+                                            <strong>{{ $categorieS }}</strong>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
                         @endforeach
                     </fieldset>
 
@@ -2336,35 +2340,43 @@
                             });
 
                             $saveRbqBtn.on('click', function () {
-                            // Mettre à jour les catégories générales affichées sur la page
-                            const categoriesGenerales = [];
-                            $cateGeneralListModal.find('li[data-category]').each(function () {
-                                const categoryG = $(this).data('category'); // Corrigé pour correspondre à 'data-category'
-                                if (categoryG) { // Vérifie que la catégorie existe
-                                    categoriesGenerales.push(categoryG);
-                                }
+                                const $cateGeneralListFieldset = $('#cateGeneralListFieldset');
+                                const $cateSpecialiseListFieldset = $('#cateSpecialiseListFieldset');
+
+                                $cateGeneralListFieldset.empty();
+                                $cateSpecialiseListFieldset.empty();
+
+                                // Mettre à jour les catégories générales affichées sur la page
+                                const categoriesGenerales = [];
+                                $cateGeneralListModal.find('li[data-category]').each(function () {
+                                    const categoryG = $(this).data('category');
+                                    if (categoryG) {
+                                        categoriesGenerales.push(categoryG);
+                                        $cateGeneralListFieldset.append(`<li data-category="${categoryG}"><strong>${categoryG}</strong></li>`);
+                                    }
+                                });
+
+                                // Mettre à jour les catégories spécialisées affichées sur la page
+                                const categoriesSpecialisees = [];
+                                $cateSpecialListModal.find('li[data-category]').each(function () {
+                                    const categoryS = $(this).data('category');
+                                    if (categoryS) {
+                                        categoriesSpecialisees.push(categoryS);
+                                        $cateSpecialiseListFieldset.append(`<li data-category="${categoryS}"><strong>${categoryS}</strong></li>`);
+                                    }
+                                });
+
+                                // Met à jour uniquement l'affichage sans sauvegarder dans la base de données
+                                $('#resultat').html(`
+                                    <h4>Catégories mises à jour temporairement</h4>
+                                    <p>Générales : ${categoriesGenerales.join(', ')}</p>
+                                    <p>Spécialisées : ${categoriesSpecialisees.join(', ')}</p>
+                                `);
+
+                                // Mettre à jour les champs cachés pour la soumission du formulaire principal
+                                $('#categorie_generale').val(JSON.stringify(categoriesGenerales));
+                                $('#categorie_specialise').val(JSON.stringify(categoriesSpecialisees));
                             });
-
-                            // Mettre à jour les catégories spécialisées affichées sur la page
-                            const categoriesSpecialisees = [];
-                            $cateSpecialListModal.find('li[data-category]').each(function () {
-                                const categoryS = $(this).data('category'); // Corrigé pour correspondre à 'data-category'
-                                if (categoryS) { // Vérifie que la catégorie existe
-                                    categoriesSpecialisees.push(categoryS);
-                                }
-                            });
-
-                            // Met à jour uniquement l'affichage sans sauvegarder dans la base de données
-                            $('#resultat').html(`
-                                <h4>Catégories mises à jour temporairement</h4>
-                                <p>Générales : ${categoriesGenerales.join(', ')}</p>
-                                <p>Spécialisées : ${categoriesSpecialisees.join(', ')}</p>
-                            `);
-
-                            // Mettre à jour les champs cachés pour la soumission du formulaire principal
-                            $('#categorie_generale').val(JSON.stringify(categoriesGenerales));
-                            $('#categorie_specialise').val(JSON.stringify(categoriesSpecialisees));
-                        });
 
                             $('#updateFicheForm').on('submit', function () {
                                 // Mettre à jour les champs cachés pour la soumission du formulaire principal
